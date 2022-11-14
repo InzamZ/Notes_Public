@@ -28,17 +28,14 @@ jobs:
       - name: Install Dependency
         run: npm install zhlint -g
       
-      - name: Run the scraping script
-        run: |
-          date
-          export TIME=$?
-          bash ./format.sh
+      - name: Run the format script
+        run: bash ./format.sh
 
       - name: Run safe dir
         run: |
           git config --global --add safe.directory /github/workspace
 
-      - name: Push Poem
+      - name: Push formatted markdown doc
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.G_T }}
