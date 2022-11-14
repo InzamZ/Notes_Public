@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.5.1
+        with:
+          # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
+          node-version: 14.x
+
+      - name: Install Dependency
+        run: npm install zhlint -g
+      
+      - name: Run the scraping script
+        run: |
+          date
+          export TIME=$?
+          bash ./format.sh
+
+      - name: Run safe dir
+        run: |
+          git config --global --add safe.directory /github/workspace
+
+      - name: Push Poem
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.G_T }}
+          branch: master
+          message: ':art: chore: autoformated'
+          force: true
