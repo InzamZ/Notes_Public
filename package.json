@@ -1,0 +1,17 @@
+{
+  "name": "Notes_Public",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:InzamZ/Notes_Public.git",
+  "author": "InzamZ <me@inzamz.top>",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.0.0-alpha.28",
+    "vue": "^3.2.45"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
+  }
+}
