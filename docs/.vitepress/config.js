@@ -4,6 +4,7 @@ export default {
     themeConfig: {
         logo: '/my-logo.svg',
         outline: 'deep',
+        lastUpdatedText: '上次更新 UTC: ',
         nav: [{
                 text: '课程笔记',
                 items: [
