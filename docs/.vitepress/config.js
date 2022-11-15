@@ -1,29 +1,35 @@
 export default {
     lang: 'zh-CN',
     lastUpdated: true,
+    markdown: {
+        config: (md) => {
+            // use more markdown-it plugins!
+            md.use(require('markdown-it-task-lists'))
+        }
+    },
     themeConfig: {
         outline: [2, 3],
         lastUpdatedText: '上次更新 UTC: ',
         nav: [{
-                text: '课程笔记',
+            text: '课程笔记',
+            items: [
+                { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
+                { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+            ]
+        },
+        {
+            text: '读书笔记',
+            items: [{
+                text: '技术类笔记',
                 items: [
-                    { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
-                    { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+                    { text: 'Linux内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
                 ]
             },
             {
-                text: '读书笔记',
-                items: [{
-                        text: '技术类笔记',
-                        items: [
-                            { text: 'Linux内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
-                        ]
-                    },
-                    {
-                        text: '文学类笔记',
-                    }
-                ]
-            },
+                text: '文学类笔记',
+            }
+            ]
+        },
         ],
         sidebar: {
             '/CoursesNotes/': [{
