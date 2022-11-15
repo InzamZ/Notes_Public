@@ -2,8 +2,7 @@ export default {
     lang: 'zh-CN',
     lastUpdated: true,
     themeConfig: {
-        logo: '/my-logo.svg',
-        outline: 'deep',
+        outline: [2, 3],
         lastUpdatedText: '上次更新 UTC: ',
         nav: [{
                 text: '课程笔记',
@@ -51,7 +50,8 @@ export default {
                     { text: '第6章：渗透测试 - 情报收集技术', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-情报收集技术' },
                     { text: '第6章：渗透测试 - 漏洞扫描技术', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-漏洞扫描技术' },
                     { text: '第6章：渗透测试 - Metasploit 框架', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-Metasploit框架' },
-                    { text: '第7章：漏洞挖掘与利用', link: '/CoursesNotes/网络攻防技术/第7章_漏洞挖掘与利用' },
+                    { text: '第7章：软件安全 - 漏洞挖掘与利用', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-漏洞挖掘与利用' },
+                    { text: '第7章：软件安全 - 缓冲区溢出', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-缓冲区溢出' },
                 ]
             }],
             '/ReadingNotes/': [{
