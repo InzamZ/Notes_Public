@@ -1,7 +1,7 @@
 # MSF 简介
 Rapid7 LLC 开发的一个开源渗透测试工具。用于开发和运行 exploit 代码，其中还包括 Opcode 数据库、shellcode 等。
 ## MSF 软件架构
-![835C3AB8-A98A-4E1F-9366-D48BDCA76683.jpeg](img/1667889883700-e10b8ab7-e3bb-4b7d-bd1f-abab72b506b8.jpeg)
+![835C3AB8-A98A-4E1F-9366-D48BDCA76683.jpeg](./img/1667889883700-e10b8ab7-e3bb-4b7d-bd1f-abab72b506b8.jpeg)
 ### Rex
 即 Ruby Extension Library，本质上是一些 class 和模块的集合，开发者可以基于这些类和模块来开发工具，比如包括：应用于大多数任务的基本库；处理 socket、协议、文本传输等；处理 SSL、SMB、HTTP、XOR、Base64、Unicode 等。
 ### MSF Core
