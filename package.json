@@ -11,7 +11,7 @@
   },
   "scripts": {
     "docs:format" : "bash format.sh",
-    "docs:dev": "vitepress dev docs",
+    "docs:dev": "bash format.sh \n vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
   },
