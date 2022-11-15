@@ -6,12 +6,15 @@
   "author": "InzamZ <me@inzamz.top>",
   "license": "MIT",
   "devDependencies": {
+    "cz-conventional-changelog": "3.3.0",
+    "husky": "^8.0.2",
+    "validate-commit-msg": "^1.1.3",
     "vitepress": "^1.0.0-alpha.28",
     "vue": "^3.2.45"
   },
   "scripts": {
-    "docs:format" : "bash format.sh",
-    "docs:dev": "bash format.sh \n vitepress dev docs",
+    "docs:format": "bash ./script/format.sh",
+    "docs:dev": "bash ./script/format.sh \n vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
   },
@@ -20,5 +23,13 @@
   },
   "dependencies": {
     "zhlint": "^0.6.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "commit-msg": "./script/validate-commit-msg.js"
+    }
   }
 }
