@@ -1,8 +1,9 @@
 export default {
+    lang: 'zh-CN',
+    lastUpdated: true,
     themeConfig: {
         logo: '/my-logo.svg',
         outline: 'deep',
-        lastUpdated: true,
         nav: [{
                 text: '课程笔记',
                 items: [
