@@ -10,11 +10,15 @@
     "vue": "^3.2.45"
   },
   "scripts": {
+    "docs:format" : "bash format.sh",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
   },
   "engines": {
     "node": ">=16"
+  },
+  "dependencies": {
+    "zhlint": "^0.6.2"
   }
 }

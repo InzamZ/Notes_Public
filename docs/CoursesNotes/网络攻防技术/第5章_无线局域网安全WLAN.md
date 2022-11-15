@@ -180,7 +180,7 @@ TKIP 使用称为 Michael 算法的 Keyed Hash function 来生成 MIC。Michael 
 KeyMixing：阶段一为了增强强度，每次连接只运行一次，但是阶段二每个包运行一次。最后生成结合 TSC0，TSC1，ARC4 key。
 
 ### TKIP：解密过程
-![0B6790AF-36DE-4A8C-B140-D2C711152283.jpeg](./img/https://cdn.nlark.com/yuque/0/2022/jpeg/12558165/1666078046719-16b67197-1f8b-4f96-990c-9c6202449b32.jpeg#clientId=uc15b8c47-4162-4&crop=0&crop=0&crop=1&crop=1&errorMessage=unknown%20error&from=ui&id=u738a85b1&margin=%5Bobject%20Object%5D&name=0B6790AF-36DE-4A8C-B140-D2C711152283.jpeg&originHeight=599&originWidth=978&originalType=binary&ratio=1&rotation=0&showTitle=false&size=152525&status=error&style=none&taskId=u7b59fc5b-9395-46b6-9fd4-7134ed721b3&title=)
+![0B6790AF-36DE-4A8C-B140-D2C711152283.jpeg](./img/1666078046719-16b67197-1f8b-4f96-990c-9c6202449b32.jpeg )
 
 - 阶段 1 的密钥混合有三个输入，即：TA、TK 和 TSC，结果为 TTAK，然后输入给阶段 2 的密钥混合，同时将 TK 和 TSC 作为输入，生成 WEP seed。WEP seed 喂给 ARC4 算法生成密钥流
 - 同时对帧的 TSC 进行检查，判断是否与预期相符，如果不相符，则丢弃；否则与密钥流做 XOR 运输，恢复出明文 MPDU，如果存在分片，这里还需要重组。以相同的方式生成 MIC 值，并与明文 MPDU 中的 MIC 进行比对，以确定是否完整。
