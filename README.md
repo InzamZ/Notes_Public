@@ -16,7 +16,7 @@ Github 仓库并不是一个完美的笔记显示器 , 于是开始采用 vitepr
 
 涉及版权问题请联系我，我会立刻删除。所有的资料仅供参考学习，务必在下载后 24 小时内删除。 笔记会比较杂和随意，不像博客可能写的比较认真，这也是之前把 acm.inzamz.top 分出我的博客的重要原因。
 
-- [ ] 与[AppleBooksNoteExport](https://github.com/InzamZ/AppleBooksNoteExport)联动实现发送邮件自动生成markdown并添加到本仓库
+- [ ] 与 [AppleBooksNoteExport](https://github.com/InzamZ/AppleBooksNoteExport) 联动实现发送邮件自动生成markdown并添加到本仓库
 - [ ] ~~图床的部署~~
 - [ ] 网页卡片的实现
 
