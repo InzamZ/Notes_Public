@@ -1,6 +1,6 @@
 # Handshake protocol
 ## 完整流程
-![1.png](./img/./img/1665225968696-203d514e-3a63-4f46-b7ec-636e022ffdee-166815224276611.png)
+![1.png](./img/1665225968696-203d514e-3a63-4f46-b7ec-636e022ffdee-166815224276611.png)
 ## 包结构图示
 ![2.jpeg](./img/1665213269815-96d7453c-9c7e-4015-82bb-b4aadf2718bb.jpeg)
 ## HandshakeType
@@ -119,7 +119,7 @@ Alert 消息分成两类，警告和致命消息。
 - 致命消息：导致连接直接中断，并将所有的相关会话作废，以避免这个会话被继续用来建立新连接。
 - 警告消息：仅仅通告对方有关的报警消息，不导致连接关闭。
 ## AlertDescription
-<img src="1665499555750-b1a026ba-cc8e-4e33-b7b6-5a0182fe8048.png" alt="image.png" style="zoom: 50%;" />
+<img src="./img/1665499555750-b1a026ba-cc8e-4e33-b7b6-5a0182fe8048.png" alt="image.png" style="zoom: 50%;" />
 
 ## TLS 报警消息类型和触发原因
 ![image.png](./img/1665499612769-77d6e3a7-a07b-41e1-b0b2-1629545abc71-166815278484750.png)
