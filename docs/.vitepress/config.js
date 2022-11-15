@@ -1,9 +1,29 @@
 export default {
     themeConfig: {
         logo: '/my-logo.svg',
-        nav: [
-            { text: 'CoursesNotes', link: '/CoursesNotes/' },
-            { text: 'ReadingNotes', link: '/ReadingNotes/' },
+        nav: [{
+                text: '课程笔记',
+                items: [
+                    { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
+                    { text: '网络攻防技术', link: '/CoursesNotes/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+                ]
+            },
+            {
+                text: '读书笔记',
+                items: [{
+                        text: '技术类笔记',
+                        items: [
+                            { text: 'Linux内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/第一章_Linux内核简介' },
+                        ]
+                    },
+                    {
+                        text: '文学类笔记',
+                        items: [
+                            { text: 'Linux内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/第一章_Linux内核简介' },
+                        ]
+                    }
+                ]
+            },
         ],
         sidebar: {
             '/CoursesNotes/': [{
