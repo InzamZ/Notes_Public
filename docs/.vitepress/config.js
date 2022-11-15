@@ -10,7 +10,7 @@ export default {
                 text: 'CoursesNotes',
                 items: [
                     { text: 'CoursesNotes', link: '/CoursesNotes/' },
-                    { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络' },
+                    { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
                     { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
                 ]
             }],
@@ -18,7 +18,7 @@ export default {
                 text: '计算机网络',
                 items: [
                     { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络' },
-                    { text: '第一章:计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络' },
+                    { text: '第一章:计算机网络体系结构', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
                 ]
             }],
             '/CoursesNotes/网络攻防技术/': [{
@@ -37,7 +37,7 @@ export default {
                 text: 'ReadingNotes',
                 items: [
                     { text: 'ReadingNotes', link: '/ReadingNotes/' },
-                    { text: 'Linux内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现' },
+                    { text: 'Linux内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/第一章_Linux内核简介' },
                 ]
             }],
             '/ReadingNotes/Linux内核设计与实现': [{
