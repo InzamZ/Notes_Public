@@ -4,7 +4,7 @@ export default {
         nav: [
             { text: 'CoursesNotes', link: '/CoursesNotes' },
             { text: 'ReadingNotes', link: '/ReadingNotes' },
-        ]，
+        ],
         sidebar: {
             '/CoursesNotes/':[
                 {
