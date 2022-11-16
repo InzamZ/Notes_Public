@@ -73,6 +73,7 @@ export default {
                     { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
                     { text: '第一章：Linux 内核简介', link: '/ReadingNotes/Linux内核设计与实现/第一章_Linux内核简介' },
                     { text: '第二章：从内核出发', link: '/ReadingNotes/Linux内核设计与实现/第二章_从内核出发' },
+                    { text: '第三章：进程管理', link: '/ReadingNotes/Linux内核设计与实现/第三章_进程管理' },
                 ]
             }]
         }
