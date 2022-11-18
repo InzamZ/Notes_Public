@@ -9,7 +9,7 @@ export default {
     },
     themeConfig: {
         outline: [2, 3],
-        lastUpdatedText: '上次更新 UTC: ',
+        lastUpdatedText: '最近更新',
         nav: [{
             text: '课程笔记',
             items: [
