@@ -5,9 +5,9 @@ export default {
         config: (md) => {
             // use more markdown-it plugins!
             md.use(require('markdown-it-task-lists'))
-            md.use(require('markdown-it-pdf'), {
-                showUrl: true
-            });
+            // md.use(require('markdown-it-pdf'), {
+            //     showUrl: true
+            // });
         }
     },
     themeConfig: {
