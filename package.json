@@ -23,6 +23,7 @@
     "node": ">=16"
   },
   "dependencies": {
+    "markdown-it-pdf": "^1.1.6",
     "zhlint": "^0.6.2"
   },
   "config": {
