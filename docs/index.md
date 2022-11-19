@@ -6,7 +6,7 @@ hero:
   text: 记录我的读书轨迹
   tagline: 胆大漂洋过海，胆小寸步难行
   image:
-    src: /icon.png
+    src: /icon.svg
     alt: Reading
   actions:
     - theme: brand
