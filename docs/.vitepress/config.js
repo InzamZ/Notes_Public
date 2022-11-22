@@ -61,6 +61,7 @@ export default {
                     { text: '第6章：渗透测试 - Metasploit 框架', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-Metasploit框架' },
                     { text: '第7章：软件安全 - 漏洞挖掘与利用', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-漏洞挖掘与利用' },
                     { text: '第7章：软件安全 - 缓冲区溢出', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-缓冲区溢出' },
+                    { text: '第8章：Web应用安全', link: '/CoursesNotes/网络攻防技术/第8章_Web应用安全' },
                 ]
             }],
             '/ReadingNotes/': [{
