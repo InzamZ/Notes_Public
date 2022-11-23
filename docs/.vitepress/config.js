@@ -5,9 +5,9 @@ export default {
         config: (md) => {
             // use more markdown-it plugins!
             md.use(require('markdown-it-task-lists'))
-            // md.use(require('markdown-it-pdf'), {
-            //     showUrl: true
-            // });
+                // md.use(require('markdown-it-pdf'), {
+                //     showUrl: true
+                // });
         }
     },
     themeConfig: {
@@ -25,7 +25,8 @@ export default {
                 items: [{
                         text: '技术类笔记',
                         items: [
-                            { text: 'Linux内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+                            { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+                            { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
                         ]
                     },
                     {
@@ -68,6 +69,7 @@ export default {
                 items: [
                     { text: 'ReadingNotes', link: '/ReadingNotes/' },
                     { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
                 ]
             }],
             '/ReadingNotes/Linux内核设计与实现/': [{
@@ -78,7 +80,14 @@ export default {
                     { text: '第二章：从内核出发', link: '/ReadingNotes/Linux内核设计与实现/第二章_从内核出发' },
                     { text: '第三章：进程管理', link: '/ReadingNotes/Linux内核设计与实现/第三章_进程管理' },
                 ]
-            }]
+            }],
+            '/ReadingNotes/C++_Primer_Plus/': [{
+                text: 'C++ Primer Plus',
+                items: [
+                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
+                    { text: '第10章：对象与类', link: '/ReadingNotes/C++_Primer_Plus/第10章_对象与类' },
+                ]
+            }],
         }
     }
 
