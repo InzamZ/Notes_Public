@@ -5,35 +5,41 @@ export default {
         config: (md) => {
             // use more markdown-it plugins!
             md.use(require('markdown-it-task-lists'))
-                // md.use(require('markdown-it-pdf'), {
-                //     showUrl: true
-                // });
+            // md.use(require('markdown-it-pdf'), {
+            //     showUrl: true
+            // });
         }
     },
     themeConfig: {
         outline: [2, 3],
         lastUpdatedText: '最近更新',
         nav: [{
-                text: '课程笔记',
+            text: '课程笔记',
+            items: [
+                { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
+                { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+            ]
+        },
+        {
+            text: '读书笔记',
+            items: [{
+                text: '技术类笔记',
                 items: [
-                    { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
-                    { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+                    { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
                 ]
             },
             {
-                text: '读书笔记',
-                items: [{
-                        text: '技术类笔记',
-                        items: [
-                            { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
-                            { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
-                        ]
-                    },
-                    {
-                        text: '文学类笔记',
-                    }
-                ]
-            },
+                text: '文学类笔记',
+            }
+            ]
+        },
+        {
+            text: '其他内容',
+            items: [
+                { text: 'C++后端开发面试题与知识点汇总', link: '/Other/Cpp_Interview_Summary' },
+            ]
+        },
         ],
         sidebar: {
             '/CoursesNotes/': [{
@@ -86,6 +92,12 @@ export default {
                 items: [
                     { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
                     { text: '第10章：对象与类', link: '/ReadingNotes/C++_Primer_Plus/第10章_对象与类' },
+                ]
+            }],
+            '/Other': [{
+                text: '其他内容',
+                items: [
+                    { text: 'C++后端开发面试题与知识点汇总', link: '/Other/Cpp_Interview_Summary' },
                 ]
             }],
         }
