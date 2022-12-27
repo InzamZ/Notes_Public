@@ -1,4 +1,7 @@
 import { defineConfig } from 'vitepress'
+import mathjax3 from 'markdown-it-mathjax3';
+
+const customElements = ['mjx-container'];
 
 export default defineConfig({
     lang: 'zh-CN',
@@ -7,11 +10,18 @@ export default defineConfig({
         config: (md) => {
             // use more markdown-it plugins!
             md.use(require('markdown-it-task-lists'))
-            md.use(require('markdown-it-katex'))
+            md.use(mathjax3)
             // md.use(require('markdown-it-pdf'), {
             //     showUrl: true
             // });
         }
+    },
+    vue: {
+        template: {
+            compilerOptions: {
+                isCustomElement: (tag) => customElements.includes(tag),
+            },
+        },
     },
     themeConfig: {
         outline: [2, 3],
