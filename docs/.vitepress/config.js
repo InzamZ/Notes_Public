@@ -55,6 +55,7 @@ export default {
                 items: [
                     { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
                     { text: '第一章：计算机网络体系结构', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
+                    { text: '第五章：传输层', link: '/CoursesNotes/计算机网络/第五章_传输层' },
                 ]
             }],
             '/CoursesNotes/网络攻防技术/': [{
