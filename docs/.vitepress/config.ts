@@ -1,7 +1,93 @@
 import { defineConfig } from 'vitepress'
-import mathjax3 from 'markdown-it-mathjax3';
+import markdownItKatex from 'markdown-it-katex'
 
-const customElements = ['mjx-container'];
+const customElements = [
+  'math',
+  'maction',
+  'maligngroup',
+  'malignmark',
+  'menclose',
+  'merror',
+  'mfenced',
+  'mfrac',
+  'mi',
+  'mlongdiv',
+  'mmultiscripts',
+  'mn',
+  'mo',
+  'mover',
+  'mpadded',
+  'mphantom',
+  'mroot',
+  'mrow',
+  'ms',
+  'mscarries',
+  'mscarry',
+  'mscarries',
+  'msgroup',
+  'mstack',
+  'mlongdiv',
+  'msline',
+  'mstack',
+  'mspace',
+  'msqrt',
+  'msrow',
+  'mstack',
+  'mstack',
+  'mstyle',
+  'msub',
+  'msup',
+  'msubsup',
+  'mtable',
+  'mtd',
+  'mtext',
+  'mtr',
+  'munder',
+  'munderover',
+  'semantics',
+  'math',
+  'mi',
+  'mn',
+  'mo',
+  'ms',
+  'mspace',
+  'mtext',
+  'menclose',
+  'merror',
+  'mfenced',
+  'mfrac',
+  'mpadded',
+  'mphantom',
+  'mroot',
+  'mrow',
+  'msqrt',
+  'mstyle',
+  'mmultiscripts',
+  'mover',
+  'mprescripts',
+  'msub',
+  'msubsup',
+  'msup',
+  'munder',
+  'munderover',
+  'none',
+  'maligngroup',
+  'malignmark',
+  'mtable',
+  'mtd',
+  'mtr',
+  'mlongdiv',
+  'mscarries',
+  'mscarry',
+  'msgroup',
+  'msline',
+  'msrow',
+  'mstack',
+  'maction',
+  'semantics',
+  'annotation',
+  'annotation-xml'
+]
 
 export default defineConfig({
     lang: 'zh-CN',
@@ -10,18 +96,16 @@ export default defineConfig({
         config: (md) => {
             // use more markdown-it plugins!
             md.use(require('markdown-it-task-lists'))
-            md.use(mathjax3)
-            // md.use(require('markdown-it-pdf'), {
-            //     showUrl: true
-            // });
+            md.use(markdownItKatex)
         }
     },
+    // 由于vitepress编译生成静态html文件时，无法识别插件生成的特殊标签，故需在编译时进行处理，将特殊标签定位自定义标签，防止编译报错
     vue: {
         template: {
             compilerOptions: {
-                isCustomElement: (tag) => customElements.includes(tag),
-            },
-        },
+                isCustomElement: (tag) => customElements.includes(tag)
+            }
+        }
     },
     themeConfig: {
         outline: [2, 3],
