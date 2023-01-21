@@ -92,6 +92,7 @@ const customElements = [
 export default defineConfig({
     lang: 'zh-CN',
     lastUpdated: true,
+    title: 'Misaka19614',
     markdown: {
         config: (md) => {
             // use more markdown-it plugins!
