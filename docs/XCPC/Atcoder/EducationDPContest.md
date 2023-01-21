@@ -98,15 +98,18 @@ int main()
 
 - $dp_{i,j}$：第 $i$ 天选择做 $j$ 事件获得的最大值。($j = 1$ 做 $a$，以此类推)
 
-状态转移方程： 
+状态转移方程：
+
 $$
-dp_{i,j} = \max^{3}_{k = 1} dp_{i-1,k} + f(j) \tag {k != j} \\
-f(x)=\lbrace
-             \begin{array}
-             a &x=1 \\  
-             b &x=2 \\
-             c &x=3 \\   
-             \end{array}
+dp_{i,j} = \max^{3}_{k = 1} dp_{i-1,k} + f(j) \tag {k != j}
+$$
+
+$$
+f(x)=\lbrace \begin {array}
+    a &x=1 \\
+    b &x=2 \\
+    c &x=3
+\end {array}
 $$
 
 ```cpp
