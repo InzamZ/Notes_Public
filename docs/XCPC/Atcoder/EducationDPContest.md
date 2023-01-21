@@ -24,7 +24,7 @@ head:
 斐波那契数列。记得加绝对值。状态转移方程： 
 
 $$
-f_{i} = \text{MAX} (f_{i-1} + \lvert h_i - h_{i-1} \rvert \ ,\  f_{i-2} + \lvert h_i - h_{i-2} \rvert)
+f_{i} = \max (f_{i-1} + \lvert h_i - h_{i-1} \rvert \ ,\  f_{i-2} + \lvert h_i - h_{i-2} \rvert)
 $$
 
 ### 代码
@@ -60,7 +60,7 @@ int main()
 同 1，加上一个循环 k。状态转移方程： 
 
 $$
-f_{i} = \text{MAX}^{k}_{j=1} (f_{i-j} + \lvert h_i - h_{i-j} \rvert)
+f_{i} = \max^{k}_{j=1} (f_{i-j} + \lvert h_i - h_{i-j} \rvert)
 $$
 
 ### 代码
@@ -102,12 +102,11 @@ int main()
 $$
 dp_{i,j} = \text{MAX}^{3}_{k = 1} dp_{i-1,k} + f(j) \tag {k != j} \\
 f(x)=\left\{  
-             \begin {array} {**lr**}  
+             \begin {array}
              a &x=1 \\  
              b &x=2 \\
              c &x=3 \\   
              \end {array}
-\right.
 $$
 
 ```cpp
@@ -162,7 +161,7 @@ int main()
 状态转移方程：
  
 $$
-dp_i=\max dp_i，dp_{i-w}+v
+dp_i=\max (dp_i,dp_{i-w}+v)
 $$
 
 ### 代码
@@ -209,11 +208,11 @@ int main()
 状态转移方程： 
 $$
 dp_x=\left\{  
-             \begin {array} {**lr**}  
+             \begin {array}
              0 &x=0 \\  
              \infty &x\neq0
              \end {array}  
-\right.\\
+\\
 dp_i=\min(dp_i, dp_{i-v}+w)；
 $$
 
