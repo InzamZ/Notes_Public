@@ -230,19 +230,19 @@ function atcoder_sidebar() {
         text: 'Atcoder',
         items: [
             { text: 'Atcoder', link: '/XCPC/Atcoder/' },
-            { text: 'ABC182', link: '/XCPC/Atcoder/ABC182' },
-            { text: 'ABC188', link: '/XCPC/Atcoder/ABC188' },
-            { text: 'ABC189', link: '/XCPC/Atcoder/ABC189' },
-            { text: 'ABC244', link: '/XCPC/Atcoder/ABC244' },
-            { text: 'ABC245', link: '/XCPC/Atcoder/ABC245' },
-            { text: 'ABC247', link: '/XCPC/Atcoder/ABC247' },
-            { text: 'ABC250', link: '/XCPC/Atcoder/ABC250' },
-            { text: 'ARC106', link: '/XCPC/Atcoder/ARC106' },
-            { text: 'ARC116', link: '/XCPC/Atcoder/ARC116' },
-            { text: 'ARC147', link: '/XCPC/Atcoder/ARC147' },
-            { text: 'ARC148', link: '/XCPC/Atcoder/ARC148' },
-            { text: 'EducationDPContest', link: '/XCPC/Atcoder/EducationDPContest' },
-            { text: 'keyence2021', link: '/XCPC/Atcoder/keyence2021' }
+            { text: 'Atcoder Beginner Contect 182', link: '/XCPC/Atcoder/ABC182' },
+            { text: 'Atcoder Beginner Contect 188', link: '/XCPC/Atcoder/ABC188' },
+            { text: 'Atcoder Beginner Contect 189', link: '/XCPC/Atcoder/ABC189' },
+            { text: 'Atcoder Beginner Contect 244', link: '/XCPC/Atcoder/ABC244' },
+            { text: 'Atcoder Beginner Contect 245', link: '/XCPC/Atcoder/ABC245' },
+            { text: 'Atcoder Beginner Contect 247', link: '/XCPC/Atcoder/ABC247' },
+            { text: 'Atcoder Beginner Contect 250', link: '/XCPC/Atcoder/ABC250' },
+            { text: 'Atcoder Regular Contect 106', link: '/XCPC/Atcoder/ARC106' },
+            { text: 'AtCoder Regular Contest 116', link: '/XCPC/Atcoder/ARC116' },
+            { text: 'AtCoder Regular Contest 147', link: '/XCPC/Atcoder/ARC147' },
+            { text: 'AtCoder Regular Contest 148', link: '/XCPC/Atcoder/ARC148' },
+            { text: 'Atcoder Education DP Contest', link: '/XCPC/Atcoder/EducationDPContest' },
+            { text: 'KEYENCE Programming Contest 2021', link: '/XCPC/Atcoder/keyence2021' }
         ]
     }]
 }
