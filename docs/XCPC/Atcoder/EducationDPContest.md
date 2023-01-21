@@ -101,15 +101,15 @@ int main()
 状态转移方程：
 
 $$
-dp_{i,j} = \max^{3}_{k = 1} dp_{i-1,k} + f(j) \tag {k != j}
-$$
-
-$$
-f(x)=\lbrace \begin {array}
-    a &x=1 \\
-    b &x=2 \\
-    c &x=3
-\end {array}
+\begin{aligned}
+dp_{i,j} = \max^{3}_{k=1} dp_{i-1,k} + f(j) & & {k \neq j} \\
+f(x)=\left\{ 
+\begin{array}{rcl}
+a & & {x = 1} \\
+b & & {x = 2} \\
+c & & {x = 3}
+\end{array} \right.
+\end{aligned}
 $$
 
 ```cpp
@@ -210,13 +210,15 @@ int main()
 
 状态转移方程： 
 $$
-dp_x = \lbrace
-             \begin{array}
-             0 &x=0 \\  
-             \infty &x\neq0
-             \end{array}  
+\begin{aligned}
+dp_x & = \left\{
+\begin{array}{rcl}
+0 & & x = 0 \\  
+\infty & & x \neq 0
+\end{array}  
 \right. \\
-dp_i=\min(dp_i, dp_{i-v}+w)；
+dp_i & = \min(dp_i, dp_{i-v}+w)
+\end{aligned}
 $$
 
 ### 代码
