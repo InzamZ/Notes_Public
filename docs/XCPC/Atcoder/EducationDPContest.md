@@ -1,7 +1,7 @@
 ---
 title: Atcoder Education DP Contest
-date: 2021-03-24 10:44:51
-updated: 2021-04-28 21:44:51
+date: 2021-03-24
+updated: 2023-01-21
 categories:
   - XCPC
   - Atcoder
@@ -17,17 +17,14 @@ head:
 
 > Atcoder 上面的 DP 练习题，主要是能看到别人的代码。
 
-<!-- more -->
-
----
-
 ## A - Frog 1
 
 ### 解题思路
 
 斐波那契数列。记得加绝对值。状态转移方程： 
+
 $$
-f _{i} = MAX (f_ {i-1} + \lvert h_i - h_ {i-1} \rvert \ ,\  f _{i-2} +\lvert h_i - h_ {i-2} \rvert)
+f_{i} = \text{MAX} (f_{i-1} + \lvert h_i - h_{i-1} \rvert \ ,\  f_{i-2} + \lvert h_i - h_{i-2} \rvert)
 $$
 
 ### 代码
@@ -61,8 +58,9 @@ int main()
 ### 解题思路
 
 同 1，加上一个循环 k。状态转移方程： 
+
 $$
-f _{i} = MAX ^{k}_ {j=1} (f _{i-j} + \lvert h_i - h_ {i-j} \rvert)
+f_{i} = \text{MAX}^{k}_{j=1} (f_{i-j} + \lvert h_i - h_{i-j} \rvert)
 $$
 
 ### 代码
@@ -98,18 +96,18 @@ int main()
 
 ### 解题思路
 
-- `dp[i][j]`：第 i 天选择做 j 事件获得的最大值。(j = 1 做 a，以此类推)
+- $dp_{i,j}$：第 $i$ 天选择做 $j$ 事件获得的最大值。($j = 1$ 做 $a$，以此类推)
 
 状态转移方程： 
 $$
-dp _{i,j} = MAX ^{3}_ {k = 1} (dp_ {i-1} + f(j)[i]) \tag {k != j} \\
+dp_{i,j} = \text{MAX}^{3}_{k = 1} dp_{i-1,k} + f(j) \tag {k != j} \\
 f(x)=\left\{  
              \begin {array} {**lr**}  
              a &x=1 \\  
              b &x=2 \\
              c &x=3 \\   
-             \end {array}  
-\right。
+             \end {array}
+\right.
 $$
 
 ```cpp
@@ -157,13 +155,14 @@ int main()
 
 01 背包问题。使用滚动数组优化。
 
-- `dp[i]` 表示到上个物品选择完后，花费 i 个单位体积可获得的最大价值。
-- `w` 当前物品占用体积
-- `v` 当前物品价值
+- $dp_i$ 表示到上个物品选择完后，花费 i 个单位体积可获得的最大价值。
+- $w$ 当前物品占用体积
+- $v$ 当前物品价值
 
-状态转移方程： 
+状态转移方程：
+ 
 $$
-dp[i]=\max (dp[i]，dp[i-w]+v)
+dp_i=\max dp_i，dp_{i-w}+v
 $$
 
 ### 代码
@@ -203,19 +202,19 @@ int main()
 
 是 D 的加强版，数据太大了，原来的办法空间复杂度$O(W)$会 MLE，于是可以换种思路。因为 n 和 v 非常小，我们可以计算价值为 i 时占用的空间。最后找到满足花费少于 W 的 i 的最大值即可。
 
-- `dp[i]` 表示到上个物品选择完后，获得的 i 价值需要花费的最少空间。
-- `w` 当前物品占用体积
-- `v` 当前物品价值
+- $dp_i$ 表示到上个物品选择完后，获得的 i 价值需要花费的最少空间。
+- $w$ 当前物品占用体积
+- $v$ 当前物品价值
 
 状态转移方程： 
 $$
-dp[x]=\left\{  
+dp_x=\left\{  
              \begin {array} {**lr**}  
              0 &x=0 \\  
              \infty &x\neq0
              \end {array}  
 \right.\\
-dp[i]=min(dp[i]，dp[i-v]+w)；
+dp_i=\min(dp_i, dp_{i-v}+w)；
 $$
 
 ### 代码
@@ -254,8 +253,3 @@ int main()
 }
 ```
 
-
-
-To Be Continued。
-
-<!-- Q.E.D. -->
