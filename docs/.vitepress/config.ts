@@ -262,22 +262,22 @@ function codeforces_sidebar() {
         text: 'Codeforces',
         items: [
             { text: 'Codeforces', link: '/XCPC/Codeforces/' },
-            { text: 'CF1440_R684', link: '/XCPC/Codeforces/CF1440_R684' },
-            { text: 'CF1451_R685', link: '/XCPC/Codeforces/CF1451_R685' },
-            { text: 'CF1452_EDU98', link: '/XCPC/Codeforces/CF1452_EDU98' },
-            { text: 'CF1459_R691', link: '/XCPC/Codeforces/CF1459_R691' },
-            { text: 'CF1462_R690', link: '/XCPC/Codeforces/CF1462_R690' },
-            { text: 'CF1463_EDU100', link: '/XCPC/Codeforces/CF1463_EDU100' },
-            { text: 'CF1609-DR-Aut2021', link: '/XCPC/Codeforces/CF1609-DR-Aut2021' },
-            { text: 'CF1613-Edu118', link: '/XCPC/Codeforces/CF1613-Edu118' },
-            { text: 'CF1651-Edu124', link: '/XCPC/Codeforces/CF1651-Edu124' },
-            { text: 'CF1658_R779', link: '/XCPC/Codeforces/CF1658_R779' },
-            { text: 'CF1668_R783', link: '/XCPC/Codeforces/CF1668_R783' },
-            { text: 'CF1671_Edu127', link: '/XCPC/Codeforces/CF1671_Edu127' },
-            { text: 'CF1675_R787', link: '/XCPC/Codeforces/CF1675_R787' },
-            { text: 'CF1726_R819', link: '/XCPC/Codeforces/CF1726_R819' },
-            { text: 'CF1728_Edu135', link: '/XCPC/Codeforces/CF1728_Edu135' },
-            { text: 'CF1750_TON3', link: '/XCPC/Codeforces/CF1750_TON3' }
+            { text: 'Codeforces Round 684 (Div.2)', link: '/XCPC/Codeforces/CF1440_R684' },
+            { text: 'Codeforces Round 685 (Div.2)', link: '/XCPC/Codeforces/CF1451_R685' },
+            { text: 'Educational Codeforces Round 98', link: '/XCPC/Codeforces/CF1452_EDU98' },
+            { text: 'Codeforces Round 691 (Div.2)', link: '/XCPC/Codeforces/CF1459_R691' },
+            { text: 'Codeforces Round 690 (Div.3)', link: '/XCPC/Codeforces/CF1462_R690' },
+            { text: 'Educational Codeforces Round 100', link: '/XCPC/Codeforces/CF1463_EDU100' },
+            { text: 'Deltix Round, Autumn 2021', link: '/XCPC/Codeforces/CF1609-DR-Aut2021' },
+            { text: 'Educational Codeforces Round 118', link: '/XCPC/Codeforces/CF1613-Edu118' },
+            { text: 'Educational Codeforces Round 124', link: '/XCPC/Codeforces/CF1651-Edu124' },
+            { text: 'Codeforces Round 779 (Div.2)', link: '/XCPC/Codeforces/CF1658_R779' },
+            { text: 'Codeforces Round 783 (Div.2)', link: '/XCPC/Codeforces/CF1668_R783' },
+            { text: 'Educational Codeforces Round 127', link: '/XCPC/Codeforces/CF1671_Edu127' },
+            { text: 'Codeforces Round 787 (Div.3)', link: '/XCPC/Codeforces/CF1675_R787' },
+            { text: 'Codeforces Round 819 (Div.1 + Div.2)', link: '/XCPC/Codeforces/CF1726_R819' },
+            { text: 'Educational Codeforces Round 135', link: '/XCPC/Codeforces/CF1728_Edu135' },
+            { text: 'CodeTON Round 3 (Div.1 + Div.2)', link: '/XCPC/Codeforces/CF1750_TON3' }
         ]
     }]
 }
