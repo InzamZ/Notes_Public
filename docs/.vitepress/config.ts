@@ -253,7 +253,7 @@ function codechef_sidebar() {
         text: 'CodeChef',
         items: [
             { text: 'CodeChef', link: '/XCPC/CodeChef/' },
-            { text: 'STARTER39', link: '/XCPC/CodeChef/STARTER39' }
+            { text: 'CodeChef Starters 39 Div4', link: '/XCPC/CodeChef/STARTER39' }
         ]
     }]
 }
@@ -297,9 +297,9 @@ function leetcode_sidebar() {
         text: 'Leetcode',
         items: [
             { text: 'Leetcode', link: '/XCPC/Leetcode/' },
-            { text: 'LeetCodeCup_2022Spring', link: '/XCPC/Leetcode/LeetCodeCup_2022Spring' },
-            { text: 'LeetCodeWeeklyContest291', link: '/XCPC/Leetcode/LeetCodeWeeklyContest291' },
-            { text: 'LeetCodeWeeklyContest292', link: '/XCPC/Leetcode/LeetCodeWeeklyContest292' },
+            { text: '力扣杯2022春季编程挑战赛', link: '/XCPC/Leetcode/LeetCodeCup_2022Spring' },
+            { text: '力扣周赛 291', link: '/XCPC/Leetcode/LeetCodeWeeklyContest291' },
+            { text: '力扣周赛 292', link: '/XCPC/Leetcode/LeetCodeWeeklyContest292' },
         ]
     }]
 }
