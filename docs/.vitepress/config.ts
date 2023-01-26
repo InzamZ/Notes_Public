@@ -298,6 +298,7 @@ function leetcode_sidebar() {
         items: [
             { text: 'Leetcode', link: '/XCPC/Leetcode/' },
             { text: '力扣杯2022春季编程挑战赛', link: '/XCPC/Leetcode/LeetCodeCup_2022Spring' },
+            { text: '力扣双周赛 95', link: '/XCPC/Leetcode/LeetCodeBiWeeklyContest95' },
             { text: '力扣周赛 291', link: '/XCPC/Leetcode/LeetCodeWeeklyContest291' },
             { text: '力扣周赛 292', link: '/XCPC/Leetcode/LeetCodeWeeklyContest292' },
         ]
