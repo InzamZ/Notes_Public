@@ -1,9 +1,10 @@
 ---
 title: 力扣双周赛 95
 lang: zh-CN
+date: 2023-01-26
+update: 2023-01-27
 tags:
   - 贪心
-  - 哈希
 description: 力扣双周赛 95
 
 ---
@@ -76,3 +77,24 @@ class DataStream {
  */
 ```
 
+## C - 2527 查询数组 Xor 美丽值
+
+### 题目大意
+
+给定一个整数数组，坐标从 0 开始，长度为 n $( 1 \leq n \leq 10^5)$ ，选定三个下标$i$,$j$,$k$,定义有效值为 $(\ (nums_i \mid nums_j) \  \& \ nums_k \ )$ ，计算出所有三元组$(0 \leq i,j,k \lt n)$ 的有效值的异或结果。
+
+### 解题思路
+
+数学题，需要对式子进行化简，最后计算结果即可。
+
+$$
+\begin{aligned}
+&(( nums_i \mid nums_j)\ \& \ nums_k) \oplus ((nums_j \mid nums_i)\ \& \ nums_k) \\
+= \  &(( nums_i \ \& \  nums_k ) \mid ( nums_j\ \&\ nums_k) ) \oplus (( nums_j\ \&\ nums_k ) \mid ( nums_i\ \&\ nums_k) ) \\
+= \  &( ( ( nums_i \ \& \ nums_k )  \oplus (( nums_j \ \& \ nums_k ) \mid ( nums_i\  \& \ nums_k ) ) ) \\
+  \  & \mid ( ( ( nums_j\  \& \ nums_k ) \oplus (( nums_j \ \& \ nums_k ) \mid ( nums_i\  \& \ nums_k ) ) )\\
+= \  &( ( ( nums_i \ \& \ nums_k )  \oplus ( nums_j \ \& \ nums_k ) ) \mid ( ( ( nums_j\  \& \ nums_k ) \oplus ( nums_j \ \& \ nums_k  ) )\\
+\end{aligned}
+$$
+
+化简后异或
