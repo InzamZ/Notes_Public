@@ -264,21 +264,35 @@ function atcoder_sidebar() {
     return [{
         text: 'Atcoder',
         items: [
-            { text: 'Atcoder', link: '/XCPC/Atcoder/' },
-            { text: 'Atcoder Beginner Contect 182', link: '/XCPC/Atcoder/ABC182' },
-            { text: 'Atcoder Beginner Contect 188', link: '/XCPC/Atcoder/ABC188' },
-            { text: 'Atcoder Beginner Contect 189', link: '/XCPC/Atcoder/ABC189' },
-            { text: 'Atcoder Beginner Contect 244', link: '/XCPC/Atcoder/ABC244' },
-            { text: 'Atcoder Beginner Contect 245', link: '/XCPC/Atcoder/ABC245' },
-            { text: 'Atcoder Beginner Contect 247', link: '/XCPC/Atcoder/ABC247' },
-            { text: 'Atcoder Beginner Contect 250', link: '/XCPC/Atcoder/ABC250' },
-            { text: 'Atcoder Beginner Contect 285', link: '/XCPC/Atcoder/ABC285' },
-            { text: 'Atcoder Regular Contect 106', link: '/XCPC/Atcoder/ARC106' },
-            { text: 'AtCoder Regular Contest 116', link: '/XCPC/Atcoder/ARC116' },
-            { text: 'AtCoder Regular Contest 147', link: '/XCPC/Atcoder/ARC147' },
-            { text: 'AtCoder Regular Contest 148', link: '/XCPC/Atcoder/ARC148' },
-            { text: 'Atcoder Education DP Contest', link: '/XCPC/Atcoder/EducationDPContest' },
-            { text: 'KEYENCE Programming Contest 2021', link: '/XCPC/Atcoder/keyence2021' }
+            {
+                text: 'Atcoder Beginner Contect',
+                items: [
+                    { text: 'ABC 182', link: '/XCPC/Atcoder/ABC182' },
+                    { text: 'ABC 188', link: '/XCPC/Atcoder/ABC188' },
+                    { text: 'ABC 189', link: '/XCPC/Atcoder/ABC189' },
+                    { text: 'ABC 244', link: '/XCPC/Atcoder/ABC244' },
+                    { text: 'ABC 245', link: '/XCPC/Atcoder/ABC245' },
+                    { text: 'ABC 247', link: '/XCPC/Atcoder/ABC247' },
+                    { text: 'ABC 250', link: '/XCPC/Atcoder/ABC250' },
+                    { text: 'ABC 285', link: '/XCPC/Atcoder/ABC285' }
+                ]
+            },
+            {
+                text: 'Atcoder Regular Contect',
+                items: [
+                    { text: 'ARC 106', link: '/XCPC/Atcoder/ARC106' },
+                    { text: 'ARC 116', link: '/XCPC/Atcoder/ARC116' },
+                    { text: 'ARC 147', link: '/XCPC/Atcoder/ARC147' },
+                    { text: 'ARC 148', link: '/XCPC/Atcoder/ARC148' }
+                ]
+            },
+            {
+                text: 'Other Atcoder Contest',
+                items: [
+                    { text: 'Education DP Contest', link: '/XCPC/Atcoder/EducationDPContest' },
+                    { text: 'KEYENCE 2021', link: '/XCPC/Atcoder/keyence2021' }
+                ]
+            }
         ]
     }];
 }
