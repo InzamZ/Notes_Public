@@ -101,9 +101,6 @@ export default defineConfig({
             md.use(markdownItKatex)
         }
     },
-	socialLinks: [
-		{ icon: 'github', link: 'https://github.com/InzamZ'},
-	],
 	cleanUrls: true,
     // 由于vitepress编译生成静态html文件时，无法识别插件生成的特殊标签，故需在编译时进行处理，将特殊标签定位自定义标签，防止编译报错
     vue: {
@@ -119,6 +116,9 @@ export default defineConfig({
     themeConfig: {
         outline: [2, 3],
         lastUpdatedText: '最近更新',
+        socialLinks: [
+            { icon: 'github', link: 'https://github.com/InzamZ'},
+        ],
         nav: nav(),
         sidebar: {
             '/CoursesNotes/': courses_notes_sidebar(),
