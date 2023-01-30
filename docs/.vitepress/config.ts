@@ -89,6 +89,173 @@ const customElements = [
   'annotation-xml'
 ]
 
+
+export default defineConfig({
+    lang: 'zh-CN',
+    lastUpdated: true,
+    title: 'Misaka19614',
+    markdown: {
+        config: (md) => {
+            // use more markdown-it plugins!
+            md.use(require('markdown-it-task-lists'))
+            md.use(markdownItKatex)
+        }
+    },
+    // 由于vitepress编译生成静态html文件时，无法识别插件生成的特殊标签，故需在编译时进行处理，将特殊标签定位自定义标签，防止编译报错
+    vue: {
+        template: {
+            compilerOptions: {
+                isCustomElement: (tag) => customElements.includes(tag)
+            }
+        }
+    },
+    head: [
+        ['link', { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css', crossorigin: '' }]
+    ],
+    themeConfig: {
+        outline: [2, 3],
+        lastUpdatedText: '最近更新',
+        nav: nav(),
+        sidebar: {
+            '/CoursesNotes/': courses_notes_sidebar(),
+            '/CoursesNotes/计算机网络/': computer_network_sidebar(),
+            '/CoursesNotes/网络攻防技术/': network_security_sidbar(),
+            '/ReadingNotes/': reading_notes_sidebar(),
+            '/ReadingNotes/Linux内核设计与实现/': linux_kernel_sidebar(),
+            '/ReadingNotes/C++_Primer_Plus/': cpp_primer_plus_sidebar(),
+            '/XCPC/Atcoder/': atcoder_sidebar(),
+            '/XCPC/CodeChef/': codechef_sidebar(),
+            '/XCPC/Codeforces/': codeforces_sidebar(),
+            '/XCPC/Lanqiao/': lanqiao_sidebar(),
+            '/XCPC/Leetcode/': leetcode_sidebar(),
+            '/XCPC/Note/': xcpc_note_sidebar(),
+            '/XCPC/Other/': xcpc_other_sidebar(),
+            '/Other': others_sidebar()
+        }
+    }
+})
+
+
+function nav()
+{
+	return [
+		{
+            text: '课程笔记',
+            items: [
+                { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构.md'},
+                { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS.md' },
+            ]
+        },
+        {
+            text: '读书笔记',
+            items: [
+				{
+	                text: '技术类笔记',
+	                items: [
+	                    { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+	                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
+	                ]
+	            },
+	            {
+	                text: '文学类笔记', items: [ ]
+	            }
+        	]
+        },
+        {
+            text: 'XCPC',
+            items: [
+                { text: 'Atcoder', link: '/XCPC/Atcoder/' },
+                { text: 'CodeChef', link: '/XCPC/CodeChef/' },
+                { text: 'Codeforces', link: '/XCPC/Codeforces/' },
+                { text: 'Lanqiao', link: '/XCPC/Lanqiao/lanqiao2022_regional_CA' },
+                { text: 'Leetcode', link: '/XCPC/Leetcode/' },
+                { text: '学习笔记', link: '/XCPC/Note/' },
+                { text: '其他', link: '/XCPC/Other/' },
+            ]
+        },
+        {
+            text: '其他内容',
+            items: [
+                { text: 'C++后端开发面试题与知识点汇总', link: '/Other/Cpp_Interview_Summary' },
+            ]
+        }
+	];
+}
+
+
+function courses_notes_sidebar(){
+	return [{
+        text: 'CoursesNotes',
+        items: [
+            { text: 'CoursesNotes', link: '/CoursesNotes/' },
+            { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
+            { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+        ]
+	}];
+}
+
+function computer_network_sidebar(){
+	return [{
+        text: '计算机网络',
+        items: [
+            { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
+            { text: '第一章：计算机网络体系结构', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
+            { text: '第五章：传输层', link: '/CoursesNotes/计算机网络/第五章_传输层' },
+        ]
+	}];
+}
+
+function network_security_sidbar(){
+	return [{
+        text: '网络攻防技术',
+        items: [
+            { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+            { text: '第4章：传输层安全协议 TLS', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+            { text: '第5章：无线局域网安全 WLAN', link: '/CoursesNotes/网络攻防技术/第5章_无线局域网安全WLAN' },
+            { text: '第6章：渗透测试 - 情报收集技术', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-情报收集技术' },
+            { text: '第6章：渗透测试 - 漏洞扫描技术', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-漏洞扫描技术' },
+            { text: '第6章：渗透测试 - Metasploit 框架', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-Metasploit框架' },
+            { text: '第7章：软件安全 - 漏洞挖掘与利用', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-漏洞挖掘与利用' },
+            { text: '第7章：软件安全 - 缓冲区溢出', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-缓冲区溢出' },
+        ]
+	}];
+}
+
+function reading_notes_sidebar(){
+	return [{
+        text: 'ReadingNotes',
+        items: [
+            { text: 'ReadingNotes', link: '/ReadingNotes/' },
+            { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+            { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
+        ]
+	}];
+}
+
+function cpp_primer_plus_sidebar()
+{
+	return [{
+	    text: 'C++ Primer Plus',
+	    items: [
+	        { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
+	        { text: '第10章：对象与类', link: '/ReadingNotes/C++_Primer_Plus/第10章_对象与类' },
+	    ]
+	}];
+}
+
+
+function linux_kernel_sidebar(){
+	return [{
+	    text: 'Linux 内核设计与实现',
+	    items: [
+	        { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+	        { text: '第一章：Linux 内核简介', link: '/ReadingNotes/Linux内核设计与实现/第一章_Linux内核简介' },
+	        { text: '第二章：从内核出发', link: '/ReadingNotes/Linux内核设计与实现/第二章_从内核出发' },
+	        { text: '第三章：进程管理', link: '/ReadingNotes/Linux内核设计与实现/第三章_进程管理' },
+	    ]
+	}];
+}
+
 function atcoder_sidebar() {
     return [{
         text: 'Atcoder',
@@ -108,7 +275,7 @@ function atcoder_sidebar() {
             { text: 'Atcoder Education DP Contest', link: '/XCPC/Atcoder/EducationDPContest' },
             { text: 'KEYENCE Programming Contest 2021', link: '/XCPC/Atcoder/keyence2021' }
         ]
-    }]
+    }];
 }
 
 function codechef_sidebar() {
@@ -118,7 +285,7 @@ function codechef_sidebar() {
             { text: 'CodeChef', link: '/XCPC/CodeChef/' },
             { text: 'CodeChef Starters 39 Div4', link: '/XCPC/CodeChef/STARTER39' }
         ]
-    }]
+    }];
 }
 
 function codeforces_sidebar() {
@@ -168,7 +335,7 @@ function leetcode_sidebar() {
     }]
 }
 
-function note_sidebar() {
+function xcpc_note_sidebar() {
     return [{
         text: 'Note',
         items: [
@@ -179,7 +346,7 @@ function note_sidebar() {
     }]
 }
 
-function other_sidebar() {
+function xcpc_other_sidebar() {
     return [{
         text: 'Other',
         items: [
@@ -189,145 +356,11 @@ function other_sidebar() {
     }]
 }
 
-function nav()
-{
-	return [
-		{
-            text: '课程笔记',
-            items: [
-                { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构.md'},
-                { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS.md' },
-            ]
-        },
-        {
-            text: '读书笔记',
-            items: [
-				{
-	                text: '技术类笔记',
-	                items: [
-	                    { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
-	                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
-	                ]
-	            },
-	            {
-	                text: '文学类笔记', items: [ ]
-	            }
-        	]
-        },
-        {
-            text: 'XCPC',
-            items: [
-                { text: 'Atcoder', link: '/XCPC/Atcoder/' },
-                { text: 'CodeChef', link: '/XCPC/CodeChef/' },
-                { text: 'Codeforces', link: '/XCPC/Codeforces/' },
-                { text: 'Lanqiao', link: '/XCPC/Lanqiao/lanqiao2022_regional_CA' },
-                { text: 'Leetcode', link: '/XCPC/Leetcode/' },
-                { text: '学习笔记', link: '/XCPC/Note/' },
-                { text: '其他', link: '/XCPC/Other/' },
-            ]
-        },
-        {
-            text: '其他内容',
-            items: [
-                { text: 'C++后端开发面试题与知识点汇总', link: '/Other/Cpp_Interview_Summary' },
-            ]
-        }
-	];
+function others_sidebar() {
+	return [{
+        text: '其他内容',
+        items: [
+            { text: 'C++后端开发面试题与知识点汇总', link: '/Other/Cpp_Interview_Summary' },
+        ]
+	}];
 }
-
-export default defineConfig({
-    lang: 'zh-CN',
-    lastUpdated: true,
-    title: 'Misaka19614',
-    markdown: {
-        config: (md) => {
-            // use more markdown-it plugins!
-            md.use(require('markdown-it-task-lists'))
-            md.use(markdownItKatex)
-        }
-    },
-    // 由于vitepress编译生成静态html文件时，无法识别插件生成的特殊标签，故需在编译时进行处理，将特殊标签定位自定义标签，防止编译报错
-    vue: {
-        template: {
-            compilerOptions: {
-                isCustomElement: (tag) => customElements.includes(tag)
-            }
-        }
-    },
-    head: [
-        ['link', { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css', crossorigin: '' }]
-    ],
-    themeConfig: {
-        outline: [2, 3],
-        lastUpdatedText: '最近更新',
-        nav: nav(),
-        sidebar: {
-            '/CoursesNotes/': [{
-                text: 'CoursesNotes',
-                items: [
-                    { text: 'CoursesNotes', link: '/CoursesNotes/' },
-                    { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
-                    { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
-                ]
-            }],
-            '/CoursesNotes/计算机网络/': [{
-                text: '计算机网络',
-                items: [
-                    { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
-                    { text: '第一章：计算机网络体系结构', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
-                    { text: '第五章：传输层', link: '/CoursesNotes/计算机网络/第五章_传输层' },
-                ]
-            }],
-            '/CoursesNotes/网络攻防技术/': [{
-                text: '网络攻防技术',
-                items: [
-                    { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
-                    { text: '第4章：传输层安全协议 TLS', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
-                    { text: '第5章：无线局域网安全 WLAN', link: '/CoursesNotes/网络攻防技术/第5章_无线局域网安全WLAN' },
-                    { text: '第6章：渗透测试 - 情报收集技术', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-情报收集技术' },
-                    { text: '第6章：渗透测试 - 漏洞扫描技术', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-漏洞扫描技术' },
-                    { text: '第6章：渗透测试 - Metasploit 框架', link: '/CoursesNotes/网络攻防技术/第6章_渗透测试-Metasploit框架' },
-                    { text: '第7章：软件安全 - 漏洞挖掘与利用', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-漏洞挖掘与利用' },
-                    { text: '第7章：软件安全 - 缓冲区溢出', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-缓冲区溢出' },
-                ]
-            }],
-            '/ReadingNotes/': [{
-                text: 'ReadingNotes',
-                items: [
-                    { text: 'ReadingNotes', link: '/ReadingNotes/' },
-                    { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
-                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
-                ]
-            }],
-            '/ReadingNotes/Linux内核设计与实现/': [{
-                text: 'Linux 内核设计与实现',
-                items: [
-                    { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
-                    { text: '第一章：Linux 内核简介', link: '/ReadingNotes/Linux内核设计与实现/第一章_Linux内核简介' },
-                    { text: '第二章：从内核出发', link: '/ReadingNotes/Linux内核设计与实现/第二章_从内核出发' },
-                    { text: '第三章：进程管理', link: '/ReadingNotes/Linux内核设计与实现/第三章_进程管理' },
-                ]
-            }],
-            '/ReadingNotes/C++_Primer_Plus/': [{
-                text: 'C++ Primer Plus',
-                items: [
-                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
-                    { text: '第10章：对象与类', link: '/ReadingNotes/C++_Primer_Plus/第10章_对象与类' },
-                ]
-            }],
-            '/XCPC/Atcoder/': atcoder_sidebar(),
-            '/XCPC/CodeChef/': codechef_sidebar(),
-            '/XCPC/Codeforces/': codeforces_sidebar(),
-            '/XCPC/Lanqiao/': lanqiao_sidebar(),
-            '/XCPC/Leetcode/': leetcode_sidebar(),
-            '/XCPC/Note/': note_sidebar(),
-            '/XCPC/Other/': other_sidebar(),
-            '/Other': [{
-                text: '其他内容',
-                items: [
-                    { text: 'C++后端开发面试题与知识点汇总', link: '/Other/Cpp_Interview_Summary' },
-                ]
-            }],
-        }
-    }
-})
