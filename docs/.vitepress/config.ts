@@ -272,6 +272,7 @@ function atcoder_sidebar() {
             { text: 'Atcoder Beginner Contect 245', link: '/XCPC/Atcoder/ABC245' },
             { text: 'Atcoder Beginner Contect 247', link: '/XCPC/Atcoder/ABC247' },
             { text: 'Atcoder Beginner Contect 250', link: '/XCPC/Atcoder/ABC250' },
+            { text: 'Atcoder Beginner Contect 285', link: '/XCPC/Atcoder/ABC285' },
             { text: 'Atcoder Regular Contect 106', link: '/XCPC/Atcoder/ARC106' },
             { text: 'AtCoder Regular Contest 116', link: '/XCPC/Atcoder/ARC116' },
             { text: 'AtCoder Regular Contest 147', link: '/XCPC/Atcoder/ARC147' },
