@@ -135,7 +135,12 @@ export default defineConfig({
             '/XCPC/Note/': xcpc_note_sidebar(),
             '/XCPC/Other/': xcpc_other_sidebar(),
             '/Other': others_sidebar()
-        }
+        },
+		algolia: {
+		    appId: 'CUWVNLJUM2',
+		    apiKey: '3e83db0b7ec52d583ac9ee2d4500f2e5',
+		    indexName: 'misaka19614'
+		}
     }
 })
 
