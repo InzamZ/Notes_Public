@@ -178,6 +178,7 @@ function nav()
                 { text: 'Codeforces', link: '/XCPC/Codeforces/' },
                 { text: 'Lanqiao', link: '/XCPC/Lanqiao/lanqiao2022_regional_CA' },
                 { text: 'Leetcode', link: '/XCPC/Leetcode/' },
+                { text: 'NowCoder', link: '/XCPC/NowCoder/' },
                 { text: '学习笔记', link: '/XCPC/Note/' },
                 { text: '其他', link: '/XCPC/Other/' },
             ]
@@ -360,6 +361,15 @@ function leetcode_sidebar() {
     }]
 }
 
+function nowcoder_sidebar() {
+    return [{
+        text: 'Nowcoder',
+        items: [
+            { text: 'Nowcoder', link: '/XCPC/Nowcoder/' },
+            { text: '牛客挑战赛', link: '/XCPC/Nowcoder/NCT066' },
+        ]
+    }]
+}
 function xcpc_note_sidebar() {
     return [{
         text: 'Note',
