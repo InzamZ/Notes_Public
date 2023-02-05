@@ -355,6 +355,7 @@ function leetcode_sidebar() {
             { text: '力扣双周赛 95', link: '/XCPC/Leetcode/LeetCodeBiWeeklyContest95' },
             { text: '力扣周赛 291', link: '/XCPC/Leetcode/LeetCodeWeeklyContest291' },
             { text: '力扣周赛 292', link: '/XCPC/Leetcode/LeetCodeWeeklyContest292' },
+            { text: '力扣周赛 331', link: '/XCPC/Leetcode/LeetCodeWeeklyContest331' },
         ]
     }]
 }
