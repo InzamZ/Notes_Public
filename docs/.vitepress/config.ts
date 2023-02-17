@@ -153,6 +153,7 @@ function nav()
             items: [
                 { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构.md'},
                 { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS.md' },
+                { text: '马克思主义基本原理', link: '/CoursesNotes/马克思主义基本原理/index.md' },
             ]
         },
         {
@@ -200,6 +201,7 @@ function courses_notes_sidebar(){
             { text: 'CoursesNotes', link: '/CoursesNotes/' },
             { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
             { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
+            { text: '马克思主义基本原理', link: '/CoursesNotes/马克思主义基本原理/index.md' },
         ]
 	}];
 }
