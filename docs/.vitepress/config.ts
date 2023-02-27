@@ -127,6 +127,7 @@ export default defineConfig({
             '/ReadingNotes/': reading_notes_sidebar(),
             '/ReadingNotes/Linux内核设计与实现/': linux_kernel_sidebar(),
             '/ReadingNotes/C++_Primer_Plus/': cpp_primer_plus_sidebar(),
+            '/ReadingNotes/CSAPP/': csapp_sidebar(),
             '/XCPC/Atcoder/': atcoder_sidebar(),
             '/XCPC/CodeChef/': codechef_sidebar(),
             '/XCPC/Codeforces/': codeforces_sidebar(),
@@ -164,6 +165,7 @@ function nav()
 	                items: [
 	                    { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
 	                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
+                        { text: 'Computer Systems: A Programmer\'s Perspective', link: '/ReadingNotes/CSAPP/' },
 	                ]
 	            },
 	            {
@@ -240,6 +242,7 @@ function reading_notes_sidebar(){
             { text: 'ReadingNotes', link: '/ReadingNotes/' },
             { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
             { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
+            { text: 'Computer Systems: A Programmer\'s Perspective', link: '/ReadingNotes/CSAPP/' },
         ]
 	}];
 }
@@ -266,6 +269,17 @@ function linux_kernel_sidebar(){
 	        { text: '第三章：进程管理', link: '/ReadingNotes/Linux内核设计与实现/第三章_进程管理' },
 	    ]
 	}];
+}
+
+function csapp_sidebar() 
+{
+    return [{
+        text: 'Computer Systems: A Programmer\'s Perspective',
+        items: [
+            { text: 'Computer Systems: A Programmer\'s Perspective', link: '/ReadingNotes/CSAPP/' },
+            { text: '第1章：计算机系统漫游', link: '/ReadingNotes/CSAPP/1-computer-system-roaming' },
+        ]
+    }];
 }
 
 function atcoder_sidebar() {
