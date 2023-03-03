@@ -351,6 +351,7 @@ function codeforces_sidebar() {
             { text: 'Educational Codeforces Round 135', link: '/XCPC/Codeforces/CF1728_Edu135' },
             { text: 'CodeTON Round 3 (Div1 + Div2)', link: '/XCPC/Codeforces/CF1750_TON3' },
             { text: 'Codeforces Round 854 by cybercats (Div1 + Div2)', link: '/XCPC/Codeforces/CF1799_R854' },
+            { text: 'Educational Codeforces Round 144', link: '/XCPC/Codeforces/CF1796_Edu144' },
         ]
     }]
 }
