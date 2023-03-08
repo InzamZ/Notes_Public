@@ -1,4 +1,4 @@
-# 第七章 多态
+# 第七章多态
 
 ![多态](./img/polymorphism.svg)
 
