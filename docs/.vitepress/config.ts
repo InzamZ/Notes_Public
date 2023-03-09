@@ -291,6 +291,7 @@ function cpp_modern_approach_sidebar()
         text: 'C++ 程序设计现代方法',
         items: [
             { text: 'C++ 程序设计现代方法', link: '/ReadingNotes/cpp_modern_approach/' },
+            { text: '第七章：多态', link: '/ReadingNotes/cpp_modern_approach/7-polymorphism.md' },
         ]
     }];
 }
