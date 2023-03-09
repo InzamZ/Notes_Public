@@ -1,0 +1,49 @@
+graph g {
+    fontname="Helvetica,Arial,sans-serif"
+    node [fontname="Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+    rankdir="LR"
+    node [fontsize=10, shape=box, height=0.5]
+    edge [arrowhead=none, weight=50,headport="w",tailport="e",constraint=true,weight=1000]
+    "title" [ label = "C++：一个更好的 C" ]
+    "subtitle1" [ label = "基础类型" ]
+    title -- subtitle1
+    "note1" [ label = "增强的字面常量" ]
+    subtitle1 -- note1
+    "note1.1" [ label = "字符串" ]
+    "note1" -- "note1.1"
+    "note1.1.1" [ label = "普通字符串" ]
+    "note1.1.2" [ label = "原始字符串" ]
+    "note1.1.3" [ label = "Unicode 字符串" ]
+    "note1.1" -- "note1.1.1"
+    "note1.1" -- "note1.1.2"
+    "note1.1" -- "note1.1.3"
+    "note1.2" [ label = "自定字面常量" ]
+    "note1" -- "note1.2"
+    "note2" [ label = "bool 类型" ]
+    "note3" [ label = "增强的枚举" ]
+    "subtitle1" -- "note2"
+    "subtitle1" -- "note3"
+    "subtitle2" [ label = "地址类型" ]
+    title -- subtitle2
+    "note2.1" [ label = "指针" ]
+    "subtitle2" -- "note2.1"
+    "note2.1.1" [ label = "nullptr" ]
+    "note2.1.2" [ label = "内存重解释" ]
+    "note2.1.3" [ label = "使用错误" ]
+    "note2.1.3.1" [ label = "指针越界" ]
+    "note2.1.3.2" [ label = "内存泄漏" ]
+    "note2.1.3.3" [ label = "悬空指针" ]
+    "note2.1.3" -- "note2.1.3.1"
+    "note2.1.3" -- "note2.1.3.2"
+    "note2.1.3" -- "note2.1.3.3"
+    "note2.1" -- "note2.1.1"
+    "note2.1" -- "note2.1.2"
+    "note2.1" -- "note2.1.3"
+    "note2.2" [ label = "引用" ]
+    "subtitle2" -- "note2.2"
+    "note2.2.1" [ label = "左值引用" ]
+    "note2.2.2" [ label = "右值引用" ]
+    "note2.2" -- "note2.2.1"
+    "note2.2" -- "note2.2.2"
+}

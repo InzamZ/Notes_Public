@@ -1,0 +1,39 @@
+graph g {
+    fontname="Helvetica,Arial,sans-serif"
+    node [fontname="Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+    rankdir="LR"
+    node [fontsize=10, shape=box, height=0.5]
+    edge [arrowhead=none, weight=50,headport="w",tailport="e",constraint=true,weight=1000]
+    "title" [ label = "引论" ]
+    "subtitle1" [ label = "程序概貌" ]
+    title -- subtitle1 
+    "note1" [ label = "程序编译过程" ]
+    subtitle1 -- note1
+    "note2" [ label = "头文件" ]
+    subtitle1 -- note2
+    "note3" [ label = "流" ]
+    subtitle1 -- note3
+    "note4" [ label = "命名空间" ]
+    subtitle1 -- note4
+    "subtitle2" [ label = "面向对象" ]
+    title -- subtitle2
+    "note5" [ label = "对象" ]
+    subtitle2 -- note5
+    "note6" [ label = "抽象" ]
+    note5 -- note6
+    "note7" [ label = "属性和行为" ]
+    note5 -- note7
+    "note8" [ label = "面向过程编程" ]
+    subtitle2 -- note8
+    "note9" [ label = "核心概念" ]
+    subtitle2 -- note9
+    "note10" [ label = "数据封装与抽象" ]
+    note9 -- note10
+    "note11" [ label = "继承" ]
+    note9 -- note11
+    "note12" [ label = "多态" ]
+    note9 -- note12
+    "note13" [ label = "泛型编程" ]
+    note9 -- note13
+}
