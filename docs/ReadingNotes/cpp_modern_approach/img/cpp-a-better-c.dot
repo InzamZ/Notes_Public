@@ -4,7 +4,7 @@ graph g {
     edge [fontname="Helvetica,Arial,sans-serif"]
     rankdir="LR"
     node [fontsize=10, shape=box, height=0.5]
-    edge [arrowhead=none, weight=50,headport="w",tailport="e",constraint=true,weight=1000]
+    edge [arrowhead=none, weight=50,constraint=true,weight=1000,penwidth=2]
     "title" [ label = "C++：一个更好的 C" ]
     "subtitle1" [ label = "基础类型" ]
     title -- subtitle1
@@ -25,7 +25,7 @@ graph g {
     "subtitle1" -- "note2"
     "subtitle1" -- "note3"
     "subtitle2" [ label = "地址类型" ]
-    title -- subtitle2
+    "title" -- "subtitle2"
     "note2.1" [ label = "指针" ]
     "subtitle2" -- "note2.1"
     "note2.1.1" [ label = "nullptr" ]
@@ -46,4 +46,92 @@ graph g {
     "note2.2.2" [ label = "右值引用" ]
     "note2.2" -- "note2.2.1"
     "note2.2" -- "note2.2.2"
+    "subtitle3" [ label = "类型自动推导" ]
+    "title" -- "subtitle3"
+    "note3.1" [ label = "decltype" ]
+    "subtitle3" -- "note3.1"
+    "note3.2" [ label = "auto" ]
+    "subtitle3" -- "note3.2"
+    "subtitle4" [ label = "运算符和表达式" ]
+    "title" -- "subtitle4"
+    "subtitle4.1" [ label = "C++特有运算符" ]
+    "subtitle4" -- "subtitle4.1"
+    "note4.1.1" [ label = "new 和 delete" ]
+    "note4.1.2" [ label = "类型转换" ]
+    "note4.1.2.1" [ label = "隐式类型转换" ]
+    "note4.1.2.2" [ label = "显式类型转换" ]
+    "note4.1.2.2.1" [ label = "static_cast" ]
+    "note4.1.2.2.2" [ label = "const_cast" ]
+    "note4.1.2.2.3" [ label = "reinterpret_cast" ]
+    "note4.1.2.2.3" [ label = "dynamic_cast" ]
+    "note4.1.2.2" -- "note4.1.2.2.1"
+    "note4.1.2.2" -- "note4.1.2.2.2"
+    "note4.1.2.2" -- "note4.1.2.2.3"
+    "note4.1.2.2" -- "note4.1.2.2.4"
+    "note4.1.2" -- "note4.1.2.1"
+    "note4.1.2" -- "note4.1.2.2"
+    "note4.1.3" [ label = "typeid" ]
+    "subtitle4.1" -- "note4.1.1"
+    "subtitle4.1" -- "note4.1.2"
+    "subtitle4.1" -- "note4.1.3"
+    "note4.2" [ label = "lambda 表达式" ]
+    "subtitle4" -- "note4.2"
+    "note4.2.1" [ label = "捕获列表" ]
+    "note4.2.2" [ label = "返回类型" ]
+    "note4.2" -- "note4.2.1"
+    "note4.2" -- "note4.2.2"
+    "subtitle5" [ label = "循环语句优化" ]
+    "title" -- "subtitle5"
+    "subtitle6" [ label = "异常" ]
+    "title" -- "subtitle6"
+    "note6.1" [ label = "异常抛出" ]
+    "subtitle6" -- "note6.1"
+    "note6.2" [ label = "异常捕获" ]
+    "subtitle6" -- "note6.2"
+    "subtitle7" [ label = "函数" ]
+    "title" -- "subtitle7"
+    "note7.1" [ label = "函数类型" ]
+    "subtitle7" -- "note7.1"
+    "note7.2" [ label = "函数参数" ]
+    "note7.2.1" [ label = "参数传递" ]
+    "note7.2.2" [ label = "const参数" ]
+    "note7.2.3" [ label = "参数默认值" ]
+    "note7.2" -- "note7.2.1"
+    "note7.2" -- "note7.2.2"
+    "note7.2" -- "note7.2.3"
+    "subtitle7" -- "note7.2"
+    "note7.3" [ label = "函数返回值" ]
+    "subtitle7" -- "note7.3"
+    "note7.3.1" [ label = "返回值类型" ]
+    "note7.3.2" [ label = "返回类型拖尾" ]
+    "note7.3.3" [ label = "返回类型自动推导" ]
+    "note7.3.4" [ label = "结构化绑定" ]
+    "note7.3.5" [ label = "返回lamda表达式" ]
+    "note7.3.6" [ label = "constexpr" ]
+    "note7.3" -- "note7.3.1"
+    "note7.3" -- "note7.3.2"
+    "note7.3" -- "note7.3.3"
+    "note7.3" -- "note7.3.4"
+    "note7.3" -- "note7.3.5"
+    "note7.3" -- "note7.3.6"
+    "note7.4" [ label = "函数重载" ]
+    "subtitle7" -- "note7.4"
+    "note7.5" [ label = "回调函数" ]
+    "subtitle7" -- "note7.5"
+    "subtitle8" [ label = "复杂类型的简化" ]
+    "title" -- "subtitle8"
+    "note8.1" [ label = "typedef" ]
+    "subtitle8" -- "note8.1"
+    "note8.2" [ label = "using" ]
+    "subtitle8" -- "note8.2"
+    "note8.3" [ label = "拖尾返回类型" ]
+    "subtitle8" -- "note8.3"
+    "subtitle9" [ label = "名字空间" ]
+    "title" -- "subtitle9"
+    "note9.1" [ label = "名字空间定义" ]
+    "note9.2" [ label = "using声明和using命令" ]
+    "note9.3" [ label = "嵌套名字空间" ]
+    "subtitle9" -- "note9.1"
+    "subtitle9" -- "note9.2"
+    "subtitle9" -- "note9.3"
 }
