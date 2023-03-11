@@ -1,0 +1,25 @@
+graph g {
+    fontname="Helvetica,Arial,sans-serif"
+    node [fontname="Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+    rankdir="LR"
+    node [fontsize=10, shape=box, height=0.5]
+    edge [arrowhead=none, weight=50,headport="w",tailport="e",constraint=true,weight=1000]
+    "title" [ label="类：面向对象的基石" ]
+    "title1" [ label="Intro：链表的实现" ]
+    "title1.1" [ label="案例与实现" ]
+    "title1.2" [ label="案例问题分析" ]
+    "note1.2.1" [ label="封装问题" ]
+    "note1.2.2" [ label="数据安全" ]
+    "title1.2" -- "note1.2.1"
+    "title1.2" -- "note1.2.2" 
+    "title1" -- "title1.1"
+    "title1" -- "title1.2"
+    "title" -- "title1" 
+    "title2" [ label="类" ]
+    "title" -- "title2"
+    "title2.1" [ label="定义类和类对象" ]
+    "title2.2" [ label="访问控制和数据封装" ]
+    "title2" -- "title2.1"
+    "title2" -- "title2.2"
+}
