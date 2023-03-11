@@ -4,7 +4,7 @@ graph g {
     edge [fontname="Helvetica,Arial,sans-serif"]
     rankdir="LR"
     node [fontsize=10, shape=box, height=0.5]
-    edge [arrowhead=none, weight=50,headport="w",tailport="e",constraint=true,weight=1000]
+    edge [arrowhead=none, weight=50,constraint=true,weight=1000]
     "title" [ label="类：面向对象的基石" ]
     "title1" [ label="Intro：链表的实现" ]
     "title1.1" [ label="案例与实现" ]
@@ -19,7 +19,57 @@ graph g {
     "title2" [ label="类" ]
     "title" -- "title2"
     "title2.1" [ label="定义类和类对象" ]
+    "note2.1.1" [ label="成员包含自身类对象" ]
+    "note2.1.2" [ label="this指针" ]
+    "title2.1" -- "note2.1.1"
+    "title2.1" -- "note2.1.2"
     "title2.2" [ label="访问控制和数据封装" ]
+    "note2.2.1" [ label="访问控制" ]
+    "note2.2.1.1" [ label="public" ]
+    "note2.2.1.2" [ label="private" ]
+    "note2.2.1.3" [ label="protected" ]
+    "note2.2.1" -- "note2.2.1.1"
+    "note2.2.1" -- "note2.2.1.2"
+    "note2.2.1" -- "note2.2.1.3"
+    "note2.2.2" [ label="访问控制保护的是类" ]
+    "note2.2.3" [ label="数据封装" ]
     "title2" -- "title2.1"
     "title2" -- "title2.2"
+    "title2.2" -- "note2.2.1"
+    "title2.2" -- "note2.2.2"
+    "title2.2" -- "note2.2.3"
+    "title2.3" [ label="类的静态成员" ]
+    "note2.3.1" [ label="静态数据成员" ]
+    "note2.3.2" [ label="静态成员函数" ]
+    "title2" -- "title2.3"
+    "title2.3" -- "note2.3.1"
+    "title2.3" -- "note2.3.2"
+    "title2.4" [ label="struct和union" ]
+    "note2.4.1" [ label="struct" ]
+    "note2.4.2" [ label="union" ]
+    "title2" -- "title2.4"
+    "title2.4" -- "note2.4.1"
+    "title2.4" -- "note2.4.2"
+    "title2.5" [ label="聚集和组合" ]
+    "note2.5.1" [ label="聚集：has-a" ]
+    "note2.5.2" [ label="组合：contains-a" ]
+    "title2" -- "title2.5"
+    "title2.5" -- "note2.5.1"
+    "title2.5" -- "note2.5.2"
+    "title3" [ label="构造、初始化和析构" ]
+    "title" -- "title3"
+    "title3.1" [ label="构造函数" ]
+    "note3.1.1" [ label="默认构造函数" ]
+    "note3.1.2" [ label="初始化列表" ]
+    "note3.1.3" [ label="嵌入对象的初始化" ]
+    "note3.1.4" [ label="构造函数重载" ]
+    "note3.1.4.1" [ label="花括号初始化列表" ]
+    "note3.1.4" -- "note3.1.4.1"
+    "note3.1.5" [ label="构造函数委托" ]
+    "title3" -- "title3.1"
+    "title3.1" -- "note3.1.1"
+    "title3.1" -- "note3.1.2"
+    "title3.1" -- "note3.1.3"
+    "title3.1" -- "note3.1.4"
+    "title3.1" -- "note3.1.5"
 }
