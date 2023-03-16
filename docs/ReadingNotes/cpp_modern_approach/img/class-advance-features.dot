@@ -42,6 +42,14 @@ graph g {
     "title" -- "title3"
     "title4" [ label="友元" ]
     "title" -- "title4"
-    
-
+    "title5" [ label="类的const成员和mutable成员" ]
+    "title" -- "title5"
+    "title5.1" [ label="const数据成员" ]
+    "title5.2" [ label="const成员函数" ]
+    "title5.3" [ label="mutable数据成员" ]
+    "title5" -- "title5.1"
+    "title5" -- "title5.2"
+    "title5" -- "title5.3"
+    "title6" [ label="类中的类型名" ]
+    "title" -- "title6"
 }
