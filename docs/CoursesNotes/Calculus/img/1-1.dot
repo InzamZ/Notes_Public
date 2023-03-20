@@ -1,0 +1,49 @@
+graph g {
+    fontname="Helvetica,Arial,sans-serif"
+    node [fontname="Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+    rankdir="LR"
+    node [fontsize=10, shape=box, height=0.5]
+    edge [arrowhead=none, weight=50,constraint=true,weight=1000]
+    "title1" [ label="映射与函数" ]
+    "title1-1" [ label="集合、区间与邻域" ]
+    "title1" -- "title1-1"
+    "title1-2" [ label="映射" ]
+    "title1" -- "title1-2"
+    "title1-3" [ label="函数的概念" ]
+    "title1" -- "title1-3"
+    "note1-3-1" [label="函数的基本要素",shape=note,fontsize=10]
+    "note1-3-1-1" [label="对应法则",shape=note,fontsize=10]
+    "note1-3-1-2" [label="定义域",shape=note,fontsize=10]
+    "title1-3" -- "note1-3-1"
+    "note1-3-1" -- "note1-3-1-1"
+    "note1-3-1" -- "note1-3-1-2"
+    "note1-3-2" [label="隐函数",shape=note,fontsize=10]
+    "title1-3" -- "note1-3-2"
+    "title1-4" [ label="函数的运算与反函数" ]
+    "title1" -- "title1-4"
+    "note1-4-1" [label="函数的四则运算",shape=note,fontsize=10]
+    "title1-4" -- "note1-4-1"
+    "note1-4-2" [label="复合函数",shape=note,fontsize=10]
+    "title1-4" -- "note1-4-2"
+    "note1-4-3" [label="反函数",shape=note,fontsize=10]
+    "title1-4" -- "note1-4-3"
+    "title1-5" [ label="具有某种特性的函数" ]
+    "title1" -- "title1-5"
+    "note1-5-1" [label="奇函数与偶函数",shape=note,fontsize=10]
+    "title1-5" -- "note1-5-1"
+    "note1-5-2" [label="单调函数",shape=note,fontsize=10]
+    "title1-5" -- "note1-5-2"
+    "note1-5-3" [label="周期函数",shape=note,fontsize=10]
+    "title1-5" -- "note1-5-3"
+    "note1-5-4" [label="有界函数",shape=note,fontsize=10]
+    "title1-5" -- "note1-5-4"
+    "title1-6" [ label="基本初等函数" ]
+    "title1" -- "title1-6"
+    "note1-6-1" [label="基本初等函数",shape=note,fontsize=10]
+    "title1-6" -- "note1-6-1"
+    "note1-6-2" [label="初等函数",shape=note,fontsize=10]
+    "title1-6" -- "note1-6-2"
+    "note1-6-3" [label="双曲函数",shape=note,fontsize=10]
+    "title1-6" -- "note1-6-3"
+}
