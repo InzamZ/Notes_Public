@@ -212,7 +212,7 @@ POSIX (Portable Operating System Interface，可移植操作系统接口) 是由
 
 ### 1.7.3 虚拟内存
 
-虚拟内存营造一个假象，所有的进程独享内存。针对 `Linux` 而言，所有程序的上层为内核代码，底部为用户代码和数据。
+虚拟内存营造一个假象，所有的进程独享内存。针对 `Linux` 而言，所有程序的上层为内核代码，底部为用户代码和数据。虚拟内存是对系统的存储器的抽象。
 
 ![虚拟地址空间](./img/virtual-address.jpeg)
 
@@ -224,7 +224,21 @@ POSIX (Portable Operating System Interface，可移植操作系统接口) 是由
 - 栈
 - 内核虚拟内存
 
+### 1.7.4 文件
+
+文件是对I/O设备的抽象，在Linux中，万物皆为文件。这种抽象将设备与其它的文件读取统一起来，只需要调用文件读写接口就能完成输入输出。
+
+::: info ChatGPT 简单介绍一下 Linux 项目
+
+Currently we are receiving more requests than we are are comfortable with! To try your request again, come back in a short while and reload this page.
+
+:::
+
+## 1.8 系统间的网络通信
+
+系统之间的网络通信是通过网络适配器，利用socket进行进程间通信的，这个在计算机网络的相关书籍会详细说明。
+
 ---
 
-未完待续
+以上
 
