@@ -226,17 +226,17 @@ POSIX (Portable Operating System Interface，可移植操作系统接口) 是由
 
 ### 1.7.4 文件
 
-文件是对I/O设备的抽象，在Linux中，万物皆为文件。这种抽象将设备与其它的文件读取统一起来，只需要调用文件读写接口就能完成输入输出。
+文件是对 I/O 设备的抽象，在 Linux 中，万物皆为文件。这种抽象将设备与其它的文件读取统一起来，只需要调用文件读写接口就能完成输入输出。
 
 ::: info ChatGPT 简单介绍一下 Linux 项目
 
-Currently we are receiving more requests than we are are comfortable with! To try your request again, come back in a short while and reload this page.
+Currently we are receiving more requests than we are are comfortable with！To try your request again，come back in a short while and reload this page。
 
 :::
 
 ## 1.8 系统间的网络通信
 
-系统之间的网络通信是通过网络适配器，利用socket进行进程间通信的，这个在计算机网络的相关书籍会详细说明。
+系统之间的网络通信是通过网络适配器，利用 socket 进行进程间通信的，这个在计算机网络的相关书籍会详细说明。
 
 ---
 
