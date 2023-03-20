@@ -1,0 +1,85 @@
+graph g {
+    fontname="Helvetica,Arial,sans-serif"
+    node [fontname="Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+    rankdir="LR"
+    node [fontsize=12, height=0.5]
+    edge [arrowhead=none, weight=50,constraint=true,weight=1000]
+    "title" [ label="计算机系统漫游"]
+
+    "title1" [ label="信息就是位+上下文"]
+    "title" -- "title1"
+    "note1-1" [ label="文本编码",shape=note,fontsize=10]
+    "title1" -- "note1-1"
+
+    "title2" [ label="程序格式的转换"]
+    "title" -- "title2"
+    "note2-1" [ label="程序的编译",shape=note,fontsize=10]
+    "title2" -- "note2-1"
+    "note2-1-1" [ label="预处理",shape=note,fontsize=10]
+    "note2-1-2" [ label="编译",shape=note,fontsize=10]
+    "note2-1-3" [ label="汇编",shape=note,fontsize=10]
+    "note2-1-4" [ label="链接",shape=note,fontsize=10]
+    "note2-1" -- "note2-1-1"
+    "note2-1" -- "note2-1-2"
+    "note2-1" -- "note2-1-3"
+    "note2-1" -- "note2-1-4"
+
+    "title3" [ label="处理器读取指令"]
+    "title" -- "title3"
+    "title3-1" [ label="系统的硬件组成"]
+    "title3" -- "title3-1"
+    "note3-1-1" [ label="总线",shape=note,fontsize=10]
+    "note3-1-2" [ label="I/O设备",shape=note,fontsize=10]
+    "note3-1-3" [ label="主存",shape=note,fontsize=10]
+    "note3-1-4" [ label="处理器",shape=note,fontsize=10]
+    "title3-1" -- "note3-1-1"
+    "title3-1" -- "note3-1-2"
+    "title3-1" -- "note3-1-3"
+    "title3-1" -- "note3-1-4"
+    "title3-2" [ label="运行程序"]
+    "title3" -- "title3-2"
+    "note3-2-1" [ label="DMA技术",shape=note,fontsize=10]
+    "title3-2" -- "note3-2-1"
+
+    "title4" [ label="高速缓存"]
+    "title" -- "title4"
+
+    "title5" [ label="存储器层次结构"]
+    "title" -- "title5"
+    "note5-1" [ label="速度越快，加个越贵，容量越小",shape=note,fontsize=10]
+    "title5" -- "note5-1"
+
+    "title6" [ label="操作系统管理硬件"]
+    "title" -- "title6"
+    "extented-reading-6" [ label="扩展阅读：Unix、Posix和标准Unix规范",shape=note,fontsize=10]
+    "title6" -- "extented-reading-6"
+    "note6-1" [ label="进程",shape=note,fontsize=10]
+    "note6-2" [ label="线程",shape=note,fontsize=10]
+    "note6-3" [ label="虚拟内存",shape=note,fontsize=10]
+    "note6-4" [ label="文件",shape=note,fontsize=10]
+    "extented-reading-6-4" [ label="扩展阅读：Linux项目",shape=note,fontsize=10]
+    "title6" -- "note6-1"
+    "title6" -- "note6-2"
+    "title6" -- "note6-3"
+    "title6" -- "note6-4"
+    "note6-4" -- "extented-reading-6-4"
+
+    "title7" [ label="系统之间的网络通信"]
+    "title" -- "title7"
+
+    "title8" [ label="重要主题"]
+    "title" -- "title8"
+    "title8-1" [ label="Amdahl定律"]
+    "title8" -- "title8-1"
+    "title8-2" [ label="并发和并行"]
+    "title8" -- "title8-2"
+    "note8-2-1" [ label="线程级并发",shape=note,fontsize=10]
+    "note8-2-2" [ label="指令级并行",shape=note,fontsize=10]
+    "note8-2-3" [ label="单指令、多数据并行",shape=note,fontsize=10]
+    "title8-2" -- "note8-2-1"
+    "title8-2" -- "note8-2-2"
+    "title8-2" -- "note8-2-3"
+    "title8-3" [ label="计算机系统中的抽象" ]
+    "title8" -- "title8-3"
+}
