@@ -1,0 +1,49 @@
+graph g {
+    fontname="Helvetica,Arial,sans-serif"
+    node [fontname="Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+    rankdir="LR"
+    node [fontsize=10, height=0.5]
+    edge [arrowhead=none, weight=50,constraint=true,weight=1000]
+    "title" [ label="矩阵及其运算" ]
+    "title1" [ label="矩阵的概念" ]
+    "title" -- "title1"
+    "note1.1" [ label="系数矩阵", shape = "note" ]
+    "note1.2" [ label="增广矩阵", shape = "note" ]
+    "note1.3" [ label="零矩阵", shape = "note" ]
+    "note1.4" [ label="n阶矩阵", shape = "note" ]
+    "note1.5" [ label="行/列矩阵", shape = "note" ]
+    "note1.6" [ label="对角矩阵与对角元", shape = "note" ]
+    "note1.7" [ label="单位矩阵", shape = "note" ]
+    "note1.8" [ label="上/下三角矩阵", shape = "note" ]
+    "title1" -- "note1.1"
+    "title1" -- "note1.2"
+    "title1" -- "note1.3"
+    "title1" -- "note1.4"
+    "title1" -- "note1.5"
+    "title1" -- "note1.6"
+    "title1" -- "note1.7"
+    "title1" -- "note1.8"
+    "title2" [ label="矩阵的线性运算" ]
+    "title" -- "title2"
+    "note2.1" [ label="矩阵的加法", shape = "note" ]
+    "note2.2" [ label="矩阵的数乘", shape = "note" ]
+    "title2" -- "note2.1"
+    "title2" -- "note2.2"
+    "title3" [ label="矩阵的乘法" ]
+    "title" -- "title3"
+    "note3.1" [ label="矩阵的乘法", shape = "note" ]
+    "note3.2" [ label="可交换性", shape = "note" ]
+    "note3.3" [ label="方阵的k阶多项式", shape = "note" ]
+    "note3.4" [ label="线性变换和旋转变换", shape = "note" ]
+    "title3" -- "note3.1"
+    "title3" -- "note3.2"
+    "title3" -- "note3.3"
+    "title3" -- "note3.4"
+    "title4" [ label="矩阵的转置" ]
+    "title" -- "title4"
+    "note4.1" [ label="矩阵的转置", shape = "note" ]
+    "note4.2" [ label="对称矩阵与反称矩阵", shape = "note" ]
+    "title4" -- "note4.1"
+    "title4" -- "note4.2"
+}
