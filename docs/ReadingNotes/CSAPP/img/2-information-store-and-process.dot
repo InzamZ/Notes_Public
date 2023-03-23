@@ -1,0 +1,74 @@
+graph g {
+    fontname="Helvetica,Arial,sans-serif"
+    node [fontname="Helvetica,Arial,sans-serif"]
+    edge [fontname="Helvetica,Arial,sans-serif"]
+    rankdir="LR"
+    node [fontsize=12, height=0.5]
+    edge [arrowhead=none, weight=50,constraint=true,weight=1000]
+    "title" [ label="信息的表示和处理"]
+
+    "title0" [ label = "引言" ]
+    "title" -- "title0" 
+    "note0-1" [ label = "十进制对于是个手指的人类很好理解，但是机器使用二进制还是简单。\n浮点数的不精确，整数的溢出但相对精确。",shape=note,fontsize=7 ]
+    "title0" -- "note0-1" [style=dotted]
+    "title0-1" [ label = "扩展阅读：C语言的演变"]
+    "title0" -- "title0-1"
+
+    "title1" [ label = "信息储存" ]
+    "title" -- "title1"
+    "note1-1" [ label = "计算机的内存是以字节为单位的，每个字节都有一个地址，\n地址从0开始，每个字节都有一个编号，编号从0开始。(虚拟地址空间)",shape=note,fontsize=7 ]
+    "title1" -- "note1-1" [style=dotted]
+    "title1-1" [ label = "十六进制表示法" ]
+    "title1" -- "title1-1"
+    "note1-1-1" [ label = "二进制不方便书写，太过冗余，\n十六进制的每个数字都可以用4个二进制位表示，\n",shape=note,fontsize=7 ]
+    "title1-1" -- "note1-1-1" [style=dotted]
+    "title1-2" [ label = "字数据大小" ]
+    "title1" -- "title1-2"
+    "note1-2-1" [ label = "字长是指针数据的标称大小\n它决定了虚拟空间的最大空间大小\n所谓32位64位就是指编译时期指定的字长\nC语言中long的长度与程序位数相关，为了\n规范，C99引入指定位数的整形，不随程序位数改变",shape=note,fontsize=7 ]
+    "title1-2" -- "note1-2-1" [style=dotted]
+    "title1-3" [ label = "寻址与字节序" ]
+    "title1" -- "title1-3"
+    "note1-3-1" [ label = "字节序是指字节在内存中的存放顺序\n大端序：高位字节存放在低地址\n小端序：低位字节存放在低地址\n一说是书写习惯问题，字节序只在底层处理上体现，\n程序员一般不会处理，实际操作系统选定后也就确定了\n但是网络编程中这是个值得注意的问题。\n虽然很多情况下大小端不可见，但是在联合和强制类型转换中能够体现\n",shape=note,fontsize=7 ]
+    "title1-3" -- "note1-3-1" [style=dotted]
+    "title1-4" [ label = "字符串的表示" ]
+    "title1" -- "title1-4"
+    "note1-4-1" [ label = "C语言中字符串是以'\0'结尾的字符数组\nunicode编码：utf8让ascii编码表示不变",shape=note,fontsize=7 ]
+    "title1-4" -- "note1-4-1" [style=dotted]
+    "title1-5" [ label = "代码表示" ]
+    "title1" -- "title1-5"
+    "note1-5-1" [ label = "机器指令是以二进制形式存储的\n不同机器编码各不相同，很少能够移植",shape=note,fontsize=7 ]
+    "title1-5" -- "note1-5-1" [style=dotted]
+    "title1-6" [ label = "布尔代数" ]
+    "title1" -- "title1-6"
+    "title1-7" [ label = "C语言的位级运算" ]
+    "title1" -- "title1-7"
+    "title1-8" [ label = "C语言的逻辑运算" ]
+    "title1" -- "title1-8"
+    "title1-9" [ label = "C语言的移位运算" ]
+    "title1" -- "title1-9"
+    "note1-9-1" [ label = "算术右移和逻辑右移跟左移不同，在于补全问题\nC默认算数右移",shape=note,fontsize=7 ]
+    "title1-9" -- "note1-9-1" [style=dotted]
+
+    "title2" [ label = "整数表示" ]
+    "title" -- "title2"
+    "title2-1" [ label = "整形数据类型" ]
+    "title2" -- "title2-1"
+    "title2-2" [ label = "无符号数的编码" ]
+    "title2" -- "title2-2"
+    "title2-3" [ label = "补码的编码" ]
+    "title2" -- "title2-3"
+    "note2-3-1" [ label = "把符号位理解为权重加了负号，会比使用循环好理解\n反码和源码的编码方式，他们对0都有两种表示，（tcpchecksum）\n关于名字，反码和补码的英文名很有意思",shape=note,fontsize=7 ]
+    "title2-3" -- "note2-3-1" [style=dotted]
+    "title2-4" [ label = "有符号数和无符号数的转换" ]
+    "title2" -- "title2-4"
+    "note2-4-1" [ label = "本质上是不改变位模式，改变数值",shape=note,fontsize=7 ]
+    "title2-4" -- "note2-4-1" [style=dotted]
+    "title2-5" [ label = "C中的有符号数和无符号数" ]
+    "title2" -- "title2-5"
+    "note2-5-1" [ label = "在运算中会提升为无符号，声明需要后缀u\n",shape=note,fontsize=7 ]
+    "title2-5" -- "note2-5-1" [style=dotted]
+    "title2-5" [ label = "截断和扩展" ]
+    "title2" -- "title2-6"
+    "title2-7" [ label = "无符号数字的使用建议" ]
+    "title2" -- "title2-7"
+}
