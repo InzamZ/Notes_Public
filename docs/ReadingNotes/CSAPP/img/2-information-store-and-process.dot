@@ -71,4 +71,10 @@ graph g {
     "title2" -- "title2-6"
     "title2-7" [ label = "无符号数字的使用建议" ]
     "title2" -- "title2-7"
+
+    "title3" [ label = "整数运算" ]
+    "title" -- "title3"
+    "note3-1" [ label = "运算分为有符号与无符号，对于溢出的处理采用的是舍去高位\n这就形成了阿贝尔群中加法的取模\n溢出对于加减法是有记忆的，乘除法没有\n也就是溢出后加减做上次的反运算可以恢复",shape=note,fontsize=7 ]
+
+    
 }
