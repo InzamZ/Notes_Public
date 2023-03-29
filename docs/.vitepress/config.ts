@@ -135,6 +135,7 @@ export default defineConfig({
             '/XCPC/Lanqiao/': lanqiao_sidebar(),
             '/XCPC/Leetcode/': leetcode_sidebar(),
             '/XCPC/Note/': xcpc_note_sidebar(),
+            '/XCPC/NowCoder/': nowcoder_sidebar(),
             '/XCPC/Other/': xcpc_other_sidebar(),
             '/Other': others_sidebar()
         },
@@ -281,6 +282,7 @@ function csapp_sidebar()
         items: [
             { text: 'Computer Systems: A Programmer\'s Perspective', link: '/ReadingNotes/CSAPP/' },
             { text: '第1章：计算机系统漫游', link: '/ReadingNotes/CSAPP/1-computer-system-roaming' },
+            { text: '第2章：信息的表示和处理', link: '/ReadingNotes/CSAPP/2-information-representation-and-processing' },
         ]
     }];
 }
