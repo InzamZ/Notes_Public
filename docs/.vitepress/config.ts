@@ -283,6 +283,7 @@ function csapp_sidebar()
             { text: 'Computer Systems: A Programmer\'s Perspective', link: '/ReadingNotes/CSAPP/' },
             { text: '第1章：计算机系统漫游', link: '/ReadingNotes/CSAPP/1-computer-system-roaming' },
             { text: '第2章：信息的表示和处理', link: '/ReadingNotes/CSAPP/2-information-representation-and-processing' },
+            { text: '第3章：程序的机器级表示', link: '/ReadingNotes/CSAPP/3-machine-level-representation-of-program' },
         ]
     }];
 }
