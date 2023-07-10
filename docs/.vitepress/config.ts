@@ -123,6 +123,7 @@ export default defineConfig({
         sidebar: {
             '/CoursesNotes/': courses_notes_sidebar(),
             '/CoursesNotes/计算机网络/': computer_network_sidebar(),
+            '/CoursesNotes/操作系统/': operating_system_sidebar(),
             '/CoursesNotes/网络攻防技术/': network_security_sidbar(),
             '/ReadingNotes/': reading_notes_sidebar(),
             '/ReadingNotes/Linux内核设计与实现/': linux_kernel_sidebar(),
@@ -155,6 +156,7 @@ function nav()
             text: '课程笔记',
             items: [
                 { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构.md'},
+                { text: '操作系统', link: '/CoursesNotes/操作系统/1-计算机系统概述.md'},
                 { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS.md' },
                 { text: '马克思主义基本原理', link: '/CoursesNotes/马克思主义基本原理/index.md' },
             ]
@@ -220,6 +222,16 @@ function computer_network_sidebar(){
             { text: '第五章：传输层', link: '/CoursesNotes/计算机网络/第五章_传输层' },
         ]
 	}];
+}
+
+function operating_system_sidebar(){
+    return [{
+        text: '操作系统',
+        items: [
+            { text: '操作系统', link: '/CoursesNotes/操作系统/' },
+            { text: '第一章：计算机系统概述', link: '/CoursesNotes/操作系统/1-计算机系统概述' },
+        ]
+    }];
 }
 
 function network_security_sidbar(){
