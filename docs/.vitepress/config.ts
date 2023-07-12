@@ -130,7 +130,7 @@ export default defineConfig({
             '/ReadingNotes/C++_Primer_Plus/': cpp_primer_plus_sidebar(),
             '/ReadingNotes/CSAPP/': csapp_sidebar(),
             '/ReadingNotes/cpp_modern_approach/': cpp_modern_approach_sidebar(),
-            '/ReadingNotes/操作系统概念': os_concept_sidebar(),
+            '/ReadingNotes/操作系统概念/': os_concept_sidebar(),
             '/XCPC/Atcoder/': atcoder_sidebar(),
             '/XCPC/CodeChef/': codechef_sidebar(),
             '/XCPC/Codeforces/': codeforces_sidebar(),
