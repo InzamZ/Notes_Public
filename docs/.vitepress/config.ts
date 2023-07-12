@@ -130,6 +130,7 @@ export default defineConfig({
             '/ReadingNotes/C++_Primer_Plus/': cpp_primer_plus_sidebar(),
             '/ReadingNotes/CSAPP/': csapp_sidebar(),
             '/ReadingNotes/cpp_modern_approach/': cpp_modern_approach_sidebar(),
+            '/ReadingNotes/操作系统概念': os_concept_sidebar(),
             '/XCPC/Atcoder/': atcoder_sidebar(),
             '/XCPC/CodeChef/': codechef_sidebar(),
             '/XCPC/Codeforces/': codeforces_sidebar(),
@@ -171,6 +172,7 @@ function nav()
 	                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
                         { text: 'Computer Systems: A Programmer\'s Perspective', link: '/ReadingNotes/CSAPP/' },
                         { text: 'C++ 程序设计现代方法', link: '/ReadingNotes/cpp_modern_approach/' },
+                        { text: '操作系统概念', link: '/ReadingNotes/操作系统概念/' },
 	                ]
 	            },
 	            {
@@ -259,6 +261,7 @@ function reading_notes_sidebar(){
             { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
             { text: 'Computer Systems: A Programmer\'s Perspective', link: '/ReadingNotes/CSAPP/' },
             { text: 'C++ 程序设计现代方法', link: '/ReadingNotes/cpp_modern_approach/' },
+            { text: '操作系统概念', link: '/ReadingNotes/操作系统概念/' },
         ]
 	}];
 }
@@ -307,6 +310,17 @@ function cpp_modern_approach_sidebar()
         items: [
             { text: 'C++ 程序设计现代方法', link: '/ReadingNotes/cpp_modern_approach/' },
             { text: '第七章：多态', link: '/ReadingNotes/cpp_modern_approach/7-polymorphism.md' },
+        ]
+    }];
+}
+
+function os_concept_sidebar()
+{
+    return [{
+        text: '操作系统概念',
+        items: [
+            { text: '操作系统概念', link: '/ReadingNotes/操作系统概念/' },
+            { text: '第1章：导论', link: '/ReadingNotes/操作系统概念/第1章_引论' },
         ]
     }];
 }
