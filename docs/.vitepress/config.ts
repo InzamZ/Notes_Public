@@ -121,6 +121,7 @@ export default defineConfig({
         ],
         nav: nav(),
         sidebar: {
+            '/AVDevelop/': av_develop_sidebar(),
             '/CoursesNotes/': courses_notes_sidebar(),
             '/CoursesNotes/计算机网络/': computer_network_sidebar(),
             '/CoursesNotes/操作系统/': operating_system_sidebar(),
@@ -153,6 +154,10 @@ export default defineConfig({
 function nav()
 {
 	return [
+        {
+            text: '音视频开发',
+            link: '/AVDevelop/'
+        },
 		{
             text: '课程笔记',
             items: [
@@ -213,6 +218,16 @@ function courses_notes_sidebar(){
             { text: '马克思主义基本原理', link: '/CoursesNotes/马克思主义基本原理/index.md' },
         ]
 	}];
+}
+
+function av_develop_sidebar(){
+    return [{
+        text: '音视频开发',
+        items: [
+            { text: '音视频开发', link: '/AVDevelop/' },
+            { text: '第一节：H264编码解码转码', link: '/AVDevelop/1-H264编码解码转码' },
+        ]
+    }];
 }
 
 function computer_network_sidebar(){
