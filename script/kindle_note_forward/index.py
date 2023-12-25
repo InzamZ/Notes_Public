@@ -81,9 +81,8 @@ def export_note(kindle_note_path: str):
             # 获取书摘位置
             note_position = note_heading_text[note_heading_text.find("位置 ") + 3 :]
             # 获取章节名
-            note_chapter = note_heading_text[
-                note_heading_text.find(" - ") + 3 : note_heading_text.find(" > 位置")
-            ]
+            note_chapter = note_heading.find_previous_sibling("div", class_="sectionHeading")
+            note_chapter = note_chapter.text.strip() if note_chapter else ""
             # 获取书摘的笔记
             next_note_heading = note_heading.find_next_sibling(
                 "div", class_="noteHeading"
