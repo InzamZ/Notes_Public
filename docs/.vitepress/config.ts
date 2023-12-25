@@ -140,6 +140,7 @@ export default defineConfig({
             '/XCPC/Note/': xcpc_note_sidebar(),
             '/XCPC/NowCoder/': nowcoder_sidebar(),
             '/XCPC/Other/': xcpc_other_sidebar(),
+            '/KindleNotes/': kindle_note_sidebar(),
             '/Other': others_sidebar()
         },
 		algolia: {
@@ -478,3 +479,14 @@ function others_sidebar() {
         ]
 	}];
 }
+
+// AUTO-GENERATED-CONTENT:START
+function kindle_note_sidebar() {
+    return [{
+        text: 'KindleNotes',
+        items: [
+            { text: 'KindleNotes', link: '/KindleNotes/' },
+        ]
+    }]
+}
+// AUTO-GENERATED-CONTENT:END
