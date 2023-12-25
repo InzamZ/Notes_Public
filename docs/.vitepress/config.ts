@@ -182,7 +182,10 @@ function nav()
 	                ]
 	            },
 	            {
-	                text: '文学类笔记', items: [ ]
+	                text: '文学类笔记',
+                    items: [ 
+                        { text: 'KindleNotes', link: '/KindleNotes/' },
+                    ]
 	            }
         	]
         },
