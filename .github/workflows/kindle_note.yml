@@ -30,7 +30,7 @@ jobs:
           pip install -r script/kindle_note_forward/requirements.txt
 
       - name: Run the kindle note forward script
-        run: python script/kindle_note_forward/index.py --atlas_uri=${{ secrets.ATLAS_URI }} --push_github --push_atlas --html_path=kindle_note/origin --markdown_path=kindle_note
+        run: python script/kindle_note_forward/index.py --atlas_uri=${{ secrets.ATLAS_URI }} --push_github --push_atlas --html_path=kindle_note/origin --markdown_path=docs/KindleNotes
 
       - name: Run safe dir
         run: |
