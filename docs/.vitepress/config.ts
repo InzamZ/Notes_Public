@@ -184,7 +184,7 @@ function nav()
 	            {
 	                text: '文学类笔记',
                     items: [ 
-                        { text: 'KindleNotes', link: '/KindleNotes/' },
+                        { text: 'KindleNotes', link: '/KindleNotes/海伯利安四部曲套装' },
                     ]
 	            }
         	]
@@ -488,7 +488,7 @@ function kindle_note_sidebar() {
     return [{
         text: 'KindleNotes',
         items: [
-            { text: 'KindleNotes', link: '/KindleNotes/' },
+            { text: 'KindleNotes', link: '/KindleNotes/海伯利安四部曲套装' },
         ]
     }]
 }

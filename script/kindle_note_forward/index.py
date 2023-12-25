@@ -166,10 +166,10 @@ def export_markdown(notes: dict, markdown_path: str):
                     f.write(f"## {note_chapter} \n\n")
                     last_chapter = note_chapter
                 # 写入文件
-                f.write(f"### color: {highlight_color} pos: {note_position} \n\n")
-                f.write(f"> {note_content}\n\n")
+                f.write(f":::tip 标注\n{note_content}\n:::\n\n")
                 if note_comments:
-                    f.write(f"---\n\n> COMMENTS: {note_comments} \n\n")
+                    f.write(f":::warning 笔记\n{note_comments}\n:::\n\n")
+                f.write(f"---\n\n")
 
 
 def push_to_atlas(notes_dict: dict, atlas_uri):
