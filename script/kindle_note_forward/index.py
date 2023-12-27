@@ -54,6 +54,8 @@ def export_note(kindle_note_path: str):
     origin_html_path: str = os.path.abspath(kindle_note_path)
     json_data: dict = {}
     for file_name in os.listdir(origin_html_path):
+        if file_name.find(".html") == -1:
+            continue
         file_path = origin_html_path + "/" + file_name
         with open(file_path, "r", encoding="utf-8") as f:
             html = f.read()
@@ -83,6 +85,9 @@ def export_note(kindle_note_path: str):
             # 获取章节名
             note_chapter = note_heading.find_previous_sibling("div", class_="sectionHeading")
             note_chapter = note_chapter.text.strip() if note_chapter else ""
+            # 获取子章节名
+            note_sub_chapter = note_heading_text[note_heading_text.find(" - ") + 3:note_heading_text.find(" > 位置")]
+            note_sub_chapter = note_sub_chapter.strip() if note_sub_chapter else ""
             # 获取书摘的笔记
             next_note_heading = note_heading.find_next_sibling(
                 "div", class_="noteHeading"
@@ -103,6 +108,7 @@ def export_note(kindle_note_path: str):
                     "content": note_content,
                     "comments": comments,
                     "chapter": note_chapter,
+                    "sub_chapter": note_sub_chapter,
                     "from": book_name,
                     "author": author,
                 }
@@ -149,6 +155,7 @@ def export_markdown(notes: dict, markdown_path: str):
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(f"# {book_name} - {author}\n\n")
             last_chapter = ""
+            last_sub_chapter = ""
             for book_note in book_notes:
                 # 获取书摘标题
                 highlight_color = book_note["color"]
@@ -158,12 +165,21 @@ def export_markdown(notes: dict, markdown_path: str):
                 note_position = book_note["position"]
                 # 获取章节名
                 note_chapter = book_note["chapter"]
+                # 获取子章节名
+                note_sub_chapter = book_note["sub_chapter"]
                 # 获取书摘的笔记
                 note_comments = book_note["comments"]
                 # 判断是否是新的章节
                 if note_chapter != last_chapter:
                     f.write(f"## {note_chapter} \n\n")
+                    if (note_sub_chapter != ""):
+                        f.write(f"### {note_sub_chapter} \n\n")
                     last_chapter = note_chapter
+                    last_sub_chapter = note_sub_chapter
+                elif note_sub_chapter != last_sub_chapter:
+                    if (note_sub_chapter != ""):
+                        f.write(f"### {note_sub_chapter} \n\n")
+                    last_sub_chapter = note_sub_chapter
                 # 写入文件
                 f.write(f":::tip 标注\n{note_content}\n:::\n\n")
                 if note_comments:
