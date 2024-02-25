@@ -30,11 +30,12 @@ jobs:
           pip install -r script/kindle_note_forward/requirements.txt
 
       - name: Export Environment Variables
-        run: |
-          export MONGODB_ATLAS_URI=${{ secrets.MONGODB_ATLAS_URI }}
+        run: 
 
       - name: Run the kindle note forward script
-        run: python script/kindle_note_forward/index.py --push_github --push_atlas --html_path=kindle_note --markdown_path=docs/KindleNotes --set_vitepress
+        run: |
+          export MONGODB_ATLAS_URI=${{ secrets.MONGODB_ATLAS_URI }}
+          python script/kindle_note_forward/index.py --push_github --push_atlas --html_path=kindle_note --markdown_path=docs/KindleNotes --set_vitepress
 
       - name: Run safe dir
         run: |
