@@ -29,9 +29,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r script/kindle_note_forward/requirements.txt
 
-      - name: Export Environment Variables
-        run: 
-
       - name: Run the kindle note forward script
         run: |
           export MONGODB_ATLAS_URI=${{ secrets.MONGODB_ATLAS_URI }}
