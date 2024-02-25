@@ -27,7 +27,7 @@ jobs:
       - name: Install Dependency
         run: |
           python -m pip install --upgrade pip
-          pip install -r script/kindle_note_forward/requirements.txt
+          pip install -r script/kindle_note_forward/requirements.txt --upgrade
 
       - name: Run the kindle note forward script
         run: |
