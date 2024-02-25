@@ -7,6 +7,7 @@ from hashlib import md5
 
 import pymongo
 from pymongo import MongoClient
+import os
 
 
 def main():
@@ -131,7 +132,7 @@ def parse_cmd_args(args):
     parser.add_argument(
         "--atlas_uri",
         type=str,
-        default="mongodb://localhost:27017/",
+        default=os.environ.get("MONGODB_ATLAS_URI"),
         help="mongodb atlas uri",
     )
     parser.add_argument("--set_vitepress", action="store_true", help="set vitepress")
@@ -195,9 +196,11 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
         collections = db.get_collection(notes_list[0]["from"])
         for x in notes_list:
             x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
-            collections.find_one_and_update(
+            collections.update_one(
                 {"contenthash": x["contenthash"]}, {"$set": x}, upsert=True
             )
+            if os.environ.get("DEBUG"):
+                print(f"push to atlas: {x['contenthash']}")
         collections.create_index(
             [("contenthash", pymongo.ASCENDING)], unique=True, name="contenthash"
         )
