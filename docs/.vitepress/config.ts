@@ -489,8 +489,7 @@ function kindle_note_sidebar() {
         text: 'KindleNotes',
         items: [
             { text: 'KindleNotes', link: '/KindleNotes/' },
-            { text: '海伯利安四部曲', link: '/KindleNotes/海伯利安四部曲.html' },
-{ text: '2001：太空漫游', link: '/KindleNotes/2001：太空漫游.html' },
+            
         ]
     }]
 }
