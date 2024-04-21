@@ -2,91 +2,91 @@ import { defineConfig } from "vitepress"
 import markdownItKatex from "markdown-it-katex"
 
 const customElements = [
-  'math',
-  'maction',
-  'maligngroup',
-  'malignmark',
-  'menclose',
-  'merror',
-  'mfenced',
-  'mfrac',
-  'mi',
-  'mlongdiv',
-  'mmultiscripts',
-  'mn',
-  'mo',
-  'mover',
-  'mpadded',
-  'mphantom',
-  'mroot',
-  'mrow',
-  'ms',
-  'mscarries',
-  'mscarry',
-  'mscarries',
-  'msgroup',
-  'mstack',
-  'mlongdiv',
-  'msline',
-  'mstack',
-  'mspace',
-  'msqrt',
-  'msrow',
-  'mstack',
-  'mstack',
-  'mstyle',
-  'msub',
-  'msup',
-  'msubsup',
-  'mtable',
-  'mtd',
-  'mtext',
-  'mtr',
-  'munder',
-  'munderover',
-  'semantics',
-  'math',
-  'mi',
-  'mn',
-  'mo',
-  'ms',
-  'mspace',
-  'mtext',
-  'menclose',
-  'merror',
-  'mfenced',
-  'mfrac',
-  'mpadded',
-  'mphantom',
-  'mroot',
-  'mrow',
-  'msqrt',
-  'mstyle',
-  'mmultiscripts',
-  'mover',
-  'mprescripts',
-  'msub',
-  'msubsup',
-  'msup',
-  'munder',
-  'munderover',
-  'none',
-  'maligngroup',
-  'malignmark',
-  'mtable',
-  'mtd',
-  'mtr',
-  'mlongdiv',
-  'mscarries',
-  'mscarry',
-  'msgroup',
-  'msline',
-  'msrow',
-  'mstack',
-  'maction',
-  'semantics',
-  'annotation',
-  'annotation-xml'
+    'math',
+    'maction',
+    'maligngroup',
+    'malignmark',
+    'menclose',
+    'merror',
+    'mfenced',
+    'mfrac',
+    'mi',
+    'mlongdiv',
+    'mmultiscripts',
+    'mn',
+    'mo',
+    'mover',
+    'mpadded',
+    'mphantom',
+    'mroot',
+    'mrow',
+    'ms',
+    'mscarries',
+    'mscarry',
+    'mscarries',
+    'msgroup',
+    'mstack',
+    'mlongdiv',
+    'msline',
+    'mstack',
+    'mspace',
+    'msqrt',
+    'msrow',
+    'mstack',
+    'mstack',
+    'mstyle',
+    'msub',
+    'msup',
+    'msubsup',
+    'mtable',
+    'mtd',
+    'mtext',
+    'mtr',
+    'munder',
+    'munderover',
+    'semantics',
+    'math',
+    'mi',
+    'mn',
+    'mo',
+    'ms',
+    'mspace',
+    'mtext',
+    'menclose',
+    'merror',
+    'mfenced',
+    'mfrac',
+    'mpadded',
+    'mphantom',
+    'mroot',
+    'mrow',
+    'msqrt',
+    'mstyle',
+    'mmultiscripts',
+    'mover',
+    'mprescripts',
+    'msub',
+    'msubsup',
+    'msup',
+    'munder',
+    'munderover',
+    'none',
+    'maligngroup',
+    'malignmark',
+    'mtable',
+    'mtd',
+    'mtr',
+    'mlongdiv',
+    'mscarries',
+    'mscarry',
+    'msgroup',
+    'msline',
+    'msrow',
+    'mstack',
+    'maction',
+    'semantics',
+    'annotation',
+    'annotation-xml'
 ]
 
 
@@ -101,7 +101,7 @@ export default defineConfig({
             md.use(markdownItKatex)
         }
     },
-	cleanUrls: true,
+    cleanUrls: true,
     // 由于vitepress编译生成静态html文件时，无法识别插件生成的特殊标签，故需在编译时进行处理，将特殊标签定位自定义标签，防止编译报错
     vue: {
         template: {
@@ -117,7 +117,7 @@ export default defineConfig({
         outline: [2, 3],
         lastUpdatedText: '最近更新',
         socialLinks: [
-            { icon: 'github', link: 'https://github.com/InzamZ'},
+            { icon: 'github', link: 'https://github.com/InzamZ' },
         ],
         nav: nav(),
         sidebar: {
@@ -143,27 +143,26 @@ export default defineConfig({
             '/KindleNotes/': kindle_note_sidebar(),
             '/Other': others_sidebar()
         },
-		algolia: {
-		    appId: 'CUWVNLJUM2',
-		    apiKey: '3e83db0b7ec52d583ac9ee2d4500f2e5',
-		    indexName: 'misaka19614'
-		}
+        algolia: {
+            appId: 'CUWVNLJUM2',
+            apiKey: '3e83db0b7ec52d583ac9ee2d4500f2e5',
+            indexName: 'misaka19614'
+        }
     }
 })
 
 
-function nav()
-{
-	return [
+function nav() {
+    return [
         {
             text: '音视频开发',
             link: '/AVDevelop/'
         },
-		{
+        {
             text: '课程笔记',
             items: [
-                { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构.md'},
-                { text: '操作系统', link: '/CoursesNotes/操作系统/1-计算机系统概述.md'},
+                { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构.md' },
+                { text: '操作系统', link: '/CoursesNotes/操作系统/1-计算机系统概述.md' },
                 { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS.md' },
                 { text: '马克思主义基本原理', link: '/CoursesNotes/马克思主义基本原理/index.md' },
             ]
@@ -171,23 +170,23 @@ function nav()
         {
             text: '读书笔记',
             items: [
-				{
-	                text: '技术类笔记',
-	                items: [
-	                    { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
-	                    { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
+                {
+                    text: '技术类笔记',
+                    items: [
+                        { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+                        { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
                         { text: 'Computer Systems: A Programmer\'s Perspective', link: '/ReadingNotes/CSAPP/' },
                         { text: 'C++ 程序设计现代方法', link: '/ReadingNotes/cpp_modern_approach/' },
                         { text: '操作系统概念', link: '/ReadingNotes/操作系统概念/' },
-	                ]
-	            },
-	            {
-	                text: '文学类笔记',
-                    items: [ 
+                    ]
+                },
+                {
+                    text: '文学类笔记',
+                    items: [
                         { text: 'KindleNotes', link: '/KindleNotes' },
                     ]
-	            }
-        	]
+                }
+            ]
         },
         {
             text: 'XCPC',
@@ -208,12 +207,12 @@ function nav()
                 { text: 'C++后端开发面试题与知识点汇总', link: '/Other/Cpp_Interview_Summary' },
             ]
         }
-	];
+    ];
 }
 
 
-function courses_notes_sidebar(){
-	return [{
+function courses_notes_sidebar() {
+    return [{
         text: 'CoursesNotes',
         items: [
             { text: 'CoursesNotes', link: '/CoursesNotes/' },
@@ -221,10 +220,10 @@ function courses_notes_sidebar(){
             { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
             { text: '马克思主义基本原理', link: '/CoursesNotes/马克思主义基本原理/index.md' },
         ]
-	}];
+    }];
 }
 
-function av_develop_sidebar(){
+function av_develop_sidebar() {
     return [{
         text: '音视频开发',
         items: [
@@ -234,18 +233,18 @@ function av_develop_sidebar(){
     }];
 }
 
-function computer_network_sidebar(){
-	return [{
+function computer_network_sidebar() {
+    return [{
         text: '计算机网络',
         items: [
             { text: '计算机网络', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
             { text: '第一章：计算机网络体系结构', link: '/CoursesNotes/计算机网络/第一章_计算机网络体系结构' },
             { text: '第五章：传输层', link: '/CoursesNotes/计算机网络/第五章_传输层' },
         ]
-	}];
+    }];
 }
 
-function operating_system_sidebar(){
+function operating_system_sidebar() {
     return [{
         text: '操作系统',
         items: [
@@ -255,8 +254,8 @@ function operating_system_sidebar(){
     }];
 }
 
-function network_security_sidbar(){
-	return [{
+function network_security_sidbar() {
+    return [{
         text: '网络攻防技术',
         items: [
             { text: '网络攻防技术', link: '/CoursesNotes/网络攻防技术/第4章_传输层安全协议TLS' },
@@ -268,11 +267,11 @@ function network_security_sidbar(){
             { text: '第7章：软件安全 - 漏洞挖掘与利用', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-漏洞挖掘与利用' },
             { text: '第7章：软件安全 - 缓冲区溢出', link: '/CoursesNotes/网络攻防技术/第7章_软件安全-缓冲区溢出' },
         ]
-	}];
+    }];
 }
 
-function reading_notes_sidebar(){
-	return [{
+function reading_notes_sidebar() {
+    return [{
         text: 'ReadingNotes',
         items: [
             { text: 'ReadingNotes', link: '/ReadingNotes/' },
@@ -282,35 +281,33 @@ function reading_notes_sidebar(){
             { text: 'C++ 程序设计现代方法', link: '/ReadingNotes/cpp_modern_approach/' },
             { text: '操作系统概念', link: '/ReadingNotes/操作系统概念/' },
         ]
-	}];
+    }];
 }
 
-function cpp_primer_plus_sidebar()
-{
-	return [{
-	    text: 'C++ Primer Plus',
-	    items: [
-	        { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
-	        { text: '第10章：对象与类', link: '/ReadingNotes/C++_Primer_Plus/第10章_对象与类' },
-	    ]
-	}];
+function cpp_primer_plus_sidebar() {
+    return [{
+        text: 'C++ Primer Plus',
+        items: [
+            { text: 'C++ Primer Plus (第6版) 中文版', link: '/ReadingNotes/C++_Primer_Plus/' },
+            { text: '第10章：对象与类', link: '/ReadingNotes/C++_Primer_Plus/第10章_对象与类' },
+        ]
+    }];
 }
 
 
-function linux_kernel_sidebar(){
-	return [{
-	    text: 'Linux 内核设计与实现',
-	    items: [
-	        { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
-	        { text: '第一章：Linux 内核简介', link: '/ReadingNotes/Linux内核设计与实现/第一章_Linux内核简介' },
-	        { text: '第二章：从内核出发', link: '/ReadingNotes/Linux内核设计与实现/第二章_从内核出发' },
-	        { text: '第三章：进程管理', link: '/ReadingNotes/Linux内核设计与实现/第三章_进程管理' },
-	    ]
-	}];
+function linux_kernel_sidebar() {
+    return [{
+        text: 'Linux 内核设计与实现',
+        items: [
+            { text: 'Linux 内核设计与实现', link: '/ReadingNotes/Linux内核设计与实现/' },
+            { text: '第一章：Linux 内核简介', link: '/ReadingNotes/Linux内核设计与实现/第一章_Linux内核简介' },
+            { text: '第二章：从内核出发', link: '/ReadingNotes/Linux内核设计与实现/第二章_从内核出发' },
+            { text: '第三章：进程管理', link: '/ReadingNotes/Linux内核设计与实现/第三章_进程管理' },
+        ]
+    }];
 }
 
-function csapp_sidebar() 
-{
+function csapp_sidebar() {
     return [{
         text: 'Computer Systems: A Programmer\'s Perspective',
         items: [
@@ -322,8 +319,7 @@ function csapp_sidebar()
     }];
 }
 
-function cpp_modern_approach_sidebar()
-{
+function cpp_modern_approach_sidebar() {
     return [{
         text: 'C++ 程序设计现代方法',
         items: [
@@ -333,8 +329,7 @@ function cpp_modern_approach_sidebar()
     }];
 }
 
-function os_concept_sidebar()
-{
+function os_concept_sidebar() {
     return [{
         text: '操作系统概念',
         items: [
@@ -475,12 +470,12 @@ function xcpc_other_sidebar() {
 }
 
 function others_sidebar() {
-	return [{
+    return [{
         text: '其他内容',
         items: [
             { text: 'C++后端开发面试题与知识点汇总', link: '/Other/Cpp_Interview_Summary' },
         ]
-	}];
+    }];
 }
 
 // AUTO-GENERATED-CONTENT:START
@@ -489,7 +484,7 @@ function kindle_note_sidebar() {
         text: 'KindleNotes',
         items: [
             { text: 'KindleNotes', link: '/KindleNotes/' },
-            
+            { text: '海伯利安四部曲', link: '/KindleNotes/海伯利安四部曲.html' },
         ]
     }]
 }
