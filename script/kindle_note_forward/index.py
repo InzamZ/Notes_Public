@@ -84,17 +84,22 @@ def export_note(kindle_note_path: str):
             # 获取书摘位置
             note_position = note_heading_text[note_heading_text.find("位置 ") + 3 :]
             # 获取章节名
-            note_chapter = note_heading.find_previous_sibling("div", class_="sectionHeading")
+            note_chapter = note_heading.find_previous_sibling(
+                "div", class_="sectionHeading"
+            )
             note_chapter = note_chapter.text.strip() if note_chapter else ""
             # 获取子章节名
-            note_sub_chapter = note_heading_text[note_heading_text.find(" - ") + 3:note_heading_text.find(" > 位置")]
+            note_sub_chapter = note_heading_text[
+                note_heading_text.find(" - ") + 3 : note_heading_text.find(" > 位置")
+            ]
             note_sub_chapter = note_sub_chapter.strip() if note_sub_chapter else ""
             # 获取书摘的笔记
             next_note_heading = note_heading.find_next_sibling(
                 "div", class_="noteHeading"
             )
+            next_note_heading
             comments = ""
-            if next_note_heading.text.find("笔记") != -1:
+            if next_note_heading and next_note_heading.text.find("笔记") != -1:
                 comments_div = next_note_heading.find_next_sibling(
                     "div", class_="noteText"
                 )
@@ -121,13 +126,17 @@ def export_note(kindle_note_path: str):
 
 def parse_cmd_args(args):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--push_github", action="store_true", help="push to github")
-    parser.add_argument("--push_atlas", action="store_true", help="push to atlas")
+    parser.add_argument(
+        "--push_github", default=True, action="store_true", help="push to github"
+    )
+    parser.add_argument(
+        "--push_atlas", default=False, action="store_true", help="push to atlas"
+    )
     parser.add_argument(
         "--markdown_path", type=str, default="kindle_note", help="markdown path"
     )
     parser.add_argument(
-        "--html_path", type=str, default="kindle_note/origin", help="html path"
+        "--html_path", type=str, default="kindle_note/", help="html path"
     )
     parser.add_argument(
         "--atlas_uri",
@@ -173,12 +182,12 @@ def export_markdown(notes: dict, markdown_path: str):
                 # 判断是否是新的章节
                 if note_chapter != last_chapter:
                     f.write(f"## {note_chapter} \n\n")
-                    if (note_sub_chapter != ""):
+                    if note_sub_chapter != "":
                         f.write(f"### {note_sub_chapter} \n\n")
                     last_chapter = note_chapter
                     last_sub_chapter = note_sub_chapter
                 elif note_sub_chapter != last_sub_chapter:
-                    if (note_sub_chapter != ""):
+                    if note_sub_chapter != "":
                         f.write(f"### {note_sub_chapter} \n\n")
                     last_sub_chapter = note_sub_chapter
                 # 写入文件
