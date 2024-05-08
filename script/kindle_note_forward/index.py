@@ -219,11 +219,12 @@ def export_markdown(notes: dict, markdown_path: str):
 
 
 def push_to_atlas(notes_dict: dict, atlas_uri):
-    client = MongoClient(atlas_uri, server_api=ServerApi("1"))
+    client = MongoClient(atlas_uri)
     db = client.get_database("BooksNotes")
     for book_name in notes_dict.keys():
         notes_list = notes_dict[book_name]
         collections = db.get_collection(notes_list[0]["from"])
+        print(collections, flush=True)
         for x in notes_list:
             x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
             collections.update_one(
@@ -237,11 +238,13 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
 
 
 def push_favorate_to_atlas(notes_dict: dict, atlas_uri):
-    client = MongoClient(atlas_uri, server_api=ServerApi("1"))
+    client = MongoClient(atlas_uri)
+    client.admin.command("ping")
     db = client.get_database("FavoriteNotes")
     for book_name in notes_dict.keys():
         notes_list = notes_dict[book_name]
         collections = db.get_collection(notes_list[0]["from"])
+        print(collections, flush=True)
         for x in notes_list:
             x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
             collections.update_one(
