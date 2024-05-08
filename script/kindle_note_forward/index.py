@@ -1,3 +1,4 @@
+import json
 import requests
 import os
 import sys
@@ -7,47 +8,43 @@ from hashlib import md5
 
 import pymongo
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 import os
 
 
-def main():
-    args = parse_cmd_args(sys.argv[1:])
-    notes = export_note(args.html_path)
-    if args.push_github:
-        export_markdown(notes, args.markdown_path)
-    if args.push_atlas:
-        push_to_atlas(notes, args.atlas_uri)
-    if args.set_vitepress:
-        set_vitepress(notes)
+# 示例文本1：第 30 页·位置 434
+# 示例文本2：01 > 第 9 页·位置 94
+def parse_note_heading_text(note_heading_text: str):
+    # 通过正则表达式提取位置信息
+    chapter, page, position = "", "", ""
+    print(f"[parse_note_heading_text] note_heading_text: {note_heading_text}")
+    if note_heading_text.find(">") != -1:
+        chapter = note_heading_text.split(">")[0].strip()
+        note_heading_text = note_heading_text.split(">")[1].strip()
+    if note_heading_text.find("页") != -1:
+        page = note_heading_text.split("页")[0].split("第")[1].strip()
+        note_heading_text = note_heading_text.split("页")[1].strip()
+    if note_heading_text.find("位置") != -1:
+        position = note_heading_text.split("位置")[1].strip()
+    print(f"[parse_note_heading_text] {chapter} {page} {position}")
+    return chapter, page, position
 
 
-# 在公共的 github 仓库中下载 kindle 导出的 HTML 书摘
-def download_booknote(lists_file_url: str):
-    resp = requests.get(lists_file_url)
-    if resp.status_code != 200:
-        return None
-    lists_file = resp.text
-    lists = lists_file.split("\n")
-    booknote_download_success = []
-    for url in lists:
-        if url == "":
-            continue
-        print("download: " + url)
-        resp = requests.get(url)
-        if resp.status_code != 200:
-            continue
-        # 文件名需要通过 url 解码
-        file_name = url.split("/")[-1]
-        file_name = requests.utils.unquote(file_name)
-        # 保存文件在当前目录下的子文件夹 notebook_html 中
-        file_path = "notebook_html/" + file_name
-        # 如果文件夹不存在则创建
-        if not os.path.exists("notebook_html"):
-            os.makedirs("notebook_html")
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(resp.text)
-        booknote_download_success.append(file_name)
-        print("download success: " + file_name)
+# 可以通过 ##KEY##VALUE## 的方式来添加额外信息
+def parse_comments(comments):
+    extra_info = {}
+    new_comments = ""
+    comment_lines = comments.split("\n")
+    for comment_line in comment_lines:
+        if comment_line.find("##") != -1:
+            comments_list = comment_line.split("##")
+            info_key = comments_list[1].strip().lower()
+            info_value = comments_list[2].strip()
+            extra_info[info_key] = info_value
+        else:
+            new_comments += comment_line + "\n"
+
+    return new_comments, extra_info
 
 
 def export_note(kindle_note_path: str):
@@ -71,81 +68,87 @@ def export_note(kindle_note_path: str):
         book_notes: list = []
         for note_heading in note_headings:
             # 获取书摘标题
-            if note_heading.find("span") is None:
-                continue
-            if note_heading.find("span").text.strip() == "":
-                continue
-            highlight_color = note_heading.find("span").text.strip()
             note_heading_text = note_heading.text.strip()
+            if note_heading_text.find("标注") == -1:
+                print(f"[WARN][{book_name}] noteHeading not found {note_heading_text}")
+                continue
+
+            highlight_color = "未知"
+            # 获取书摘标题的颜色
+            if note_heading.find("span") is None:
+                print(f"[WARN][{book_name}] span not found {note_heading.text.strip()}")
+            elif note_heading.find("span").text.strip() == "":
+                print(f"[WARN][{book_name}] span is empty {note_heading.text.strip()}")
+            else:
+                highlight_color = note_heading.find("span").text.strip()
+
             # 获取书摘内容
-            note_content = note_heading.find_next_sibling(
+            next_note_text_div = note_heading.find_next_sibling(
                 "div", class_="noteText"
-            ).text.strip()
-            # 获取书摘位置
-            note_position = note_heading_text[note_heading_text.find("位置 ") + 3 :]
+            )
+            if next_note_text_div is None:
+                print(
+                    f"[WARN][{book_name}] noteText not found {note_heading.text.strip()}"
+                )
+                continue
+            note_content = next_note_text_div.text.strip()
             # 获取章节名
-            note_chapter = note_heading.find_previous_sibling(
+            pre_note_heading_div = note_heading.find_previous_sibling(
                 "div", class_="sectionHeading"
             )
-            note_chapter = note_chapter.text.strip() if note_chapter else ""
-            # 获取子章节名
-            note_sub_chapter = note_heading_text[
-                note_heading_text.find(" - ") + 3 : note_heading_text.find(" > 位置")
-            ]
-            note_sub_chapter = note_sub_chapter.strip() if note_sub_chapter else ""
+
+            note_section = book_name
+            if pre_note_heading_div:
+                note_section = pre_note_heading_div.text.strip()
+            else:
+                print(
+                    f"[WARN][{book_name}] sectionHeading not found {pre_note_heading_div.text.strip()}"
+                )
+            # 获取书摘位置
+            # 示例文本1：标注(<span class="highlight_blue">蓝色</span>) - 第 30 页·位置 434
+            # 示例文本2：标注(<span class="highlight_blue">蓝色</span>) - 01 > 第 9 页·位置 94
+            # 使用正则表达式提取位置信息包括三级子标题，页数和位置
+
+            if note_heading_text.find("-") != -1:
+                note_heading_text = note_heading_text[note_heading_text.find("-") + 1 :]
+
+            chapter, page, position = parse_note_heading_text(note_heading_text)
+
             # 获取书摘的笔记
             next_note_heading = note_heading.find_next_sibling(
                 "div", class_="noteHeading"
             )
-            next_note_heading
             comments = ""
+            extra_info = {}
             if next_note_heading and next_note_heading.text.find("笔记") != -1:
                 comments_div = next_note_heading.find_next_sibling(
                     "div", class_="noteText"
                 )
                 comments = comments_div.text.strip() if comments_div else ""
-            print(f"export: {highlight_color}  {note_position} {note_content}")
+
+                # 可以通过 ##KEY##VALUE## 的方式来添加额外信息
+                comments, extra_info = parse_comments(comments)
+            print(f"export: {highlight_color}  {position} {note_content}")
             if comments != "":
-                print(f"export: {note_chapter} {note_position} {comments}")
-            book_notes.append(
-                {
-                    "color": highlight_color,
-                    "position": note_position,
-                    "content": note_content,
-                    "comments": comments,
-                    "chapter": note_chapter,
-                    "sub_chapter": note_sub_chapter,
-                    "from": book_name,
-                    "author": author,
-                }
-            )
+                print(f"export: {note_section} {position} {comments}")
+            book_note = {
+                "color": highlight_color,
+                "position": position,
+                "page": page,
+                "content": note_content,
+                "comments": comments,
+                "section": note_section,
+                "chapter": chapter,
+                "from": book_name,
+                "author": author,
+            }
+            # 合并两个字典
+            for key in extra_info:
+                book_note[key] = extra_info[key]
+            book_notes.append(book_note)
         json_data[book_name] = book_notes
         print("export success: " + book_name)
     return json_data
-
-
-def parse_cmd_args(args):
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--push_github", default=True, action="store_true", help="push to github"
-    )
-    parser.add_argument(
-        "--push_atlas", default=False, action="store_true", help="push to atlas"
-    )
-    parser.add_argument(
-        "--markdown_path", type=str, default="kindle_note", help="markdown path"
-    )
-    parser.add_argument(
-        "--html_path", type=str, default="kindle_note/", help="html path"
-    )
-    parser.add_argument(
-        "--atlas_uri",
-        type=str,
-        default=os.environ.get("MONGODB_ATLAS_URI"),
-        help="mongodb atlas uri",
-    )
-    parser.add_argument("--set_vitepress", action="store_true", help="set vitepress")
-    return parser.parse_args(args)
 
 
 def export_markdown(notes: dict, markdown_path: str):
@@ -164,8 +167,8 @@ def export_markdown(notes: dict, markdown_path: str):
         file_path = f"{markdown_path}/{book_name}.md"
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(f"# {book_name} - {author}\n\n")
+            last_section = ""
             last_chapter = ""
-            last_sub_chapter = ""
             for book_note in book_notes:
                 # 获取书摘标题
                 highlight_color = book_note["color"]
@@ -174,32 +177,68 @@ def export_markdown(notes: dict, markdown_path: str):
                 # 获取书摘位置
                 note_position = book_note["position"]
                 # 获取章节名
-                note_chapter = book_note["chapter"]
+                note_section = book_note["section"]
                 # 获取子章节名
-                note_sub_chapter = book_note["sub_chapter"]
+                note_chapter = book_note["chapter"]
                 # 获取书摘的笔记
                 note_comments = book_note["comments"]
+                note_page = book_note.get("page", "")
+                note_position = book_note.get("position", "")
+                # 获取引用信息
+                note_ref = book_note.get("ref", "")
+                note_ref_author = book_note.get("ref_author", "")
                 # 判断是否是新的章节
-                if note_chapter != last_chapter:
-                    f.write(f"## {note_chapter} \n\n")
-                    if note_sub_chapter != "":
-                        f.write(f"### {note_sub_chapter} \n\n")
+                if note_section != last_section:
+                    f.write(f"## {note_section} \n\n")
+                    if note_chapter != "":
+                        f.write(f"### {note_chapter} \n\n")
+                    last_section = note_section
                     last_chapter = note_chapter
-                    last_sub_chapter = note_sub_chapter
-                elif note_sub_chapter != last_sub_chapter:
-                    if note_sub_chapter != "":
-                        f.write(f"### {note_sub_chapter} \n\n")
-                    last_sub_chapter = note_sub_chapter
+                elif note_chapter != "" and note_chapter != last_chapter:
+                    f.write(f"### {note_chapter} \n\n")
+                    last_chapter = note_chapter
+
                 # 写入文件
-                f.write(f":::tip 标注\n{note_content}\n:::\n\n")
+                note_title = "标注"
+                if note_page != "":
+                    note_title += f" > 第 {note_page} 页"
+                if note_position != "":
+                    note_title += f" - 位置 {note_position}"
+
+                f.write(f":::tip {note_title}\n{note_content}\n:::\n\n")
+                if note_ref:
+                    if note_ref_author:
+                        f.write(
+                            f":::info 引用自\n{note_ref} - {note_ref_author}\n:::\n\n"
+                        )
+                    else:
+                        f.write(f":::info 引用自\n{note_ref}\n:::\n\n")
                 if note_comments:
                     f.write(f":::warning 笔记\n{note_comments}\n:::\n\n")
                 f.write(f"---\n\n")
 
 
 def push_to_atlas(notes_dict: dict, atlas_uri):
-    client = MongoClient(atlas_uri)
+    client = MongoClient(atlas_uri, server_api=ServerApi("1"))
     db = client.get_database("BooksNotes")
+    for book_name in notes_dict.keys():
+        notes_list = notes_dict[book_name]
+        collections = db.get_collection(notes_list[0]["from"])
+        for x in notes_list:
+            x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
+            collections.update_one(
+                {"contenthash": x["contenthash"]}, {"$set": x}, upsert=True
+            )
+            if os.environ.get("DEBUG"):
+                print(f"push to atlas: {x['contenthash']}")
+        collections.create_index(
+            [("contenthash", pymongo.ASCENDING)], unique=True, name="contenthash"
+        )
+
+
+def push_favorate_to_atlas(notes_dict: dict, atlas_uri):
+    client = MongoClient(atlas_uri, server_api=ServerApi("1"))
+    db = client.get_database("FavoriteNotes")
     for book_name in notes_dict.keys():
         notes_list = notes_dict[book_name]
         collections = db.get_collection(notes_list[0]["from"])
@@ -229,14 +268,14 @@ def set_vitepress(notes_dict: dict):
     return [{
         text: 'KindleNotes',
         items: [
-            { text: 'KindleNotes', link: '/KindleNotes/' },
+            { text: 'KindleNotes', link: '/kindlenotes/' },
             ======AUTO-GENERATED-CONTENT======
         ]
     }]
 }"""
-    auto_generate_content = "\n".join(
+    auto_generate_content = "\n            ".join(
         [
-            f"{{ text: '{book_name}', link: '/KindleNotes/{book_name}.html' }},"
+            f"{{ text: '{book_name}', link: '/KindleNotes/{book_name}' }},"
             for book_name in notes_dict.keys()
         ]
     )
@@ -246,6 +285,48 @@ def set_vitepress(notes_dict: dict):
     config_ts += "\n// AUTO-GENERATED-CONTENT:END"
     with open("docs/.vitepress/config.ts", "w", encoding="utf-8") as f:
         f.write(config_ts)
+
+
+def parse_cmd_args(args):
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--push_github", default=False, action="store_true", help="push to github"
+    )
+    parser.add_argument(
+        "--push_atlas", default=False, action="store_true", help="push to atlas"
+    )
+    parser.add_argument(
+        "--push_favorate", default=False, action="store_true", help="push to favorate"
+    )
+    parser.add_argument(
+        "--markdown_path", type=str, default="kindle_note", help="markdown path"
+    )
+    parser.add_argument(
+        "--html_path", type=str, default="kindle_note/", help="html path"
+    )
+    parser.add_argument(
+        "--atlas_uri",
+        type=str,
+        default=os.environ.get("MONGODB_ATLAS_URI"),
+        help="mongodb atlas uri",
+    )
+    parser.add_argument("--set_vitepress", action="store_true", help="set vitepress")
+    return parser.parse_args(args)
+
+
+def main():
+    args = parse_cmd_args(sys.argv[1:])
+    notes = export_note(args.html_path)
+    json_text = str(notes)
+    print(json.dumps(notes, indent=4, ensure_ascii=False))
+    if args.push_github:
+        export_markdown(notes, args.markdown_path)
+    if args.push_atlas:
+        push_to_atlas(notes, args.atlas_uri)
+    if args.push_favorate:
+        push_favorate_to_atlas(notes, args.atlas_uri)
+    if args.set_vitepress:
+        set_vitepress(notes)
 
 
 if __name__ == "__main__":

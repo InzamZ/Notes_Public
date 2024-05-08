@@ -183,7 +183,7 @@ function nav() {
                 {
                     text: '文学类笔记',
                     items: [
-                        { text: 'KindleNotes', link: '/KindleNotes' },
+                        { text: 'KindleNotes', link: '/KindleNotes/' },
                     ]
                 }
             ]
@@ -483,8 +483,9 @@ function kindle_note_sidebar() {
     return [{
         text: 'KindleNotes',
         items: [
-            { text: 'KindleNotes', link: '/KindleNotes/' },
-            { text: '海伯利安四部曲', link: '/KindleNotes/海伯利安四部曲.html' },
+            { text: 'KindleNotes', link: '/kindlenotes/' },
+            { text: '海伯利安', link: '/KindleNotes/海伯利安' },
+            { text: '海伯利安的陨落', link: '/KindleNotes/海伯利安的陨落' },
         ]
     }]
 }
