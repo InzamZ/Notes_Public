@@ -1,4 +1,7 @@
+from curses import tigetflag
 import json
+from re import search
+import time
 import requests
 import os
 import sys
@@ -10,6 +13,7 @@ import pymongo
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
+import pdb
 
 
 # 示例文本1：第 30 页·位置 434
@@ -222,11 +226,14 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
     client = MongoClient(atlas_uri)
     db = client.get_database("BooksNotes")
     for book_name in notes_dict.keys():
+        booknote_config = db.get_collection("BookNoteConfig")
         notes_list = notes_dict[book_name]
         collections = db.get_collection(notes_list[0]["from"])
         print(collections, flush=True)
         for x in notes_list:
             x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
+            x["hash"] = "0"
+            x["hash"] = md5(x["content"].encode("utf-8")).hexdigest()
             collections.update_one(
                 {"contenthash": x["contenthash"]}, {"$set": x}, upsert=True
             )
@@ -290,6 +297,71 @@ def set_vitepress(notes_dict: dict):
         f.write(config_ts)
 
 
+def parse_books_data(books_data: list, book_name: str):
+    for book in books_data:
+        if book["item"]["title"] == book_name:
+            return book
+    return None
+
+
+def search_neodb(book_name: str, neodb_token: str):
+    url = f"https://neodb.social/api/me/shelf/complete?category=book&page=1"
+    headers = {
+        "Authorization": "Bearer " + neodb_token,
+        "accept": "application/json",
+    }
+    response = requests.get(url, headers=headers)
+    resp_json = response.json()
+    books_data = resp_json["data"]
+    pages = resp_json["pages"]
+    rst = parse_books_data(books_data, book_name)
+    for page in range(1, pages + 1):
+        if rst != None:
+            return rst
+        url = f"https://neodb.social/api/me/shelf/complete?category=book&page={page}"
+        response = requests.get(url, headers=headers)
+        resp_json = response.json()
+        books_data = resp_json["data"]
+        rst = parse_books_data(books_data, book_name)
+    return rst
+
+
+def push_channel(note: dict, atlas_uri: str, neodb_token: str):
+    client = MongoClient(atlas_uri)
+    db = client.get_database("BooksNotes")
+    for book_name in note.keys():
+        booknote_config = db.get_collection("BookNoteConfig")
+        book_config = booknote_config.find_one({"from": book_name})
+        collections = db.get_collection(book_name)
+        print(collections, flush=True)
+        print(book_config, flush=True)
+        if book_config == None:
+            book_config = {"from": book_name, "info": None, "msg": None}
+            booknote_config.insert_one(book_config)
+        book_config = booknote_config.find_one({"from": book_name})
+        book_info = book_config["info"]
+        # pdb.set_trace()
+        if book_info == None:
+            book_info = search_neodb(book_name, neodb_token)
+            print(book_info, flush=True)
+        booknote_config.update_one(
+            {"from": book_name}, {"$set": {"info": book_info}}, upsert=True
+        )
+        book_msg = book_config["msg"]
+        if book_msg == None:
+            # TODO：发送消息
+            pass
+        # 遍历 mongodb 的所有 collections
+        # for x in collections.find():
+        #     # 通过 hash 值来判断是否已经发送过
+        #     if x["contenthash"] in book_info:
+        #         if x["hash"] == book_info[x["contenthash"]]["hash"]:
+        #             continue
+        #         # 如果有评论逻辑需要此修改
+        #         pass
+    client.close()
+
+
 def parse_cmd_args(args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -299,7 +371,10 @@ def parse_cmd_args(args):
         "--push_atlas", default=False, action="store_true", help="push to atlas"
     )
     parser.add_argument(
-        "--push_favorate", default=False, action="store_true", help="push to favorate"
+        "--push_favorate",
+        default=False,
+        action="store_true",
+        help="push favorate to atlas",
     )
     parser.add_argument(
         "--markdown_path", type=str, default="kindle_note", help="markdown path"
@@ -311,9 +386,19 @@ def parse_cmd_args(args):
         "--atlas_uri",
         type=str,
         default=os.environ.get("MONGODB_ATLAS_URI"),
-        help="mongodb atlas uri",
+        help="mongodb atlas uri, required if push to atlas, push to channel",
     )
     parser.add_argument("--set_vitepress", action="store_true", help="set vitepress")
+    parser.add_argument(
+        "--push_channel", default=False, action="store_true", help="push to channel"
+    )
+    parser.add_argument("--debug", default=False, action="store_true", help="debug")
+    parser.add_argument(
+        "--neodb_token",
+        type=str,
+        default=os.environ.get("NEODB_TOKEN"),
+        help="neodb token",
+    )
     return parser.parse_args(args)
 
 
@@ -330,6 +415,8 @@ def main():
         push_favorate_to_atlas(notes, args.atlas_uri)
     if args.set_vitepress:
         set_vitepress(notes)
+    if args.push_channel:
+        push_channel(notes, args.atlas_uri, args.neodb_token)
 
 
 if __name__ == "__main__":
