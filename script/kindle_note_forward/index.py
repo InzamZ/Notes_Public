@@ -1,5 +1,7 @@
+from ast import parse
 from curses import tigetflag
 import json
+from math import e
 from re import search
 import time
 import requests
@@ -14,6 +16,7 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
 import pdb
+import telebot
 
 
 # 示例文本1：第 30 页·位置 434
@@ -326,9 +329,37 @@ def search_neodb(book_name: str, neodb_token: str):
     return rst
 
 
-def push_channel(note: dict, atlas_uri: str, neodb_token: str):
+def get_ranking_star(rating: int):
+    if rating == 0:
+        return "🌑🌑🌑🌑🌑"
+    elif rating == 1:
+        return "🌗🌑🌑🌑🌑"
+    elif rating == 2:
+        return "🌕🌑🌑🌑🌑"
+    elif rating == 3:
+        return "🌕🌗🌑🌑🌑"
+    elif rating == 4:
+        return "🌕🌕🌑🌑🌑"
+    elif rating == 5:
+        return "🌕🌕🌗🌑🌑"
+    elif rating == 6:
+        return "🌕🌕🌕🌑🌑"
+    elif rating == 7:
+        return "🌕🌕🌕🌗🌑"
+    elif rating == 8:
+        return "🌕🌕🌕🌕🌑"
+    elif rating == 9:
+        return "🌕🌕🌕🌕🌗"
+    elif rating == 10:
+        return "🌕🌕🌕🌕🌕"
+
+
+def push_channel(
+    note: dict, atlas_uri: str, neodb_token: str, telegram_token: str, channel: str
+):
     client = MongoClient(atlas_uri)
     db = client.get_database("BooksNotes")
+    bot = telebot.TeleBot(telegram_token)
     for book_name in note.keys():
         booknote_config = db.get_collection("BookNoteConfig")
         book_config = booknote_config.find_one({"from": book_name})
@@ -350,6 +381,10 @@ def push_channel(note: dict, atlas_uri: str, neodb_token: str):
         book_msg = book_config["msg"]
         if book_msg == None:
             # TODO：发送消息
+            bot.send_message(
+                chat_id=channel,
+                text=f'📖 {book_info["item"]["title"]}\nRating: {get_ranking_star(book_info["item"]["rating"])}\n👉 {book_info["item"]["id"]}\n',
+            )
             pass
         # 遍历 mongodb 的所有 collections
         # for x in collections.find():
@@ -399,6 +434,18 @@ def parse_cmd_args(args):
         default=os.environ.get("NEODB_TOKEN"),
         help="neodb token",
     )
+    parser.add_argument(
+        "--telegram_token",
+        type=str,
+        default=os.environ.get("TELEGRAM_BOT_TOKEN"),
+        help="telegram token",
+    )
+    parser.add_argument(
+        "--report_channel",
+        type=str,
+        default=os.environ.get("REPORT_CHANNEL"),
+        help="report channel",
+    )
     return parser.parse_args(args)
 
 
@@ -416,7 +463,13 @@ def main():
     if args.set_vitepress:
         set_vitepress(notes)
     if args.push_channel:
-        push_channel(notes, args.atlas_uri, args.neodb_token)
+        push_channel(
+            notes,
+            args.atlas_uri,
+            args.neodb_token,
+            args.telegram_token,
+            args.report_channel,
+        )
 
 
 if __name__ == "__main__":
