@@ -1,4 +1,9 @@
+from ast import parse
+from curses import tigetflag
 import json
+from math import e
+from re import search
+import time
 import requests
 import os
 import sys
@@ -10,6 +15,8 @@ import pymongo
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
+import pdb
+import telebot
 
 
 # 示例文本1：第 30 页·位置 434
@@ -222,11 +229,14 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
     client = MongoClient(atlas_uri)
     db = client.get_database("BooksNotes")
     for book_name in notes_dict.keys():
+        booknote_config = db.get_collection("BookNoteConfig")
         notes_list = notes_dict[book_name]
         collections = db.get_collection(notes_list[0]["from"])
         print(collections, flush=True)
         for x in notes_list:
             x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
+            x["hash"] = "0"
+            x["hash"] = md5(x["content"].encode("utf-8")).hexdigest()
             collections.update_one(
                 {"contenthash": x["contenthash"]}, {"$set": x}, upsert=True
             )
@@ -290,6 +300,129 @@ def set_vitepress(notes_dict: dict):
         f.write(config_ts)
 
 
+def parse_books_data(books_data: list, book_name: str):
+    for book in books_data:
+        if book["item"]["title"] == book_name:
+            return book
+    return None
+
+
+def search_neodb(book_name: str, neodb_token: str):
+    url = f"https://neodb.social/api/me/shelf/complete?category=book&page=1"
+    headers = {
+        "Authorization": "Bearer " + neodb_token,
+        "accept": "application/json",
+    }
+    response = requests.get(url, headers=headers)
+    resp_json = response.json()
+    books_data = resp_json["data"]
+    pages = resp_json["pages"]
+    rst = parse_books_data(books_data, book_name)
+    for page in range(1, pages + 1):
+        if rst != None:
+            return rst
+        url = f"https://neodb.social/api/me/shelf/complete?category=book&page={page}"
+        response = requests.get(url, headers=headers)
+        resp_json = response.json()
+        books_data = resp_json["data"]
+        rst = parse_books_data(books_data, book_name)
+    return rst
+
+
+def get_ranking_star(rating: int):
+    if rating == 0:
+        return "🌑🌑🌑🌑🌑"
+    elif rating == 1:
+        return "🌗🌑🌑🌑🌑"
+    elif rating == 2:
+        return "🌕🌑🌑🌑🌑"
+    elif rating == 3:
+        return "🌕🌗🌑🌑🌑"
+    elif rating == 4:
+        return "🌕🌕🌑🌑🌑"
+    elif rating == 5:
+        return "🌕🌕🌗🌑🌑"
+    elif rating == 6:
+        return "🌕🌕🌕🌑🌑"
+    elif rating == 7:
+        return "🌕🌕🌕🌗🌑"
+    elif rating == 8:
+        return "🌕🌕🌕🌕🌑"
+    elif rating == 9:
+        return "🌕🌕🌕🌕🌗"
+    elif rating == 10:
+        return "🌕🌕🌕🌕🌕"
+
+
+def push_channel(
+    note: dict,
+    atlas_uri: str,
+    neodb_token: str,
+    telegram_token: str,
+    channel: str,
+    force_update: bool = False,
+):
+    client = MongoClient(atlas_uri)
+    db = client.get_database("BooksNotes")
+    bot = telebot.TeleBot(telegram_token)
+    for book_name in note.keys():
+        booknote_config = db.get_collection("BookNoteConfig")
+        book_config = booknote_config.find_one({"from": book_name})
+        collections = db.get_collection(book_name)
+        print(collections, flush=True)
+        print(book_config, flush=True)
+        if book_config == None:
+            book_config = {"from": book_name, "info": None, "telegram_msg_info": None}
+            booknote_config.insert_one(book_config)
+        book_config = booknote_config.find_one({"from": book_name})
+        book_info = book_config["info"]
+        if book_info == None:
+            book_info = search_neodb(book_name, neodb_token)
+            print(book_info, flush=True)
+        booknote_config.update_one(
+            {"from": book_name}, {"$set": {"info": book_info}}, upsert=True
+        )
+        telegram_msg_info = book_config.get("telegram_msg_info", None)
+        message = None
+        if force_update or telegram_msg_info == None:
+            try:
+                # 强制清空所有之前的消息
+                if (
+                    telegram_msg_info != None
+                    and "channel_message_id" in telegram_msg_info
+                    and telegram_msg_info["channel_message_id"] != None
+                ):
+                    bot.delete_message(
+                        chat_id=channel,
+                        message_id=telegram_msg_info["channel_message_id"],
+                    )
+            except telebot.apihelper.ApiTelegramException as e:
+                print("Delete message failed, maybe message not found.\nError:\n", e)
+
+            try:
+                # TODO：发送消息
+                # pdb.set_trace()
+                message = bot.send_message(
+                    chat_id=channel,
+                    text=f'📖 {book_info["item"]["title"]}\nRating: {get_ranking_star(book_info["rating_grade"])}\n👉 {book_info["item"]["id"]}\n',
+                )
+                telegram_msg_info = {
+                    "channel_message_id": message.message_id,
+                    "forward_chat": {},
+                }
+                print("Telegram message info: ", telegram_msg_info, flush=True)
+                booknote_config.update_one(
+                    {"from": book_name},
+                    {"$set": {"telegram_msg_info": telegram_msg_info}},
+                    upsert=True,
+                )
+            except Exception as e:
+                print("Update mongodb failed, rollback send msg.\nError:\n", e)
+                if message:
+                    bot.delete_message(chat_id=channel, message_id=message.message_id)
+    client.close()
+
+
 def parse_cmd_args(args):
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -299,7 +432,10 @@ def parse_cmd_args(args):
         "--push_atlas", default=False, action="store_true", help="push to atlas"
     )
     parser.add_argument(
-        "--push_favorate", default=False, action="store_true", help="push to favorate"
+        "--push_favorate",
+        default=False,
+        action="store_true",
+        help="push favorate to atlas",
     )
     parser.add_argument(
         "--markdown_path", type=str, default="kindle_note", help="markdown path"
@@ -311,9 +447,34 @@ def parse_cmd_args(args):
         "--atlas_uri",
         type=str,
         default=os.environ.get("MONGODB_ATLAS_URI"),
-        help="mongodb atlas uri",
+        help="mongodb atlas uri, required if push to atlas, push to channel",
     )
     parser.add_argument("--set_vitepress", action="store_true", help="set vitepress")
+    parser.add_argument(
+        "--push_channel", default=False, action="store_true", help="push to channel"
+    )
+    parser.add_argument("--debug", default=False, action="store_true", help="debug")
+    parser.add_argument(
+        "--neodb_token",
+        type=str,
+        default=os.environ.get("NEODB_TOKEN"),
+        help="neodb token",
+    )
+    parser.add_argument(
+        "--telegram_token",
+        type=str,
+        default=os.environ.get("TELEGRAM_BOT_TOKEN"),
+        help="telegram token",
+    )
+    parser.add_argument(
+        "--report_channel",
+        type=str,
+        default=os.environ.get("REPORT_CHANNEL"),
+        help="report channel",
+    )
+    parser.add_argument(
+        "--force_update", default=False, action="store_true", help="force update"
+    )
     return parser.parse_args(args)
 
 
@@ -330,6 +491,15 @@ def main():
         push_favorate_to_atlas(notes, args.atlas_uri)
     if args.set_vitepress:
         set_vitepress(notes)
+    if args.push_channel:
+        push_channel(
+            notes,
+            args.atlas_uri,
+            args.neodb_token,
+            args.telegram_token,
+            args.report_channel,
+            args.force_update,
+        )
 
 
 if __name__ == "__main__":
