@@ -372,7 +372,7 @@ def push_channel(
         print(collections, flush=True)
         print(book_config, flush=True)
         if book_config == None:
-            book_config = {"from": book_name, "info": None, "msg": None}
+            book_config = {"from": book_name, "info": None, "telegram_msg_info": None}
             booknote_config.insert_one(book_config)
         book_config = booknote_config.find_one({"from": book_name})
         book_info = book_config["info"]
@@ -383,7 +383,22 @@ def push_channel(
             {"from": book_name}, {"$set": {"info": book_info}}, upsert=True
         )
         telegram_msg_info = book_config.get("telegram_msg_info", None)
+        message = None
         if force_update or telegram_msg_info == None:
+            try:
+                # 强制清空所有之前的消息
+                if (
+                    telegram_msg_info != None
+                    and "channel_message_id" in telegram_msg_info
+                    and telegram_msg_info["channel_message_id"] != None
+                ):
+                    bot.delete_message(
+                        chat_id=channel,
+                        message_id=telegram_msg_info["channel_message_id"],
+                    )
+            except telebot.apihelper.ApiTelegramException as e:
+                print("Delete message failed, maybe message not found.\nError:\n", e)
+
             try:
                 # TODO：发送消息
                 # pdb.set_trace()
@@ -403,16 +418,8 @@ def push_channel(
                 )
             except Exception as e:
                 print("Update mongodb failed, rollback send msg.\nError:\n", e)
-                bot.delete_message(chat_id=channel, message_id=message.message_id)
-            pass
-        # 遍历 mongodb 的所有 collections
-        # for x in collections.find():
-        #     # 通过 hash 值来判断是否已经发送过
-        #     if x["contenthash"] in book_info:
-        #         if x["hash"] == book_info[x["contenthash"]]["hash"]:
-        #             continue
-        #         # 如果有评论逻辑需要此修改
-        #         pass
+                if message:
+                    bot.delete_message(chat_id=channel, message_id=message.message_id)
     client.close()
 
 
