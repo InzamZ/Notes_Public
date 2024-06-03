@@ -355,7 +355,12 @@ def get_ranking_star(rating: int):
 
 
 def push_channel(
-    note: dict, atlas_uri: str, neodb_token: str, telegram_token: str, channel: str
+    note: dict,
+    atlas_uri: str,
+    neodb_token: str,
+    telegram_token: str,
+    channel: str,
+    force_update: bool = False,
 ):
     client = MongoClient(atlas_uri)
     db = client.get_database("BooksNotes")
@@ -371,20 +376,34 @@ def push_channel(
             booknote_config.insert_one(book_config)
         book_config = booknote_config.find_one({"from": book_name})
         book_info = book_config["info"]
-        # pdb.set_trace()
         if book_info == None:
             book_info = search_neodb(book_name, neodb_token)
             print(book_info, flush=True)
         booknote_config.update_one(
             {"from": book_name}, {"$set": {"info": book_info}}, upsert=True
         )
-        book_msg = book_config["msg"]
-        if book_msg == None:
-            # TODO：发送消息
-            bot.send_message(
-                chat_id=channel,
-                text=f'📖 {book_info["item"]["title"]}\nRating: {get_ranking_star(book_info["item"]["rating"])}\n👉 {book_info["item"]["id"]}\n',
-            )
+        telegram_msg_info = book_config.get("telegram_msg_info", None)
+        if force_update or telegram_msg_info == None:
+            try:
+                # TODO：发送消息
+                # pdb.set_trace()
+                message = bot.send_message(
+                    chat_id=channel,
+                    text=f'📖 {book_info["item"]["title"]}\nRating: {get_ranking_star(book_info["rating_grade"])}\n👉 {book_info["item"]["id"]}\n',
+                )
+                telegram_msg_info = {
+                    "channel_message_id": message.message_id,
+                    "forward_chat": {},
+                }
+                print("Telegram message info: ", telegram_msg_info, flush=True)
+                booknote_config.update_one(
+                    {"from": book_name},
+                    {"$set": {"telegram_msg_info": telegram_msg_info}},
+                    upsert=True,
+                )
+            except Exception as e:
+                print("Update mongodb failed, rollback send msg.\nError:\n", e)
+                bot.delete_message(chat_id=channel, message_id=message.message_id)
             pass
         # 遍历 mongodb 的所有 collections
         # for x in collections.find():
@@ -446,6 +465,9 @@ def parse_cmd_args(args):
         default=os.environ.get("REPORT_CHANNEL"),
         help="report channel",
     )
+    parser.add_argument(
+        "--force_update", default=False, action="store_true", help="force update"
+    )
     return parser.parse_args(args)
 
 
@@ -469,6 +491,7 @@ def main():
             args.neodb_token,
             args.telegram_token,
             args.report_channel,
+            args.force_update,
         )
 
 
