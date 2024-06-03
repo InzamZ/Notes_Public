@@ -484,8 +484,9 @@ function kindle_note_sidebar() {
         text: 'KindleNotes',
         items: [
             { text: 'KindleNotes', link: '/kindlenotes/' },
-            { text: '海伯利安', link: '/KindleNotes/海伯利安' },
+            { text: '杀死一只知更鸟', link: '/KindleNotes/杀死一只知更鸟' },
             { text: '海伯利安的陨落', link: '/KindleNotes/海伯利安的陨落' },
+            { text: '海伯利安', link: '/KindleNotes/海伯利安' },
         ]
     }]
 }
