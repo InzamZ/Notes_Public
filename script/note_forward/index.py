@@ -620,6 +620,15 @@ def parse_cmd_args(args):
     parser.add_argument(
         "--apple_note_html", type=str, default="apple_note", help="apple note html"
     )
+    parser.add_argument(
+        "--parse_eml",
+        default=False,
+        action="store_true",
+        help="parse eml to html",
+    )
+    parser.add_argument(
+        "--eml_path", type=str, default="apple_note/eml", help="eml path"
+    )
     return parser.parse_args(args)
 
 
@@ -629,6 +638,8 @@ def main():
     apple_note = {}
     json_text = str(notes)
     print(json.dumps(notes, indent=4, ensure_ascii=False))
+    if args.parse_eml:
+        extract_html(args.eml_path, args.apple_html_path)
     if args.push_apple_books_note:
         apple_note = export_apple_note(args.apple_html_path)
     if args.push_github:
