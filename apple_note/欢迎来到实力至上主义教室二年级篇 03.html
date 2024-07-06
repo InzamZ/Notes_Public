@@ -1,59 +1,285 @@
-<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body dir="auto"><div dir="ltr">
-    
-        <style type="text/css">body { margin: auto; font-family: "Helvetica Neue", Arial, sans-serif; line-height: 18px; }
-a { text-decoration: none; color: rgb(61, 90, 157); }
-.booktitle { font-family: "Helvetica Neue", Palatino, Times, serif; font-size: 35px; color: rgb(26, 26, 26); line-height: 38px; text-align: center; text-decoration: none; width: 80%; margin-left: auto; margin-right: auto; }
-a.booktitle:hover { text-decoration: underline; }
-#insertionheader { margin-top: 10px; margin-bottom: 4px; padding: 1px 0px; }
-.separator { background: rgb(215, 215, 215); margin: auto; width: 85%; height: 1px; }
-.annotation { width: 85%; margin: auto; }
-.annotationheader { font-family: "Helvetica Neue", Palatino, Georgia, serif; font-size: 15px; padding-top: 36px; margin-bottom: 6px; display: inline-block; width: 100%; }
-.annotationchapter { color: rgb(52, 52, 52); float: left; text-align: left; margin-bottom: 5px; }
-.annotationdate { color: rgb(52, 52, 52); float: right; text-align: right; margin-left: 10px; margin-bottom: 5px; }
-.annotationcontent { text-align: justify; margin-top: 7px; }
-.annotationrepresentativetext { font-family: "Helvetica Neue", Palatino, Georgia, serif; color: rgb(35, 35, 35); font-size: 15px; line-height: 19px; margin-top: 0px; display: table-cell; }
-a.annotationrepresentativetext { text-decoration: none; color: inherit; }
-a.annotationrepresentativetext:hover { text-decoration: underline; color: inherit; }
-.annotationnote { font-family: "Helvetica Neue", arial, sans-serif; font-size: 15px; line-height: 19px; color: rgb(35, 35, 35); margin-top: 24px; margin-bottom: 28px; }
-.citation { font-family: "Helvetica Neue", Palatino, Georgia, serif; font-size: 15px; line-height: 19px; color: rgb(0, 0, 0); font-weight: bold; text-align: center; width: 80%; margin-left: auto; margin-right: auto; margin-top: -10px; }
-.storelink { font-family: "Helvetica Neue", Palatino, Georgia, serif; font-size: 15px; line-height: 19px; text-align: center; width: 80%; margin-left: auto; margin-right: auto; margin-top: -12px; }
-.storelink a:link { color: rgb(0, 0, 255); text-decoration: underline; }
-.blue { background: rgb(174, 204, 252); }
-.blueBorder { border-left-color: rgb(174, 204, 252); }
-.green { background: rgb(178, 233, 46); }
-.greenBorder { border-left-color: rgb(178, 233, 46); }
-.yellow { background: rgb(255, 226, 125); }
-.yellowBorder { border-left-color: rgb(255, 226, 125); }
-.pink { background: rgb(250, 170, 210); }
-.pinkBorder { border-left-color: rgb(250, 170, 210); }
-.purple { background: rgb(217, 171, 238); }
-.purpleBorder { border-left-color: rgb(217, 171, 238); }
-.defaultColor { background: rgb(184, 184, 184); }
-.underline { text-decoration: underline; color: red; }
-.disclaimer { font-size: 11px; color: rgb(76, 76, 76); text-align: center; }
-.getapps { font-size: 12px; text-align: center; }
-.paper { width: 70%; text-align: center; margin-left: auto; margin-right: auto; margin-top: 10px; -webkit-box-shadow: rgb(0, 0, 0) 0px 2px 4px; box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 4px; background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(249, 249, 249)), color-stop(0.05, rgb(255, 255, 255)), color-stop(0.64, rgb(255, 255, 255)), color-stop(0.83, rgb(244, 244, 244)), to(rgb(255, 255, 255))); }
-.excerpt { font-family: "Helvetica Neue", Palatino, Georgia, serif; font-size: 15px; line-height: 19px; color: rgb(35, 35, 35); width: 85%; margin-left: auto; margin-right: auto; margin-bottom: 38px; }
-.excerptfrom { font-family: "Helvetica Neue", Palatino, Georgia, serif; font-size: 15px; line-height: 19px; color: rgb(148, 148, 148); text-align: center; margin-top: 30px; margin-bottom: 17px; }
-.AEBookInfo { font-family: "Helvetica Neue", "Arial sans-serif"; font-size: 14px; line-height: 19px; color: rgb(0, 0, 0); }
-.AEBookInfo .title { line-height: 20px; font-size: 16px; font-weight: bold; }
-.AEBookInfo a.title { color: rgb(71, 36, 8); }
-.annotationselectionMarker { height: 100%; width: 3px; display: table-cell; }
-.annotationselectioninnermargin { width: 10px; display: table-cell; }</style>
-        <style type="text/css">table { margin-left: auto; margin-right: auto; }</style>
-    
-    
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+</head>
+
+<body dir="auto">
+    <div dir="ltr">
+
+        <style type="text/css">
+            body {
+                margin: auto;
+                font-family: "Helvetica Neue", Arial, sans-serif;
+                line-height: 18px;
+            }
+
+            a {
+                text-decoration: none;
+                color: rgb(61, 90, 157);
+            }
+
+            .booktitle {
+                font-family: "Helvetica Neue", Palatino, Times, serif;
+                font-size: 35px;
+                color: rgb(26, 26, 26);
+                line-height: 38px;
+                text-align: center;
+                text-decoration: none;
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            a.booktitle:hover {
+                text-decoration: underline;
+            }
+
+            #insertionheader {
+                margin-top: 10px;
+                margin-bottom: 4px;
+                padding: 1px 0px;
+            }
+
+            .separator {
+                background: rgb(215, 215, 215);
+                margin: auto;
+                width: 85%;
+                height: 1px;
+            }
+
+            .annotation {
+                width: 85%;
+                margin: auto;
+            }
+
+            .annotationheader {
+                font-family: "Helvetica Neue", Palatino, Georgia, serif;
+                font-size: 15px;
+                padding-top: 36px;
+                margin-bottom: 6px;
+                display: inline-block;
+                width: 100%;
+            }
+
+            .annotationchapter {
+                color: rgb(52, 52, 52);
+                float: left;
+                text-align: left;
+                margin-bottom: 5px;
+            }
+
+            .annotationdate {
+                color: rgb(52, 52, 52);
+                float: right;
+                text-align: right;
+                margin-left: 10px;
+                margin-bottom: 5px;
+            }
+
+            .annotationcontent {
+                text-align: justify;
+                margin-top: 7px;
+            }
+
+            .annotationrepresentativetext {
+                font-family: "Helvetica Neue", Palatino, Georgia, serif;
+                color: rgb(35, 35, 35);
+                font-size: 15px;
+                line-height: 19px;
+                margin-top: 0px;
+                display: table-cell;
+            }
+
+            a.annotationrepresentativetext {
+                text-decoration: none;
+                color: inherit;
+            }
+
+            a.annotationrepresentativetext:hover {
+                text-decoration: underline;
+                color: inherit;
+            }
+
+            .annotationnote {
+                font-family: "Helvetica Neue", arial, sans-serif;
+                font-size: 15px;
+                line-height: 19px;
+                color: rgb(35, 35, 35);
+                margin-top: 24px;
+                margin-bottom: 28px;
+            }
+
+            .citation {
+                font-family: "Helvetica Neue", Palatino, Georgia, serif;
+                font-size: 15px;
+                line-height: 19px;
+                color: rgb(0, 0, 0);
+                font-weight: bold;
+                text-align: center;
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: -10px;
+            }
+
+            .storelink {
+                font-family: "Helvetica Neue", Palatino, Georgia, serif;
+                font-size: 15px;
+                line-height: 19px;
+                text-align: center;
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: -12px;
+            }
+
+            .storelink a:link {
+                color: rgb(0, 0, 255);
+                text-decoration: underline;
+            }
+
+            .blue {
+                background: rgb(174, 204, 252);
+            }
+
+            .blueBorder {
+                border-left-color: rgb(174, 204, 252);
+            }
+
+            .green {
+                background: rgb(178, 233, 46);
+            }
+
+            .greenBorder {
+                border-left-color: rgb(178, 233, 46);
+            }
+
+            .yellow {
+                background: rgb(255, 226, 125);
+            }
+
+            .yellowBorder {
+                border-left-color: rgb(255, 226, 125);
+            }
+
+            .pink {
+                background: rgb(250, 170, 210);
+            }
+
+            .pinkBorder {
+                border-left-color: rgb(250, 170, 210);
+            }
+
+            .purple {
+                background: rgb(217, 171, 238);
+            }
+
+            .purpleBorder {
+                border-left-color: rgb(217, 171, 238);
+            }
+
+            .defaultColor {
+                background: rgb(184, 184, 184);
+            }
+
+            .underline {
+                text-decoration: underline;
+                color: red;
+            }
+
+            .disclaimer {
+                font-size: 11px;
+                color: rgb(76, 76, 76);
+                text-align: center;
+            }
+
+            .getapps {
+                font-size: 12px;
+                text-align: center;
+            }
+
+            .paper {
+                width: 70%;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 10px;
+                -webkit-box-shadow: rgb(0, 0, 0) 0px 2px 4px;
+                box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 4px;
+                background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(249, 249, 249)), color-stop(0.05, rgb(255, 255, 255)), color-stop(0.64, rgb(255, 255, 255)), color-stop(0.83, rgb(244, 244, 244)), to(rgb(255, 255, 255)));
+            }
+
+            .excerpt {
+                font-family: "Helvetica Neue", Palatino, Georgia, serif;
+                font-size: 15px;
+                line-height: 19px;
+                color: rgb(35, 35, 35);
+                width: 85%;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 38px;
+            }
+
+            .excerptfrom {
+                font-family: "Helvetica Neue", Palatino, Georgia, serif;
+                font-size: 15px;
+                line-height: 19px;
+                color: rgb(148, 148, 148);
+                text-align: center;
+                margin-top: 30px;
+                margin-bottom: 17px;
+            }
+
+            .AEBookInfo {
+                font-family: "Helvetica Neue", "Arial sans-serif";
+                font-size: 14px;
+                line-height: 19px;
+                color: rgb(0, 0, 0);
+            }
+
+            .AEBookInfo .title {
+                line-height: 20px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .AEBookInfo a.title {
+                color: rgb(71, 36, 8);
+            }
+
+            .annotationselectionMarker {
+                height: 100%;
+                width: 3px;
+                display: table-cell;
+            }
+
+            .annotationselectioninnermargin {
+                width: 10px;
+                display: table-cell;
+            }
+        </style>
+        <style type="text/css">
+            table {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+
+
         <p id="insertionheader"><br></p>
-        <h3 style="margin-top:-7px; font-family:Helvetica Neue, Arial, Sans-Serif;font-weight:normal;font-size:17px;color:rgb(26,26,26);line-height:20px; text-align:center;">
+        <h3
+            style="margin-top:-7px; font-family:Helvetica Neue, Arial, Sans-Serif;font-weight:normal;font-size:17px;color:rgb(26,26,26);line-height:20px; text-align:center;">
             笔记摘自
         </h3>
         <h1 class="booktitle" style="margin-top:-5px;" width="80%">
-                欢迎来到实力至上主义的教室　２年生編３
+            欢迎来到实力至上主义教室二年级篇 03
         </h1>
-        <h2 style="margin-top:-20px; font-family:Helvetica Neue, Arial, Sans-Serif;font-weight:normal;font-size:23px;color:rgb(26,26,26);line-height:26px; word-break: break-word; text-align:center; margin-bottom:46px;">
+        <h2
+            style="margin-top:-20px; font-family:Helvetica Neue, Arial, Sans-Serif;font-weight:normal;font-size:23px;color:rgb(26,26,26);line-height:26px; word-break: break-word; text-align:center; margin-bottom:46px;">
             衣笠彰梧
         </h2>
-            <div class="separator"></div>
+        <div class="separator"></div>
 
         <div class="annotation">
             <div class="annotationheader">
@@ -61,30 +287,30 @@ a.annotationrepresentativetext:hover { text-decoration: underline; color: inheri
                     2024年7月7日
                 </div>
                 <div class="annotationchapter">
-                    
+
                 </div>
             </div>
             <div class="annotationcontent">
-                        <div class="annotationselectionMarker yellow">
-            </div>
-            <div class="annotationselectioninnermargin">
-            </div>
+                <div class="annotationselectionMarker yellow">
+                </div>
+                <div class="annotationselectioninnermargin">
+                </div>
                 <p class="annotationrepresentativetext">
-                我的本质跟那个男人是一样的。
-只要守护住了自己，其他人如何跟我没有任何关系。
-然而，即便本质相同，也有不同的地方。
-我认为不应该轻易将自己的本质表露在人前。
-总的来说就是，要不要清理掉妨碍自己的蠢货。
-关键就在于，是对那蠢货伸手，还是看着蠢货自生自灭。
-那个男的绝对不会朝蠢货伸手。
-这就是他与我决定性的不同。
+                    我的本质跟那个男人是一样的。
+                    只要守护住了自己，其他人如何跟我没有任何关系。
+                    然而，即便本质相同，也有不同的地方。
+                    我认为不应该轻易将自己的本质表露在人前。
+                    总的来说就是，要不要清理掉妨碍自己的蠢货。
+                    关键就在于，是对那蠢货伸手，还是看着蠢货自生自灭。
+                    那个男的绝对不会朝蠢货伸手。
+                    这就是他与我决定性的不同。
                 </p>
                 <p class="annotationnote">
-                
+                    [[speaker]] 绫小路·清隆
                 </p>
             </div>
         </div>
-                    <div class="separator"></div>
+        <div class="separator"></div>
 
         <div class="annotation">
             <div class="annotationheader">
@@ -92,23 +318,23 @@ a.annotationrepresentativetext:hover { text-decoration: underline; color: inheri
                     2024年7月7日
                 </div>
                 <div class="annotationchapter">
-                    
+
                 </div>
             </div>
             <div class="annotationcontent">
-                        <div class="annotationselectionMarker yellow">
-            </div>
-            <div class="annotationselectioninnermargin">
-            </div>
+                <div class="annotationselectionMarker yellow">
+                </div>
+                <div class="annotationselectioninnermargin">
+                </div>
                 <p class="annotationrepresentativetext">
-                即便表现出想要战斗的意志，但要是自己心里已经认输了，那么战意也会就此丧失。
+                    即便表现出想要战斗的意志，但要是自己心里已经认输了，那么战意也会就此丧失。
                 </p>
                 <p class="annotationnote">
-                
+
                 </p>
             </div>
         </div>
-                    <div class="separator"></div>
+        <div class="separator"></div>
 
         <div class="annotation">
             <div class="annotationheader">
@@ -116,23 +342,23 @@ a.annotationrepresentativetext:hover { text-decoration: underline; color: inheri
                     2024年7月7日
                 </div>
                 <div class="annotationchapter">
-                    
+
                 </div>
             </div>
             <div class="annotationcontent">
-                        <div class="annotationselectionMarker yellow">
-            </div>
-            <div class="annotationselectioninnermargin">
-            </div>
+                <div class="annotationselectionMarker yellow">
+                </div>
+                <div class="annotationselectioninnermargin">
+                </div>
                 <p class="annotationrepresentativetext">
-                「呜哇，谦虚？刚入学的时候，绫小路同学在女生之间还是挺有人气的吧？」
+                    「呜哇，谦虚？刚入学的时候，绫小路同学在女生之间还是挺有人气的吧？」
                 </p>
                 <p class="annotationnote">
-                
+
                 </p>
             </div>
         </div>
-                    <div class="separator"></div>
+        <div class="separator"></div>
 
         <div class="annotation">
             <div class="annotationheader">
@@ -140,23 +366,23 @@ a.annotationrepresentativetext:hover { text-decoration: underline; color: inheri
                     2024年7月7日
                 </div>
                 <div class="annotationchapter">
-                    
+
                 </div>
             </div>
             <div class="annotationcontent">
-                        <div class="annotationselectionMarker yellow">
-            </div>
-            <div class="annotationselectioninnermargin">
-            </div>
+                <div class="annotationselectionMarker yellow">
+                </div>
+                <div class="annotationselectioninnermargin">
+                </div>
                 <p class="annotationrepresentativetext">
-                「那家伙不仅是个怪人还是个超人。关注这个人的行为举止只会浪费你的时间。」
+                    「那家伙不仅是个怪人还是个超人。关注这个人的行为举止只会浪费你的时间。」
                 </p>
                 <p class="annotationnote">
-                
+
                 </p>
             </div>
         </div>
-                    <div class="separator"></div>
+        <div class="separator"></div>
 
         <div class="annotation">
             <div class="annotationheader">
@@ -164,23 +390,23 @@ a.annotationrepresentativetext:hover { text-decoration: underline; color: inheri
                     2024年7月7日
                 </div>
                 <div class="annotationchapter">
-                    
+
                 </div>
             </div>
             <div class="annotationcontent">
-                        <div class="annotationselectionMarker yellow">
-            </div>
-            <div class="annotationselectioninnermargin">
-            </div>
+                <div class="annotationselectionMarker yellow">
+                </div>
+                <div class="annotationselectioninnermargin">
+                </div>
                 <p class="annotationrepresentativetext">
-                「要是无法再见面，要是无法再见到最喜欢的人，也就不可能再传达自己喜欢的这份心情了！」
+                    「要是无法再见面，要是无法再见到最喜欢的人，也就不可能再传达自己喜欢的这份心情了！」
                 </p>
                 <p class="annotationnote">
-                
+
                 </p>
             </div>
         </div>
-                    <div class="separator"></div>
+        <div class="separator"></div>
 
         <div class="annotation">
             <div class="annotationheader">
@@ -188,39 +414,43 @@ a.annotationrepresentativetext:hover { text-decoration: underline; color: inheri
                     2024年7月7日
                 </div>
                 <div class="annotationchapter">
-                    
+
                 </div>
             </div>
             <div class="annotationcontent">
-                        <div class="annotationselectionMarker yellow">
-            </div>
-            <div class="annotationselectioninnermargin">
-            </div>
+                <div class="annotationselectionMarker yellow">
+                </div>
+                <div class="annotationselectioninnermargin">
+                </div>
                 <p class="annotationrepresentativetext">
-                人们是很难在有罪恶感的情况下继续战斗的。
-所以人们才会高举着『正义』之旗，主张着自己的正当性发起战斗。
-只要自己还坚信这份正义，就能凭借着这一信念不断战斗下去。
+                    人们是很难在有罪恶感的情况下继续战斗的。
+                    所以人们才会高举着『正义』之旗，主张着自己的正当性发起战斗。
+                    只要自己还坚信这份正义，就能凭借着这一信念不断战斗下去。
                 </p>
                 <p class="annotationnote">
-                
+
                 </p>
             </div>
         </div>
-                    <div class="separator"></div>
+        <div class="separator"></div>
 
-    <p class="excerptfrom">
-        所有摘录来自
-    </p>
-    <div style="width:80%;margin-left:auto;margin-right:auto">
-        
-    </div>
-    <p class="citation">
-        衣笠彰梧. “欢迎来到实力至上主义的教室　２年生編３.” MF文库J, 2020-10-24. Apple Books. <br>
-此材料受版权保护。
-    </p>
-    <p class="storelink">
-        
-    </p>
-    
+        <p class="excerptfrom">
+            所有摘录来自
+        </p>
+        <div style="width:80%;margin-left:auto;margin-right:auto">
 
-</div><br id="lineBreakAtBeginningOfSignature"><div dir="ltr">发自我的 iPhone</div></body></html>
+        </div>
+        <p class="citation">
+            衣笠彰梧. “欢迎来到实力至上主义的教室　２年生編３.” MF文库J, 2020-10-24. Apple Books. <br>
+            此材料受版权保护。
+        </p>
+        <p class="storelink">
+
+        </p>
+
+
+    </div><br id="lineBreakAtBeginningOfSignature">
+    <div dir="ltr">发自我的 iPhone</div>
+</body>
+
+</html>
