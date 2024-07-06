@@ -27,12 +27,12 @@ jobs:
       - name: Install Dependency
         run: |
           python -m pip install --upgrade pip
-          pip install -r script/kindle_note_forward/requirements.txt --upgrade
+          pip install -r script/note_forward/requirements.txt --upgrade
 
       - name: Run the kindle note forward script
         run: |
           export MONGODB_ATLAS_URI=${{ secrets.MONGODB_ATLAS_URI }}
-          python script/kindle_note_forward/index.py --push_github --push_atlas --push_favorate --html_path=kindle_note --markdown_path=docs/KindleNotes --set_vitepress 
+          python script/note_forward/index.py --push_github --push_atlas --push_favorate --kindle_html_path=kindle_note --markdown_path=docs/KindleNotes --set_vitepress --push_apple_books_note 
 
       - name: Run safe dir
         run: |

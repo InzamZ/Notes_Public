@@ -1,6 +1,7 @@
 .vscode
 env
 ExObjects
+apple_note/eml
 
 # Logs
 logs
