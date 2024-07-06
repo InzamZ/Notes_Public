@@ -18,7 +18,7 @@ import os
 import pdb
 import telebot
 
-from script.note_forward.apple_books_parser import export_apple_note
+from .apple_books_parser import export_apple_note
 
 
 # 示例文本1：第 30 页·位置 434
