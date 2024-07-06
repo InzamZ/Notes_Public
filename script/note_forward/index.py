@@ -18,6 +18,8 @@ import os
 import pdb
 import telebot
 
+from script.note_forward.apple_books_parser import export_apple_note
+
 
 # 示例文本1：第 30 页·位置 434
 # 示例文本2：01 > 第 9 页·位置 94
@@ -441,7 +443,13 @@ def parse_cmd_args(args):
         "--markdown_path", type=str, default="kindle_note", help="markdown path"
     )
     parser.add_argument(
-        "--html_path", type=str, default="kindle_note/", help="html path"
+        "--kindle_html_path", type=str, default="kindle_note/", help="kindle html path"
+    )
+    parser.add_argument(
+        "--apple_html_path",
+        type=str,
+        default="apple_note/",
+        help="apple books html path",
     )
     parser.add_argument(
         "--atlas_uri",
@@ -475,20 +483,35 @@ def parse_cmd_args(args):
     parser.add_argument(
         "--force_update", default=False, action="store_true", help="force update"
     )
+    parser.add_argument(
+        "--push_apple_books_note",
+        default=False,
+        action="store_true",
+        help="push apple books note",
+    )
+    parser.add_argument(
+        "--apple_note_html", type=str, default="apple_note", help="apple note html"
+    )
     return parser.parse_args(args)
 
 
 def main():
     args = parse_cmd_args(sys.argv[1:])
-    notes = export_note(args.html_path)
+    notes = export_note(args.kindle_html_path)
+    apple_note = {}
     json_text = str(notes)
     print(json.dumps(notes, indent=4, ensure_ascii=False))
+    if args.push_apple_books_note:
+        apple_note = export_apple_note(args.apple_html_path)
     if args.push_github:
         export_markdown(notes, args.markdown_path)
+        export_markdown(apple_note, args.markdown_path)
     if args.push_atlas:
         push_to_atlas(notes, args.atlas_uri)
+        push_to_atlas(apple_note, args.atlas_uri)
     if args.push_favorate:
         push_favorate_to_atlas(notes, args.atlas_uri)
+        push_favorate_to_atlas(apple_note, args.atlas_uri)
     if args.set_vitepress:
         set_vitepress(notes)
     if args.push_channel:
