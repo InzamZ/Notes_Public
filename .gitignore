@@ -2,6 +2,9 @@
 env
 ExObjects
 apple_note/eml
+credentials.json
+script/note_forward/layer
+apple_note/eml
 
 # Logs
 logs

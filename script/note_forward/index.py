@@ -4,6 +4,8 @@ import json
 from math import e
 from re import search
 import time
+import traceback
+from turtle import ht
 import requests
 import os
 import sys
@@ -14,18 +16,92 @@ from hashlib import md5
 import pymongo
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
-import os
 import pdb
 import telebot
 import email
-import os
 import re
-import json
-from bs4 import BeautifulSoup
 from email.policy import default
+import imaplib
 
 
-def get_html_body_from_eml(eml_file_path):
+def get_eml_files_from_icloud(
+    sender_email,
+    max_results=10,
+    email_account="your_email@icloud.com",
+    app_password="your_app_specific_password",
+    save_path="/tmp/apple_note/eml",
+):
+    try:
+        mail = imaplib.IMAP4_SSL("imap.mail.me.com")
+        status, rst = mail.login(email_account, app_password)
+        print("Login status:", status, rst)
+        print("Mail list:", mail.list())
+
+        # 选择收件箱
+        status, messages = mail.select("INBOX")
+        if status != "OK":
+            print("Failed to select inbox.")
+            return []
+        # 假设已经提取了发件人和收件人信息
+        sender_email = "inzamzheng@icloud.com"
+        recipient_email = "booknote@misaka19614.com"
+        # 尝试使用简单的搜索
+        status, data = mail.search(
+            None, f'FROM "{sender_email}"', f'TO "{recipient_email}"'
+        )
+        if status != "OK" or not data or not data[0]:
+            print("No emails found or search failed.")
+            return []
+
+        # 获取邮件 ID 列表
+        mail_ids = data[0].split()
+        mail_ids.reverse()
+        eml_files = []
+        eml_filenames = []
+
+        print(f"Found {len(mail_ids)} emails.")
+
+        # 只处理最多 max_results 数量的邮件
+        for num in mail_ids[:max_results]:
+            # 获取邮件的头部信息
+            print("Email ID:", num)
+            status, msg_data = mail.fetch(num, "(BODY.PEEK[])")
+            if status != "OK" or not msg_data or len(msg_data[0]) < 2:
+                print(f"Failed to fetch or parse email ID {num}")
+                continue
+
+            # 提取邮件内容
+            raw_email = msg_data[0][1]
+            print(f"Raw email size: {len(raw_email)}")
+            if not raw_email:
+                print("Empty email content, skipping...")
+                continue
+
+            # 解析邮件内容
+            msg = email.message_from_bytes(raw_email)
+
+            # 保存邮件为 .eml 文件
+            eml_filename = f"email_{num.decode()}.eml"
+            eml_path = os.path.join(save_path, eml_filename)
+            os.makedirs(save_path, exist_ok=True)
+
+            with open(eml_path, "wb") as eml_file:
+                eml_file.write(raw_email)
+
+            eml_files.append(eml_path)
+            eml_filenames.append(eml_filename)
+            print(f"Saved email as {eml_path}")
+
+        mail.logout()
+        return eml_filenames
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        print("Traceback:", traceback.format_exc())
+        return []
+
+
+def get_html_body_from_eml(eml_file_path, html_save_path):
     # 读取并解析.eml文件内容
     with open(eml_file_path, "r", encoding="utf-8") as f:
         raw_email = f.read()
@@ -47,34 +123,48 @@ def get_html_body_from_eml(eml_file_path):
         if msg.get_content_type() == "text/html":
             html_body = msg.get_payload(decode=True).decode(msg.get_content_charset())
 
+    with open(html_save_path, "w", encoding="utf-8") as f:
+        f.write(html_body)
     # print(html_body)
     return html_body
-
-    with open("apple_note.html", "w", encoding="utf-8") as f:
-        f.write(html_body)
 
 
 def extract_html(eml_path, html_path):
     # 读取路径eml_path下所有的eml文件调用get_html_body函数，返回HTML正文
-    for file in os.listdir(eml_path):
-        if file.endswith(".eml"):
-            html_body = get_html_body_from_eml(os.path.join(eml_path, file))
-            new_file = file.replace(".eml", ".html")
-            with open(os.path.join(html_path, new_file), "w", encoding="utf-8") as f:
-                f.write(html_body)
+    sender = "booknote@misaka19614.com"
+    eml_files = get_eml_files_from_icloud(
+        sender_email=sender,
+        max_results=10,
+        email_account=os.environ.get("ICLOUD_EMAIL"),
+        app_password=os.environ.get("ICLOUD_APP_PASSWORD"),
+        save_path=eml_path,
+    )
+    os.makedirs(html_path, exist_ok=True)
+    for filename in eml_files:
+        new_filename = os.path.join(html_path, filename.replace(".eml", ".html"))
+        filename = os.path.join(eml_path, filename)
+        html_body = get_html_body_from_eml(filename, new_filename)
+        with open(new_filename, "w", encoding="utf-8") as f:
+            f.write(html_body)
+            print(f"Saved html as {new_filename}")
 
 
 def export_apple_note(apple_html_path):
     json_data = {}
     for file in os.listdir(apple_html_path):
+        book_name = ""
+        html = ""
         if file.endswith(".html"):
             with open(os.path.join(apple_html_path, file), "r", encoding="utf-8") as f:
                 html = f.read()
-                notes, favorite_notes = parse_notes(html)
+                book_name, notes, favorite_notes = parse_notes(html)
                 # print(json.dumps(notes, ensure_ascii=False))
                 # print(json.dumps(favorite_notes, ensure_ascii=False))
-                bookname = file.replace(".html", "")
-                json_data[bookname] = notes
+                json_data[book_name] = notes
+            with open(
+                os.path.join(apple_html_path, book_name), "w", encoding="utf-8"
+            ) as f:
+                f.write(html)
     return json_data
 
 
@@ -82,7 +172,7 @@ def parse_notes(html):
     notes_list = []
     favorite_notes = []
     soup = BeautifulSoup(html, "html.parser")
-    print(soup.prettify())
+    # print(soup.prettify())
     book_name = soup.find("h1", class_="booktitle").text.strip()
     author = soup.find("h2").text.strip()
     notes = soup.find_all("div", class_="annotation")
@@ -129,7 +219,7 @@ def parse_notes(html):
         if item["type"] == 0:
             favorite_notes.append(item)
         notes_list.append(item)
-    return notes_list, favorite_notes
+    return book_name, notes_list, favorite_notes
 
 
 def parse_note_args(item):
@@ -154,7 +244,7 @@ def parse_note_args(item):
 def parse_note_heading_text(note_heading_text: str):
     # 通过正则表达式提取位置信息
     chapter, page, position = "", "", ""
-    print(f"[parse_note_heading_text] note_heading_text: {note_heading_text}")
+    # print(f"[parse_note_heading_text] note_heading_text: {note_heading_text}")
     if note_heading_text.find(">") != -1:
         chapter = note_heading_text.split(">")[0].strip()
         note_heading_text = note_heading_text.split(">")[1].strip()
@@ -367,6 +457,7 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
             x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
             x["hash"] = "0"
             x["hash"] = md5(x["content"].encode("utf-8")).hexdigest()
+            print(f"note: {str(x)}")
             collections.update_one(
                 {"contenthash": x["contenthash"]}, {"$set": x}, upsert=True
             )
@@ -662,6 +753,15 @@ def main():
             args.report_channel,
             args.force_update,
         )
+
+
+def main_handler(event, context):
+    print("Received event: " + json.dumps(event, indent=2))
+    print("Received context: " + str(context))
+    extract_html("/tmp/apple_note/eml", "/tmp/apple_note/html")
+    apple_note = export_apple_note("/tmp/apple_note/html")
+    push_to_atlas(apple_note, os.environ.get("MONGODB_ATLAS_URI"))
+    return "success"
 
 
 if __name__ == "__main__":

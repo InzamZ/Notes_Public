@@ -32,7 +32,9 @@ jobs:
       - name: Run the kindle note forward script
         run: |
           export MONGODB_ATLAS_URI=${{ secrets.MONGODB_ATLAS_URI }}
-          python script/note_forward/index.py --push_github --push_atlas --push_favorate --kindle_html_path=kindle_note --markdown_path=docs/KindleNotes --set_vitepress --push_apple_books_note 
+          export ICLOUD_EMAIL=${{ secrets.ICLOUD_EMAIL }}
+          export ICLOUD_APP_PASSWORD=${{ secrets.ICLOUD_APP_PASSWORD }}
+          python script/note_forward/index.py --push_github --push_atlas --push_favorate --kindle_html_path=kindle_note --markdown_path=docs/KindleNotes --set_vitepress --push_apple_books_note --parse_eml 
 
       - name: Run safe dir
         run: |
@@ -43,5 +45,5 @@ jobs:
         with:
           github_token: ${{ secrets.G_T }}
           branch: master
-          message: '📝 docs: 上传 kindle 导出笔记'
+          message: '📝 docs: 上传导出笔记'
           force: true
