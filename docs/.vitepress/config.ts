@@ -484,16 +484,7 @@ function kindle_note_sidebar() {
         text: 'KindleNotes',
         items: [
             { text: 'KindleNotes', link: '/kindlenotes/' },
-            { text: '动物农场', link: '/KindleNotes/动物农场' },
-            { text: '易中天中华史：王安石变法', link: '/KindleNotes/易中天中华史：王安石变法' },
-            { text: '杀死一只知更鸟', link: '/KindleNotes/杀死一只知更鸟' },
-            { text: '欢迎来到实力至上主义的教室 08', link: '/KindleNotes/欢迎来到实力至上主义的教室 08' },
-            { text: '欢迎来到实力至上主义的教室 09', link: '/KindleNotes/欢迎来到实力至上主义的教室 09' },
-            { text: '欢迎来到实力至上主义的教室 10', link: '/KindleNotes/欢迎来到实力至上主义的教室 10' },
-            { text: '欢迎来到实力至上主义的教室 11', link: '/KindleNotes/欢迎来到实力至上主义的教室 11' },
-            { text: '欢迎来到实力至上主义的教室二年级篇 01', link: '/KindleNotes/欢迎来到实力至上主义的教室二年级篇 01' },
-            { text: '海伯利安', link: '/KindleNotes/海伯利安' },
-            { text: '海伯利安的陨落', link: '/KindleNotes/海伯利安的陨落' },
+            
         ]
     }]
 }

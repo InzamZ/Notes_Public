@@ -34,7 +34,7 @@ jobs:
           export MONGODB_ATLAS_URI=${{ secrets.MONGODB_ATLAS_URI }}
           export ICLOUD_EMAIL=${{ secrets.ICLOUD_EMAIL }}
           export ICLOUD_APP_PASSWORD=${{ secrets.ICLOUD_APP_PASSWORD }}
-          python script/note_forward/index.py --push_github --push_atlas --push_favorate --kindle_html_path=kindle_note --markdown_path=docs/KindleNotes --set_vitepress --push_apple_books_note --parse_eml 
+          python script/note_forward/index.py --push_github --push_atlas --push_favorate  --set_vitepress --parse_eml --export_apple_books_note
 
       - name: Run safe dir
         run: |

@@ -5,7 +5,6 @@ from math import e
 from re import search
 import time
 import traceback
-from turtle import ht
 import requests
 import os
 import sys
@@ -151,10 +150,11 @@ def extract_html(eml_path, cache_html_path):
 
 def export_apple_note(apple_html_path, cache_html_path):
     json_data = {}
-    for file in os.listdir(apple_html_path):
+    for file in os.listdir(cache_html_path):
         book_name = ""
         html = ""
         if file.endswith(".html"):
+            print(f"export apple note: {file}")
             with open(os.path.join(cache_html_path, file), "r", encoding="utf-8") as f:
                 html = f.read()
                 book_name, notes, favorite_notes = parse_notes(html)
@@ -162,7 +162,9 @@ def export_apple_note(apple_html_path, cache_html_path):
                 # print(json.dumps(favorite_notes, ensure_ascii=False))
                 json_data[book_name] = notes
             with open(
-                os.path.join(apple_html_path, book_name), "w", encoding="utf-8"
+                os.path.join(apple_html_path, book_name + ".html"),
+                "w",
+                encoding="utf-8",
             ) as f:
                 f.write(html)
     return json_data
@@ -177,7 +179,6 @@ def parse_notes(html):
     author = soup.find("h2").text.strip()
     notes = soup.find_all("div", class_="annotation")
     for x in notes:
-        book_note = {}
         item = {
             "from": book_name,
             "author": author,
@@ -223,7 +224,7 @@ def parse_notes(html):
 
 
 def parse_note_args(item):
-    comment = item["comments"]
+    comment: str = item["comments"]
     comment = comment.splitlines()
     note_res = ""
     pattern = "\\[\\[[a-zA-Z_]+\\]\\]"
@@ -231,8 +232,20 @@ def parse_note_args(item):
         res = re.match(pattern, x)
         if res:
             the_key = res.group(0)[2:-2]
-            item[the_key] = x[len(res.group(0)) :]
-            item[the_key] = item[the_key].strip()
+            content = x[len(res.group(0)) :]
+            if len(content) == 0:
+                item[the_key] = True
+                print(f"key: {the_key}, value: {item[the_key]}")
+                continue
+            split_char = content[0]
+            content = content[1:].strip()
+            content = content.split(split_char)
+            if len(content) == 1:
+                item[the_key] = content[0]
+                print(f"key: {the_key}, value: {item[the_key]}")
+                continue
+            item[the_key] = content
+            print(f"key: {the_key}, value: {item[the_key]}")
         else:
             note_res += x
     item["note"] = note_res
@@ -703,7 +716,7 @@ def parse_cmd_args(args):
         "--force_update", default=False, action="store_true", help="force update"
     )
     parser.add_argument(
-        "--push_apple_books_note",
+        "--export_kindle_note",
         default=False,
         action="store_true",
         help="push apple books note",
@@ -720,27 +733,42 @@ def parse_cmd_args(args):
     parser.add_argument(
         "--eml_path", type=str, default="apple_note/eml", help="eml path"
     )
+    parser.add_argument(
+        "--export_apple_books_note",
+        default=False,
+        action="store_true",
+        help="export kindle note",
+    )
+    parser.add_argument(
+        "--print_json", default=False, action="store_true", help="print json"
+    )
     return parser.parse_args(args)
 
 
 def main():
     args = parse_cmd_args(sys.argv[1:])
-    notes = export_note(args.kindle_html_path)
     apple_note = {}
-    json_text = str(notes)
-    print(json.dumps(notes, indent=4, ensure_ascii=False))
+    notes = {}
     if args.parse_eml:
+        print("parse eml to html")
         extract_html(args.eml_path, "/tmp/apple_note/html")
-    if args.push_apple_books_note:
-        apple_note = export_apple_note(
-            args.apple_html_path, cache_html_path="/tmp/apple_note/html"
-        )
+    if args.export_kindle_note:
+        print("export kindle note")
+        notes = export_note(args.kindle_html_path)
+    if args.export_apple_books_note:
+        print("export apple books note")
+        apple_note = export_apple_note(args.apple_html_path, "/tmp/apple_note/html")
     if args.push_github:
+        print("push to github")
         export_markdown(notes, args.markdown_path)
         export_markdown(apple_note, args.markdown_path)
     if args.push_atlas:
+        print("push to atlas")
         push_to_atlas(notes, args.atlas_uri)
         push_to_atlas(apple_note, args.atlas_uri)
+    if args.print_json:
+        print(json.dumps(notes, indent=4, ensure_ascii=False))
+        print(json.dumps(apple_note, indent=4, ensure_ascii=False))
     if args.push_favorate:
         push_favorate_to_atlas(notes, args.atlas_uri)
         push_favorate_to_atlas(apple_note, args.atlas_uri)
