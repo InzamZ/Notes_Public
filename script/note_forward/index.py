@@ -129,7 +129,8 @@ def get_html_body_from_eml(eml_file_path, html_save_path):
     return html_body
 
 
-def extract_html(eml_path, html_path):
+def extract_html(eml_path, cache_html_path):
+    os.makedirs(cache_html_path, exist_ok=True)
     # 读取路径eml_path下所有的eml文件调用get_html_body函数，返回HTML正文
     sender = "booknote@misaka19614.com"
     eml_files = get_eml_files_from_icloud(
@@ -139,9 +140,8 @@ def extract_html(eml_path, html_path):
         app_password=os.environ.get("ICLOUD_APP_PASSWORD"),
         save_path=eml_path,
     )
-    os.makedirs(html_path, exist_ok=True)
     for filename in eml_files:
-        new_filename = os.path.join(html_path, filename.replace(".eml", ".html"))
+        new_filename = os.path.join(cache_html_path, filename.replace(".eml", ".html"))
         filename = os.path.join(eml_path, filename)
         html_body = get_html_body_from_eml(filename, new_filename)
         with open(new_filename, "w", encoding="utf-8") as f:
@@ -149,13 +149,13 @@ def extract_html(eml_path, html_path):
             print(f"Saved html as {new_filename}")
 
 
-def export_apple_note(apple_html_path):
+def export_apple_note(apple_html_path, cache_html_path):
     json_data = {}
     for file in os.listdir(apple_html_path):
         book_name = ""
         html = ""
         if file.endswith(".html"):
-            with open(os.path.join(apple_html_path, file), "r", encoding="utf-8") as f:
+            with open(os.path.join(cache_html_path, file), "r", encoding="utf-8") as f:
                 html = f.read()
                 book_name, notes, favorite_notes = parse_notes(html)
                 # print(json.dumps(notes, ensure_ascii=False))
@@ -730,9 +730,11 @@ def main():
     json_text = str(notes)
     print(json.dumps(notes, indent=4, ensure_ascii=False))
     if args.parse_eml:
-        extract_html(args.eml_path, args.apple_html_path)
+        extract_html(args.eml_path, "/tmp/apple_note/html")
     if args.push_apple_books_note:
-        apple_note = export_apple_note(args.apple_html_path)
+        apple_note = export_apple_note(
+            args.apple_html_path, cache_html_path="/tmp/apple_note/html"
+        )
     if args.push_github:
         export_markdown(notes, args.markdown_path)
         export_markdown(apple_note, args.markdown_path)
