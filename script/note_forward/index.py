@@ -5,6 +5,7 @@ from math import e
 from re import search
 import time
 import traceback
+from urllib.parse import urlencode
 import requests
 import os
 import sys
@@ -21,6 +22,8 @@ import email
 import re
 from email.policy import default
 import imaplib
+
+import urllib
 
 
 def get_eml_files_from_icloud(
@@ -542,15 +545,19 @@ def parse_books_data(books_data: list, book_name: str):
 
 
 def search_neodb(book_name: str, neodb_token: str):
+    encoded_bookname = urllib.parse.quote(book_name)
     url = f"https://neodb.social/api/me/shelf/complete?category=book&page=1"
     headers = {
         "Authorization": "Bearer " + neodb_token,
         "accept": "application/json",
     }
     response = requests.get(url, headers=headers)
+    print("Response: ", response.text)
     resp_json = response.json()
     books_data = resp_json["data"]
+    print("BooksData: ", books_data)
     pages = resp_json["pages"]
+    print("Pages: ", pages)
     rst = parse_books_data(books_data, book_name)
     for page in range(1, pages + 1):
         if rst != None:
@@ -560,6 +567,28 @@ def search_neodb(book_name: str, neodb_token: str):
         resp_json = response.json()
         books_data = resp_json["data"]
         rst = parse_books_data(books_data, book_name)
+    if rst == None:
+        print("Book not found in my shelf. Try to search in all books.")
+        url = f"https://neodb.social/api/me/tag/?title={encoded_bookname}&page=1"
+        response = requests.get(url, headers=headers)
+        resp_json = response.json()
+        tag_uuid = resp_json["data"][0]["uuid"]
+
+        url = f"https://neodb.social/api/me/tag/{tag_uuid}/item/?page=1"
+        response = requests.get(url, headers=headers)
+        resp_json = response.json()
+        books_data = resp_json["data"]
+        print("BooksData: ", books_data)
+        pages = resp_json["pages"]
+        print("Pages: ", pages)
+        book_uuid = books_data[0]["item"]["uuid"]
+        url = f"https://neodb.social/api/me/shelf/item/{book_uuid}"
+        response = requests.get(url, headers=headers)
+        print("Response: ", response.text)
+        resp_json = response.json()
+        rst = resp_json
+        rst["item"]["title"] = book_name
+    print("Rst: ", rst)
     return rst
 
 
@@ -594,30 +623,39 @@ def push_channel(
     neodb_token: str,
     telegram_token: str,
     channel: str,
-    force_update: bool = False,
+    force_update: bool = True,
 ):
     client = MongoClient(atlas_uri)
     db = client.get_database("BooksNotes")
     bot = telebot.TeleBot(telegram_token)
+    if bot.get_me().id == None:
+        print("Telegram bot token error.")
+        return
     for book_name in note.keys():
         booknote_config = db.get_collection("BookNoteConfig")
+        if booknote_config == None:
+            booknote_config = db.create_collection("BookNoteConfig")
         book_config = booknote_config.find_one({"from": book_name})
-        collections = db.get_collection(book_name)
-        print(collections, flush=True)
-        print(book_config, flush=True)
         if book_config == None:
             book_config = {"from": book_name, "info": None, "telegram_msg_info": None}
             booknote_config.insert_one(book_config)
-        book_config = booknote_config.find_one({"from": book_name})
+            booknote_config.create_index([("from", pymongo.ASCENDING)], unique=True)
+        collections = db.get_collection(book_name)
+        print("Collection: ", collections)
+        print("BookConfig: ", book_config)
+        print("BookNoteConfig: ", booknote_config)
+        if book_config == None:
+            book_config = {"from": book_name, "info": None, "telegram_msg_info": None}
+            booknote_config.insert_one(book_config)
         book_info = book_config["info"]
-        if book_info == None:
+        if force_update or book_info == None:
             book_info = search_neodb(book_name, neodb_token)
-            print(book_info, flush=True)
+            print("Search neodb: ", book_info)
         booknote_config.update_one(
             {"from": book_name}, {"$set": {"info": book_info}}, upsert=True
         )
         telegram_msg_info = book_config.get("telegram_msg_info", None)
-        message = None
+        print("Telegram Msg Info: ", telegram_msg_info)
         if force_update or telegram_msg_info == None:
             try:
                 # 强制清空所有之前的消息
@@ -626,6 +664,7 @@ def push_channel(
                     and "channel_message_id" in telegram_msg_info
                     and telegram_msg_info["channel_message_id"] != None
                 ):
+                    print("Delete message: ", telegram_msg_info["channel_message_id"])
                     bot.delete_message(
                         chat_id=channel,
                         message_id=telegram_msg_info["channel_message_id"],
@@ -654,6 +693,11 @@ def push_channel(
                 print("Update mongodb failed, rollback send msg.\nError:\n", e)
                 if message:
                     bot.delete_message(chat_id=channel, message_id=message.message_id)
+    # print("Sleep for waiting telegram message forward.")
+    # time.sleep(30)
+    for book_name in note.keys():
+        booknote_config = db.get_collection("BookNoteConfig")
+
     client.close()
 
 
@@ -777,6 +821,14 @@ def main():
     if args.push_channel:
         push_channel(
             notes,
+            args.atlas_uri,
+            args.neodb_token,
+            args.telegram_token,
+            args.report_channel,
+            args.force_update,
+        )
+        push_channel(
+            apple_note,
             args.atlas_uri,
             args.neodb_token,
             args.telegram_token,

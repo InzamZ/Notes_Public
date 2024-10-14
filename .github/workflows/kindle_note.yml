@@ -9,6 +9,9 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  schedule:
+    # 使用 Cron 表达式定义时间
+    - cron: '0/30 * * * *' # 
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -34,7 +37,10 @@ jobs:
           export MONGODB_ATLAS_URI=${{ secrets.MONGODB_ATLAS_URI }}
           export ICLOUD_EMAIL=${{ secrets.ICLOUD_EMAIL }}
           export ICLOUD_APP_PASSWORD=${{ secrets.ICLOUD_APP_PASSWORD }}
-          python script/note_forward/index.py --push_github --push_atlas --push_favorate  --set_vitepress --parse_eml --export_apple_books_note
+          export TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+          export REPORT_CHANNEL=${{ secrets.REPORT_CHANNEL }}
+          export NEODB_TOKEN=${{ secrets.NEODB_TOKEN }}
+          python script/note_forward/index.py --push_github --push_atlas --push_favorate  --set_vitepress --parse_eml --export_apple_books_note --push_channel
 
       - name: Run safe dir
         run: |
