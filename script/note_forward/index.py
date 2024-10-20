@@ -5,7 +5,7 @@ from math import e
 from re import search
 import time
 import traceback
-from urllib.parse import urlencode
+from urllib.parse import quote
 import requests
 import os
 import sys
@@ -22,8 +22,7 @@ import email
 import re
 from email.policy import default
 import imaplib
-
-import urllib
+from cos_wrapper import upload_file_to_cos
 
 
 def get_eml_files_from_icloud(
@@ -131,8 +130,7 @@ def get_html_body_from_eml(eml_file_path, html_save_path):
     return html_body
 
 
-def extract_html(eml_path, cache_html_path):
-    os.makedirs(cache_html_path, exist_ok=True)
+def extract_html(eml_path, html_path):
     # 读取路径eml_path下所有的eml文件调用get_html_body函数，返回HTML正文
     sender = "booknote@misaka19614.com"
     eml_files = get_eml_files_from_icloud(
@@ -142,8 +140,9 @@ def extract_html(eml_path, cache_html_path):
         app_password=os.environ.get("ICLOUD_APP_PASSWORD"),
         save_path=eml_path,
     )
+    os.makedirs(html_path, exist_ok=True)
     for filename in eml_files:
-        new_filename = os.path.join(cache_html_path, filename.replace(".eml", ".html"))
+        new_filename = os.path.join(html_path, filename.replace(".eml", ".html"))
         filename = os.path.join(eml_path, filename)
         html_body = get_html_body_from_eml(filename, new_filename)
         with open(new_filename, "w", encoding="utf-8") as f:
@@ -151,26 +150,117 @@ def extract_html(eml_path, cache_html_path):
             print(f"Saved html as {new_filename}")
 
 
-def export_apple_note(apple_html_path, cache_html_path):
+def export_apple_note(apple_html_path):
     json_data = {}
-    for file in os.listdir(cache_html_path):
-        book_name = ""
-        html = ""
+    for file in os.listdir(apple_html_path):
         if file.endswith(".html"):
-            print(f"export apple note: {file}")
-            with open(os.path.join(cache_html_path, file), "r", encoding="utf-8") as f:
+            with open(os.path.join(apple_html_path, file), "r", encoding="utf-8") as f:
                 html = f.read()
-                book_name, notes, favorite_notes = parse_notes(html)
+                notes, favorite_notes = parse_notes(html)
                 # print(json.dumps(notes, ensure_ascii=False))
                 # print(json.dumps(favorite_notes, ensure_ascii=False))
-                json_data[book_name] = notes
-            with open(
-                os.path.join(apple_html_path, book_name + ".html"),
-                "w",
-                encoding="utf-8",
-            ) as f:
-                f.write(html)
+                bookname = file.replace(".html", "")
+                json_data[bookname] = notes
     return json_data
+
+
+def parse_character_info_from_bgm(notes, mongo_uri):
+    # print("Notes: ", notes)
+    for bookname in notes.keys():
+        for note in notes[bookname]:
+            character = note.get("character_comment", None)
+            if character == None:
+                character = note.get("speaker", None)
+            bookname = note.get("from", "")
+            if character == None:
+                continue
+            character_info = get_character_info_from_bgm(character, bookname)
+            # print("character_info: ", character, character_info)
+            if character_info != None:
+                push_info_to_mongodb(character_info, mongo_uri)
+
+
+def get_character_info_from_bgm(character, bookname):
+    book_name_search_key = bookname.split()[0]
+    print("book_name_search_key: ", book_name_search_key)
+
+    url = f"https://api.bgm.tv/search/subject/{quote(book_name_search_key)}?type=2&responseGroup=medium"
+    headers = {
+        "Authorization": "Bearer " + os.getenv("BANGUMI_TOKEN"),
+        "User-Agent": "Misaka19614/CharacterInfo",
+        "accept": "application/json",
+    }
+
+    print("url: ", url)
+    response_json = requests.get(url, headers=headers, stream=False)
+    response_json = response_json.json()
+    print("response_json: ", response_json)
+    time.sleep(1)
+    results = response_json["results"]
+    anime_list = response_json["list"]
+    for anime in anime_list:
+        anime_id = anime["id"]
+        character_info = get_character_info_by_anime_id(anime_id, character, bookname)
+        # print("character_info: ", character_info)
+        if character_info != None:
+            return character_info
+    return None
+
+
+def get_character_info_by_anime_id(anime_id, character_name, book_name):
+    url = f"https://api.bgm.tv/v0/subjects/{anime_id}/characters"
+    headers = {
+        "Authorization": "Bearer " + os.getenv("BANGUMI_TOKEN"),
+        "User-Agent": "Misaka19614/CharacterInfo",
+    }
+    character_json = requests.get(url, headers=headers).json()
+    character_info = {
+        "name": character_name,
+        "nickname": character_name,
+        "bio": "",
+        "avatar": " https://lain.bgm.tv/img/no_icon_subject.png",
+        "birthDate": "unknown",
+        "joinDate": "unknown",
+        "lastActive": "unknown",
+        "gender": "lgbtq",
+        "group": book_name,
+    }
+    for result in character_json:
+        # print(f'{result["name"]} vs {character_name}')
+        if result["name"] == character_name:
+            print("character_json: ", character_json)
+            character_info["avatar"] = result["images"]["large"]
+            uid = md5(character_name.encode("utf-8")).hexdigest()[:13]
+            uid = f"anime-{anime_id}-{uid}"
+            character_info["uuid"] = uid
+            with open(f"/tmp/{uid}.png", "wb") as f:
+                f.write(requests.get(character_info["avatar"]).content)
+            cos_resp = upload_file_to_cos(
+                os.getenv("IMAGE_COS_BUCKET"),
+                f"avatar/{uid}.png",
+                f"/tmp/{uid}.png",
+            )
+            print("cos_resp: ", cos_resp)
+            # http://examples-1251000004.cos.ap-shanghai.myqcloud.com/sample.jpeg?imageMogr2/rcrop/50x100
+            character_info["avatar"] = (
+                os.getenv(
+                    "IMAGE_COS_URL",
+                    "https://image.inzamz.top/",
+                )
+                + f"avatar/{uid}.png?imageMogr2/cut/400x400/gravity/northwest/",
+            )
+            return character_info
+    return None
+
+
+def push_info_to_mongodb(character_info, mongo_uri):
+    print("push_info_to_mongodb character_info: ", character_info)
+    client = MongoClient(mongo_uri)
+    db = client.get_database("CharacterProfiles")
+    collections = db.get_collection("default")
+    collections.update_one(
+        {"name": character_info["name"]}, {"$set": character_info}, upsert=True
+    )
 
 
 def parse_notes(html):
@@ -182,6 +272,7 @@ def parse_notes(html):
     author = soup.find("h2").text.strip()
     notes = soup.find_all("div", class_="annotation")
     for x in notes:
+        book_note = {}
         item = {
             "from": book_name,
             "author": author,
@@ -223,11 +314,11 @@ def parse_notes(html):
         if item["type"] == 0:
             favorite_notes.append(item)
         notes_list.append(item)
-    return book_name, notes_list, favorite_notes
+    return notes_list, favorite_notes
 
 
 def parse_note_args(item):
-    comment: str = item["comments"]
+    comment = item["comments"]
     comment = comment.splitlines()
     note_res = ""
     pattern = "\\[\\[[a-zA-Z_]+\\]\\]"
@@ -235,20 +326,8 @@ def parse_note_args(item):
         res = re.match(pattern, x)
         if res:
             the_key = res.group(0)[2:-2]
-            content = x[len(res.group(0)) :]
-            if len(content) == 0:
-                item[the_key] = True
-                print(f"key: {the_key}, value: {item[the_key]}")
-                continue
-            split_char = content[0]
-            content = content[1:].strip()
-            content = content.split(split_char)
-            if len(content) == 1:
-                item[the_key] = content[0]
-                print(f"key: {the_key}, value: {item[the_key]}")
-                continue
-            item[the_key] = content
-            print(f"key: {the_key}, value: {item[the_key]}")
+            item[the_key] = x[len(res.group(0)) :]
+            item[the_key] = item[the_key].strip()
         else:
             note_res += x
     item["note"] = note_res
@@ -467,13 +546,16 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
     for book_name in notes_dict.keys():
         booknote_config = db.get_collection("BookNoteConfig")
         notes_list = notes_dict[book_name]
+        print("bookname: ", book_name)
+        if book_name == "MsgToBookname":
+            continue
         collections = db.get_collection(notes_list[0]["from"])
         print(collections, flush=True)
         for x in notes_list:
             x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
             x["hash"] = "0"
             x["hash"] = md5(x["content"].encode("utf-8")).hexdigest()
-            print(f"note: {str(x)}")
+            # print(f"note: {str(x)}")
             collections.update_one(
                 {"contenthash": x["contenthash"]}, {"$set": x}, upsert=True
             )
@@ -545,19 +627,15 @@ def parse_books_data(books_data: list, book_name: str):
 
 
 def search_neodb(book_name: str, neodb_token: str):
-    encoded_bookname = urllib.parse.quote(book_name)
     url = f"https://neodb.social/api/me/shelf/complete?category=book&page=1"
     headers = {
         "Authorization": "Bearer " + neodb_token,
         "accept": "application/json",
     }
     response = requests.get(url, headers=headers)
-    print("Response: ", response.text)
     resp_json = response.json()
     books_data = resp_json["data"]
-    print("BooksData: ", books_data)
     pages = resp_json["pages"]
-    print("Pages: ", pages)
     rst = parse_books_data(books_data, book_name)
     for page in range(1, pages + 1):
         if rst != None:
@@ -567,28 +645,6 @@ def search_neodb(book_name: str, neodb_token: str):
         resp_json = response.json()
         books_data = resp_json["data"]
         rst = parse_books_data(books_data, book_name)
-    if rst == None:
-        print("Book not found in my shelf. Try to search in all books.")
-        url = f"https://neodb.social/api/me/tag/?title={encoded_bookname}&page=1"
-        response = requests.get(url, headers=headers)
-        resp_json = response.json()
-        tag_uuid = resp_json["data"][0]["uuid"]
-
-        url = f"https://neodb.social/api/me/tag/{tag_uuid}/item/?page=1"
-        response = requests.get(url, headers=headers)
-        resp_json = response.json()
-        books_data = resp_json["data"]
-        print("BooksData: ", books_data)
-        pages = resp_json["pages"]
-        print("Pages: ", pages)
-        book_uuid = books_data[0]["item"]["uuid"]
-        url = f"https://neodb.social/api/me/shelf/item/{book_uuid}"
-        response = requests.get(url, headers=headers)
-        print("Response: ", response.text)
-        resp_json = response.json()
-        rst = resp_json
-        rst["item"]["title"] = book_name
-    print("Rst: ", rst)
     return rst
 
 
@@ -623,39 +679,32 @@ def push_channel(
     neodb_token: str,
     telegram_token: str,
     channel: str,
-    force_update: bool = True,
+    force_update: bool = False,
 ):
     client = MongoClient(atlas_uri)
     db = client.get_database("BooksNotes")
     bot = telebot.TeleBot(telegram_token)
-    if bot.get_me().id == None:
-        print("Telegram bot token error.")
-        return
     for book_name in note.keys():
         booknote_config = db.get_collection("BookNoteConfig")
-        if booknote_config == None:
-            booknote_config = db.create_collection("BookNoteConfig")
         book_config = booknote_config.find_one({"from": book_name})
-        if book_config == None:
-            book_config = {"from": book_name, "info": None, "telegram_msg_info": None}
-            booknote_config.insert_one(book_config)
-            booknote_config.create_index([("from", pymongo.ASCENDING)], unique=True)
         collections = db.get_collection(book_name)
-        print("Collection: ", collections)
-        print("BookConfig: ", book_config)
-        print("BookNoteConfig: ", booknote_config)
+        print(collections, flush=True)
+        print(book_config, flush=True)
         if book_config == None:
             book_config = {"from": book_name, "info": None, "telegram_msg_info": None}
-            booknote_config.insert_one(book_config)
+            booknote_config.update_one(
+                {"from": book_name}, {"$set": book_config}, upsert=True
+            )
+        book_config = booknote_config.find_one({"from": book_name})
         book_info = book_config["info"]
-        if force_update or book_info == None:
+        if book_info == None:
             book_info = search_neodb(book_name, neodb_token)
-            print("Search neodb: ", book_info)
+            print(book_info, flush=True)
         booknote_config.update_one(
             {"from": book_name}, {"$set": {"info": book_info}}, upsert=True
         )
         telegram_msg_info = book_config.get("telegram_msg_info", None)
-        print("Telegram Msg Info: ", telegram_msg_info)
+        message = None
         if force_update or telegram_msg_info == None:
             try:
                 # 强制清空所有之前的消息
@@ -664,10 +713,18 @@ def push_channel(
                     and "channel_message_id" in telegram_msg_info
                     and telegram_msg_info["channel_message_id"] != None
                 ):
-                    print("Delete message: ", telegram_msg_info["channel_message_id"])
                     bot.delete_message(
                         chat_id=channel,
                         message_id=telegram_msg_info["channel_message_id"],
+                    )
+                    msg_config = db.get_collection("MsgToBookname")
+                    if msg_config == None:
+                        msg_config = db.create_collection("MsgToBookname")
+                        msg_config.create_index(
+                            [("channel_message_id", pymongo.ASCENDING)], unique=True
+                        )
+                    msg_config.delete_many(
+                        {"channel_message_id": telegram_msg_info["channel_message_id"]}
                     )
             except telebot.apihelper.ApiTelegramException as e:
                 print("Delete message failed, maybe message not found.\nError:\n", e)
@@ -689,15 +746,24 @@ def push_channel(
                     {"$set": {"telegram_msg_info": telegram_msg_info}},
                     upsert=True,
                 )
+                msg_config = db.get_collection("MsgToBookname")
+                if msg_config == None:
+                    msg_config = db.create_collection("MsgToBookname")
+                    msg_config.create_index(
+                        [("channel_message_id", pymongo.ASCENDING)], unique=True
+                    )
+                msg_config.update_many(
+                    {"book_name": book_name},
+                    {"$set": {"channel_message_id": message.message_id}},
+                    upsert=True,
+                )
+                for x in msg_config.find():
+                    print("MsgConfig: ", x)
+                print("Message: ", message)
             except Exception as e:
                 print("Update mongodb failed, rollback send msg.\nError:\n", e)
                 if message:
                     bot.delete_message(chat_id=channel, message_id=message.message_id)
-    # print("Sleep for waiting telegram message forward.")
-    # time.sleep(30)
-    for book_name in note.keys():
-        booknote_config = db.get_collection("BookNoteConfig")
-
     client.close()
 
 
@@ -760,13 +826,31 @@ def parse_cmd_args(args):
         "--force_update", default=False, action="store_true", help="force update"
     )
     parser.add_argument(
-        "--export_kindle_note",
+        "--push_apple_books_note",
         default=False,
         action="store_true",
         help="push apple books note",
     )
     parser.add_argument(
         "--apple_note_html", type=str, default="apple_note", help="apple note html"
+    )
+    parser.add_argument(
+        "--get_apple_note_from_mongo",
+        default=False,
+        action="store_true",
+        help="get apple note",
+    )
+    parser.add_argument(
+        "--export_apple_books_note",
+        default=False,
+        action="store_true",
+        help="export apple books note",
+    )
+    parser.add_argument(
+        "--export_kindle_books_note",
+        default=False,
+        action="store_true",
+        help="export kindle books note",
     )
     parser.add_argument(
         "--parse_eml",
@@ -777,48 +861,37 @@ def parse_cmd_args(args):
     parser.add_argument(
         "--eml_path", type=str, default="apple_note/eml", help="eml path"
     )
-    parser.add_argument(
-        "--export_apple_books_note",
-        default=False,
-        action="store_true",
-        help="export kindle note",
-    )
-    parser.add_argument(
-        "--print_json", default=False, action="store_true", help="print json"
-    )
     return parser.parse_args(args)
 
 
 def main():
     args = parse_cmd_args(sys.argv[1:])
+    kindle_notes = {}
     apple_note = {}
-    notes = {}
-    if args.parse_eml:
-        print("parse eml to html")
-        extract_html(args.eml_path, "/tmp/apple_note/html")
-    if args.export_kindle_note:
-        print("export kindle note")
-        notes = export_note(args.kindle_html_path)
+    if args.export_kindle_books_note:
+        kindle_notes = export_note(args.kindle_html_path)
+        print("KindleNotes: ", json.dumps(kindle_notes, indent=4, ensure_ascii=False))
     if args.export_apple_books_note:
-        print("export apple books note")
-        apple_note = export_apple_note(args.apple_html_path, "/tmp/apple_note/html")
+        extract_html(args.eml_path, args.apple_html_path)
+        apple_note = export_apple_note(args.apple_html_path)
+        print("AppleNote: ", json.dumps(apple_note, indent=4, ensure_ascii=False))
+    if args.get_apple_note_from_mongo:
+        apple_note = get_apple_note_from_mongo(os.getenv("MONGODB_ATLAS_URI"))
+        print("Apple_note: ", apple_note)
     if args.push_github:
-        print("push to github")
-        export_markdown(notes, args.markdown_path)
+        export_markdown(kindle_notes, args.markdown_path)
         export_markdown(apple_note, args.markdown_path)
     if args.push_atlas:
-        print("push to atlas")
-        push_to_atlas(notes, args.atlas_uri)
+        push_to_atlas(kindle_notes, args.atlas_uri)
         push_to_atlas(apple_note, args.atlas_uri)
-    if args.print_json:
-        print(json.dumps(notes, indent=4, ensure_ascii=False))
-        print(json.dumps(apple_note, indent=4, ensure_ascii=False))
     if args.push_favorate:
-        push_favorate_to_atlas(notes, args.atlas_uri)
+        push_favorate_to_atlas(kindle_notes, args.atlas_uri)
         push_favorate_to_atlas(apple_note, args.atlas_uri)
     if args.set_vitepress:
-        set_vitepress(notes)
+        set_vitepress(kindle_notes)
+        set_vitepress(apple_note)
     if args.push_channel:
+        notes = get_apple_note_from_mongo(os.getenv("MONGODB_ATLAS_URI"))
         push_channel(
             notes,
             args.atlas_uri,
@@ -827,22 +900,29 @@ def main():
             args.report_channel,
             args.force_update,
         )
-        push_channel(
-            apple_note,
-            args.atlas_uri,
-            args.neodb_token,
-            args.telegram_token,
-            args.report_channel,
-            args.force_update,
-        )
+
+
+def get_apple_note_from_mongo(atlas_uri):
+    apple_note = {}
+    client = MongoClient(atlas_uri)
+    db = client.get_database("BooksNotes")
+    booknote_config = db.get_collection("BookNoteConfig")
+    collections = db.list_collection_names()
+    print(collections, flush=True)
+    for collection in collections:
+        if collection == "BookNoteConfig":
+            continue
+        notes_list = list(db.get_collection(collection).find())
+        apple_note[collection] = notes_list
+    return apple_note
 
 
 def main_handler(event, context):
     print("Received event: " + json.dumps(event, indent=2))
     print("Received context: " + str(context))
-    extract_html("/tmp/apple_note/eml", "/tmp/apple_note/html")
-    apple_note = export_apple_note("/tmp/apple_note/html")
-    push_to_atlas(apple_note, os.environ.get("MONGODB_ATLAS_URI"))
+    apple_note = get_apple_note_from_mongo(os.getenv("MONGODB_ATLAS_URI"))
+    print("apple_note: ", apple_note)
+    parse_character_info_from_bgm(apple_note, os.environ.get("MONGODB_ATLAS_URI"))
     return "success"
 
 
