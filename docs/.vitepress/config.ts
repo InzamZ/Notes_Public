@@ -487,6 +487,7 @@ function kindle_note_sidebar() {
             { text: 'email_4512', link: '/KindleNotes/email_4512' },
             { text: 'email_4519', link: '/KindleNotes/email_4519' },
             { text: 'email_4523', link: '/KindleNotes/email_4523' },
+            { text: 'email_4527', link: '/KindleNotes/email_4527' },
             { text: '欢迎来到实力至上主义的教室 二年级篇 06', link: '/KindleNotes/欢迎来到实力至上主义的教室 二年级篇 06' },
         ]
     }]
