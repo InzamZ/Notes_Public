@@ -726,7 +726,7 @@ def push_channel(
         telegram_msg_info = book_config.get("telegram_msg_info", None)
         message = None
         print("telegram_msg_info: ", telegram_msg_info, flush=True)
-        if force_update or telegram_msg_info != None:
+        if force_update or telegram_msg_info == None:
             try:
                 # 强制清空所有之前的消息
                 if (
