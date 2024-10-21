@@ -641,10 +641,30 @@ def search_neodb(book_name: str, neodb_token: str):
         if rst != None:
             return rst
         url = f"https://neodb.social/api/me/shelf/complete?category=book&page={page}"
+        time.sleep(0.1)
         response = requests.get(url, headers=headers)
         resp_json = response.json()
         books_data = resp_json["data"]
         rst = parse_books_data(books_data, book_name)
+    uuid = 0
+    if rst == None:
+        url = f"https://neodb.social/api/me/tag/?title={book_name}&page=1"
+        time.sleep(0.1)
+        response = requests.get(url, headers=headers)
+        resp_json = response.json()
+        books_data = resp_json.get("data", [])
+        for tag in books_data:
+            if tag["title"] == book_name:
+                tag_uuid = tag["uuid"]
+                url = f"https://neodb.social/api/me/tag/{tag_uuid}/item/?page=1"
+                time.sleep(0.1)
+                response = requests.get(url, headers=headers)
+                resp_json = response.json()
+                uuid = resp_json.get("data", None)[0]["item"]["uuid"]
+    if uuid != 0:
+        url = f"https://neodb.social/api/me/shelf/item/{uuid}"
+        response = requests.get(url, headers=headers)
+        rst = response.json()
     return rst
 
 
@@ -699,13 +719,14 @@ def push_channel(
         book_info = book_config["info"]
         if book_info == None:
             book_info = search_neodb(book_name, neodb_token)
-            print(book_info, flush=True)
-        booknote_config.update_one(
+            print("book_info: ", book_info, flush=True)
+        booknote_config.update_many(
             {"from": book_name}, {"$set": {"info": book_info}}, upsert=True
         )
         telegram_msg_info = book_config.get("telegram_msg_info", None)
         message = None
-        if force_update or telegram_msg_info == None:
+        print("telegram_msg_info: ", telegram_msg_info, flush=True)
+        if force_update or telegram_msg_info != None:
             try:
                 # 强制清空所有之前的消息
                 if (
