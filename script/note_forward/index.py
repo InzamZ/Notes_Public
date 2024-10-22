@@ -749,38 +749,46 @@ def push_channel(
                     )
             except telebot.apihelper.ApiTelegramException as e:
                 print("Delete message failed, maybe message not found.\nError:\n", e)
-
+        if (
+            telegram_msg_info != None
+            and "channel_message_id" in telegram_msg_info
+            and telegram_msg_info["channel_message_id"] != None
+        ):
             try:
-                # TODO：发送消息
-                # pdb.set_trace()
-                message = bot.send_message(
-                    chat_id=channel,
-                    text=f'📖 {book_info["item"]["title"]}\nRating: {get_ranking_star(book_info["rating_grade"])}\n👉 {book_info["item"]["id"]}\n',
-                )
-                telegram_msg_info = {
-                    "channel_message_id": message.message_id,
-                    "forward_chat": {},
-                }
-                print("Telegram message info: ", telegram_msg_info, flush=True)
-                booknote_config.update_one(
-                    {"from": book_name},
-                    {"$set": {"telegram_msg_info": telegram_msg_info}},
-                    upsert=True,
-                )
-                msg_config = db.get_collection("MsgToBookname")
-                if msg_config == None:
-                    msg_config = db.create_collection("MsgToBookname")
-                    msg_config.create_index(
-                        [("channel_message_id", pymongo.ASCENDING)], unique=True
+                try:
+                    message = bot.edit_message_text(
+                        f'📖 {book_name}\nRating: {get_ranking_star(book_info["rating_grade"])}\n👉 {book_info["item"]["id"]}\n',
+                        channel,
                     )
-                msg_config.update_many(
-                    {"book_name": book_name},
-                    {"$set": {"channel_message_id": message.message_id}},
-                    upsert=True,
-                )
-                for x in msg_config.find():
-                    print("MsgConfig: ", x)
-                print("Message: ", message)
+                except Exception as e:
+                    message = bot.send_message(
+                        chat_id=channel,
+                        text=f'📖 {book_name}\nRating: {get_ranking_star(book_info["rating_grade"])}\n👉 {book_info["item"]["id"]}\n',
+                    )
+                    telegram_msg_info = {
+                        "channel_message_id": message.message_id,
+                        "forward_chat": {},
+                    }
+                    print("Telegram message info: ", telegram_msg_info, flush=True)
+                    booknote_config.update_one(
+                        {"from": book_name},
+                        {"$set": {"telegram_msg_info": telegram_msg_info}},
+                        upsert=True,
+                    )
+                    msg_config = db.get_collection("MsgToBookname")
+                    if msg_config == None:
+                        msg_config = db.create_collection("MsgToBookname")
+                        msg_config.create_index(
+                            [("channel_message_id", pymongo.ASCENDING)], unique=True
+                        )
+                    msg_config.update_many(
+                        {"book_name": book_name},
+                        {"$set": {"channel_message_id": message.message_id}},
+                        upsert=True,
+                    )
+                    for x in msg_config.find():
+                        print("MsgConfig: ", x)
+                    print("Message: ", message)
             except Exception as e:
                 print("Update mongodb failed, rollback send msg.\nError:\n", e)
                 if message:
