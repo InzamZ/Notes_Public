@@ -141,3 +141,4 @@ cache/
 # macos
 .DS_Store
 script/note_forward/.env
+__pycache__
