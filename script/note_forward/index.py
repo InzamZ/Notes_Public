@@ -751,7 +751,6 @@ def push_channel(
                 print("Delete message failed, maybe message not found.\nError:\n", e)
 
             try:
-                print("Error: ", e)
                 message = bot.send_message(
                     chat_id=channel,
                     text=f'📖 {book_name}\nRating: {get_ranking_star(book_info["rating_grade"])}\n👉 {book_info["item"]["id"]}\n',
