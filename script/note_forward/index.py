@@ -762,6 +762,7 @@ def push_channel(
                         telegram_msg_info["channel_message_id"],
                     )
                 except Exception as e:
+                    print("Error: ", e)
                     message = bot.send_message(
                         chat_id=channel,
                         text=f'📖 {book_name}\nRating: {get_ranking_star(book_info["rating_grade"])}\n👉 {book_info["item"]["id"]}\n',
