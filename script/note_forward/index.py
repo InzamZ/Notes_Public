@@ -180,7 +180,7 @@ def parse_character_info_from_bgm(notes, mongo_uri):
             if character == None:
                 continue
             character_info = get_character_info_from_bgm(character, bookname)
-            # print("character_info: ", character, character_info)
+            print("character_info: ", character, character_info)
             if character_info != None:
                 push_info_to_mongodb(character_info, mongo_uri)
 
@@ -206,7 +206,7 @@ def get_character_info_from_bgm(character, bookname):
     for anime in anime_list:
         anime_id = anime["id"]
         character_info = get_character_info_by_anime_id(anime_id, character, bookname)
-        # print("character_info: ", character_info)
+        print("character_info: ", character_info)
         if character_info != None:
             return character_info
     return None
@@ -901,6 +901,7 @@ def main():
     if args.export_apple_books_note:
         extract_html(args.eml_path, args.apple_html_path)
         apple_note = export_apple_note(args.apple_html_path)
+        parse_character_info_from_bgm(apple_note, os.environ.get("MONGODB_ATLAS_URI"))
         print("AppleNote: ", json.dumps(apple_note, indent=4, ensure_ascii=False))
     if args.get_apple_note_from_mongo:
         apple_note = get_apple_note_from_mongo(os.getenv("MONGODB_ATLAS_URI"))

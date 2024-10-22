@@ -40,6 +40,7 @@ jobs:
           export TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
           export REPORT_CHANNEL=${{ secrets.REPORT_CHANNEL }}
           export NEODB_TOKEN=${{ secrets.NEODB_TOKEN }}
+          export BANGUMI_TOKEN=${{ secrets.BANGUMI_TOKEN }}
           python3 script/note_forward/index.py --push_github --push_atlas --export_apple_books_note  --set_vitepress --push_channel --force_update
 
       - name: Run safe dir
