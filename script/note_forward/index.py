@@ -162,6 +162,10 @@ def export_apple_note(apple_html_path):
                 bookname = file.replace(".html", "")
                 bookname = notes[0]["from"]
                 json_data[bookname] = notes
+            os.rename(
+                os.path.join(apple_html_path, file),
+                os.path.join(apple_html_path, f"{bookname}.html"),
+            )
     return json_data
 
 
