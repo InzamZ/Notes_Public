@@ -487,6 +487,8 @@ function kindle_note_sidebar() {
             { text: '欢迎来到实力至上主义的教室 01', link: '/KindleNotes/欢迎来到实力至上主义的教室 01' },
             { text: '欢迎来到实力至上主义的教室 08', link: '/KindleNotes/欢迎来到实力至上主义的教室 08' },
             { text: '欢迎来到实力至上主义的教室 09', link: '/KindleNotes/欢迎来到实力至上主义的教室 09' },
+            { text: '欢迎来到实力至上主义的教室 二年级篇 02', link: '/KindleNotes/欢迎来到实力至上主义的教室 二年级篇 02' },
+            { text: '欢迎来到实力至上主义的教室 二年级篇 05', link: '/KindleNotes/欢迎来到实力至上主义的教室 二年级篇 05' },
             { text: '欢迎来到实力至上主义的教室 二年级篇 06', link: '/KindleNotes/欢迎来到实力至上主义的教室 二年级篇 06' },
         ]
     }]
