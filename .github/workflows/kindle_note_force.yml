@@ -41,6 +41,9 @@ jobs:
           export REPORT_CHANNEL=${{ secrets.REPORT_CHANNEL }}
           export NEODB_TOKEN=${{ secrets.NEODB_TOKEN }}
           export BANGUMI_TOKEN=${{ secrets.BANGUMI_TOKEN }}
+          export COS_SECRET_ID=${{ secrets.COS_SECRET_ID }}
+          export COS_SECRET_KEY=${{ secrets.COS_SECRET_KEY }}
+          export IMAGE_COS_BUCKET=${{ secrets.IMAGE_COS_BUCKET }}
           python3 script/note_forward/index.py --push_github --push_atlas --export_apple_books_note  --set_vitepress --push_channel --force_update
 
       - name: Run safe dir

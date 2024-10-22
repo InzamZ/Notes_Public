@@ -20,6 +20,7 @@ import pdb
 import telebot
 import email
 import re
+from PIL import Image
 from email.policy import default
 import imaplib
 from cos_wrapper import upload_file_to_cos
@@ -212,6 +213,12 @@ def get_character_info_from_bgm(character, bookname):
     return None
 
 
+def get_image_size(image_path):
+    with open(image_path, "rb") as f:
+        with Image.open(f) as image:
+            return image.size
+
+
 def get_character_info_by_anime_id(anime_id, character_name, book_name):
     url = f"https://api.bgm.tv/v0/subjects/{anime_id}/characters"
     headers = {
@@ -247,15 +254,20 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name):
             )
             print("cos_resp: ", cos_resp)
             # http://examples-1251000004.cos.ap-shanghai.myqcloud.com/sample.jpeg?imageMogr2/rcrop/50x100
+            # 获取图片的尺寸
+            width, height = get_image_size(
+                f"/tmp/{uid}.png",
+            )
+            min_size = int(min(width, height))
             character_info["avatar"] = (
                 os.getenv(
                     "IMAGE_COS_URL",
                     "https://image.inzamz.top/",
                 )
-                + f"avatar/{uid}.png?imageMogr2/cut/400x400/gravity/northwest/",
+                + f"avatar/{uid}.png?imageMogr2/cut/{min_size}x{min_size}/gravity/north/",
             )
             character_info["card_url"] = (
-                f"https://char.misaka19614.com/profile/userId/{uid}"
+                f"https://char.misaka19614.com/profile/userId/{uid}?random={int(time.time())}"
             )
             return character_info
     return None
