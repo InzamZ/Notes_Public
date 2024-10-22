@@ -160,6 +160,7 @@ def export_apple_note(apple_html_path):
                 # print(json.dumps(notes, ensure_ascii=False))
                 # print(json.dumps(favorite_notes, ensure_ascii=False))
                 bookname = file.replace(".html", "")
+                bookname = notes[0]["from"]
                 json_data[bookname] = notes
     return json_data
 
@@ -248,6 +249,9 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name):
                     "https://image.inzamz.top/",
                 )
                 + f"avatar/{uid}.png?imageMogr2/cut/400x400/gravity/northwest/",
+            )
+            character_info["card_url"] = (
+                f"https://char.misaka19614.com/profile/userId/{uid}"
             )
             return character_info
     return None

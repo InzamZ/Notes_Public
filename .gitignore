@@ -140,3 +140,4 @@ cache/
 
 # macos
 .DS_Store
+script/note_forward/.env
