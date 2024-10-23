@@ -181,10 +181,10 @@ def parse_character_info_from_bgm(notes, mongo_uri):
             if character == None:
                 continue
             character_info = get_character_info_from_bgm(character, bookname)
-            if note.get("character_comment", None) != None:
-                character_info['bio'] = note['content']
-            print("character_info: ", character, character_info)
             if character_info != None:
+                print("character_info: ", character, character_info)
+                if note.get("character_comment", None) != None:
+                    character_info['bio'] = note['content']
                 push_info_to_mongodb(character_info, mongo_uri)
 
 
