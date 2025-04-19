@@ -348,8 +348,12 @@ def parse_note_args(item):
         res = re.match(pattern, x)
         if res:
             the_key = res.group(0)[2:-2]
-            item[the_key] = x[len(res.group(0)) :]
-            item[the_key] = item[the_key].strip()
+            ctx_value = x[len(res.group(0)) :]
+            if len(ctx_value) > 0:
+                sep_char = ctx_value[0]
+                item[the_key] = ctx_value[1:].split(sep_char)
+            else:
+                item[the_key] = ctx_value.strip()
         else:
             note_res += x
     item["note"] = note_res
