@@ -352,6 +352,8 @@ def parse_note_args(item):
             if len(ctx_value) > 0:
                 sep_char = ctx_value[0]
                 item[the_key] = ctx_value[1:].split(sep_char)
+                if len(item[the_key]) <= 1:
+                    item[the_key] = ctx_value.strip()
             else:
                 item[the_key] = ctx_value.strip()
         else:
