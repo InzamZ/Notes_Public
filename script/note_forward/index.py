@@ -25,6 +25,10 @@ from email.policy import default
 import imaplib
 from cos_wrapper import upload_file_to_cos
 
+import dotenv
+
+dotenv.load_dotenv()
+
 
 def get_eml_files_from_icloud(
     sender_email,
@@ -294,6 +298,31 @@ def push_info_to_mongodb(character_info, mongo_uri):
         {"name": character_info["name"]}, {"$set": character_info}, upsert=True
     )
 
+def push_tag_info_to_mongodb(item, mongo_uri):
+    print("push_tag_info_to_mongodb item: ", item)
+    if not item.get("tag"):
+        return
+    
+    with MongoClient(mongo_uri) as client:
+        db = client.get_database("TagDict")
+        collections = db.get_collection("default")
+        tags = item["tag"]
+        tags = [tags] if isinstance(tags, str) else tags
+        processed_tags = [x.strip() for x in tags if x.strip()]
+        
+        for tag in processed_tags:
+            # 规范化当前item的JSON表示用于去重
+            normalized_item = json.loads(
+                json.dumps(item, ensure_ascii=False, sort_keys=True)
+            )
+            
+            # 使用MongoDB的原子操作直接添加并去重
+            collections.update_one(
+                {"tag": tag},
+                {"$addToSet": {"quote": normalized_item}},
+                upsert=True
+            )
+
 
 def parse_notes(html):
     notes_list = []
@@ -339,6 +368,8 @@ def parse_notes(html):
         if item["content"].strip() == "":
             continue
         item = parse_note_args(item)
+        if os.environ.get("PUSH_TAG_INFO_TO_MONGODB") == "true":
+            push_tag_info_to_mongodb(item, os.environ.get("MONGODB_ATLAS_URI"))
         pattern = "^[^\u4e00-\u9fa5A-Za-z]+"
         res = re.match(pattern, item["chapter"])
         if res:
