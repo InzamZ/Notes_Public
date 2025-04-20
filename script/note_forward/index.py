@@ -171,7 +171,7 @@ def export_apple_note(apple_html_path):
 
 
 def parse_character_info_from_bgm(notes, mongo_uri):
-    # print("Notes: ", notes)
+    print("Notes: ", notes)
     for bookname in notes.keys():
         for note in notes[bookname]:
             character = note.get("character_comment", None)
