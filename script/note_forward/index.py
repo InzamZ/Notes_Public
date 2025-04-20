@@ -136,7 +136,7 @@ def extract_html(eml_path, html_path):
     sender = "booknote@misaka19614.com"
     eml_files = get_eml_files_from_icloud(
         sender_email=sender,
-        max_results=10,
+        max_results=100,
         email_account=os.environ.get("ICLOUD_EMAIL"),
         app_password=os.environ.get("ICLOUD_APP_PASSWORD"),
         save_path=eml_path,
