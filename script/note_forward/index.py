@@ -222,6 +222,10 @@ def get_image_size(image_path):
         with Image.open(f) as image:
             return image.size
 
+import opencc
+
+# 初始化简繁转换器，繁体转简体
+converter = opencc.OpenCC('t2s.json')
 
 def get_character_info_by_anime_id(anime_id, character_name, book_name):
     url = f"https://api.bgm.tv/v0/subjects/{anime_id}/characters"
@@ -241,9 +245,16 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name):
         "gender": "lgbtq",
         "group": book_name,
     }
+    
+    # 将输入的字符名称统一转换为简体
+    converted_character_name = converter.convert(character_name)
+    
     for result in character_json:
-        # print(f'{result["name"]} vs {character_name}')
-        if result["name"] == character_name:
+        # 将API返回的名称转换为简体
+        converted_result_name = converter.convert(result["name"])
+        
+        # 使用转换后的名称进行比较
+        if converted_result_name == converted_character_name:
             print("character_json: ", character_json)
             character_info["avatar"] = result["images"]["large"]
             uid = md5(character_name.encode("utf-8")).hexdigest()[:13]
@@ -257,8 +268,6 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name):
                 f"/tmp/{uid}.png",
             )
             print("cos_resp: ", cos_resp)
-            # http://examples-1251000004.cos.ap-shanghai.myqcloud.com/sample.jpeg?imageMogr2/rcrop/50x100
-            # 获取图片的尺寸
             width, height = get_image_size(
                 f"/tmp/{uid}.png",
             )
@@ -268,14 +277,13 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name):
                     "IMAGE_COS_URL",
                     "https://image.inzamz.top/",
                 )
-                + f"avatar/{uid}.png?imageMogr2/cut/{min_size}x{min_size}/gravity/north/",
+                + f"avatar/{uid}.png?imageMogr2/cut/{min_size}x{min_size}/gravity/north/"
             )
             character_info["card_url"] = (
                 f"https://char.misaka19614.com/profile/userId/{uid}?random={int(time.time())}"
             )
             return character_info
     return None
-
 
 def push_info_to_mongodb(character_info, mongo_uri):
     print("push_info_to_mongodb character_info: ", character_info)
