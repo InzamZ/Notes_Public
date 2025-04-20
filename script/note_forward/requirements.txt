@@ -31,3 +31,4 @@ uritemplate==4.1.1
 urllib3==2.2.3
 cos-python-sdk-v5
 pillow
+opencc-python-reimplemented
