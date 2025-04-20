@@ -363,7 +363,7 @@ def parse_note_args(item):
                 sep_char = ctx_value[0]
                 item[the_key] = ctx_value[1:].split(sep_char)
                 tmp_list = []
-                for tmp_item in item[the_key]
+                for tmp_item in item[the_key]:
                     if len(tmp_item) > 0: 
                         tmp_list.append(tmp_item)
                 item[the_key] = tmp_list
