@@ -708,7 +708,9 @@ def search_neodb(book_name: str, neodb_token: str):
     }
     response = requests.get(url, headers=headers)
     resp_json = response.json()
-    books_data = resp_json["data"]
+    books_data = resp_json.get("data", None)
+    if books_data == None:
+        return None
     pages = resp_json["pages"]
     rst = parse_books_data(books_data, book_name)
     for page in range(1, pages + 1):
@@ -794,6 +796,8 @@ def push_channel(
         if book_info == None:
             book_info = search_neodb(book_name, neodb_token)
             print("book_info: ", book_info, flush=True)
+        if book_info == None:
+            continue
         booknote_config.update_many(
             {"from": book_name}, {"$set": {"info": book_info}}, upsert=True
         )
