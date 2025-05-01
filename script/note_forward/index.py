@@ -163,10 +163,11 @@ def export_apple_note(apple_html_path):
                 html = f.read()
                 notes, favorite_notes = parse_notes(html)
                 # print(json.dumps(notes, ensure_ascii=False))
-                # print(json.dumps(favorite_notes, ensure_ascii=False))
-                bookname = file.replace(".html", "")
-                bookname = notes[0]["from"]
-                json_data[bookname] = notes
+                for note in notes:
+                    bookname = note["from"]
+                    if json_data.get(bookname, None) is None:
+                        json_data[bookname] = []
+                    json_data[bookname].append(note)
             os.rename(
                 os.path.join(apple_html_path, file),
                 os.path.join(apple_html_path, f"{bookname}.html"),
@@ -681,7 +682,7 @@ def set_vitepress(notes_dict: dict):
 }"""
     auto_generate_content = "\n            ".join(
         [
-            f"{{ text: '{book_name}', link: '/KindleNotes/{book_name}' }},"
+            f"{{ text: '{book_name.replace(" ", "-")}', link: '/KindleNotes/{book_name.replace(" ", "-")}' }},"
             for book_name in sorted(notes_dict.keys())
         ]
     )

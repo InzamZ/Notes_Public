@@ -484,13 +484,6 @@ function kindle_note_sidebar() {
         text: 'KindleNotes',
         items: [
             { text: 'KindleNotes', link: '/kindlenotes/' },
-            { text: '欢迎来到实力至上主义的教室 01', link: '/KindleNotes/欢迎来到实力至上主义的教室 01' },
-            { text: '欢迎来到实力至上主义的教室 02', link: '/KindleNotes/欢迎来到实力至上主义的教室 02' },
-            { text: '欢迎来到实力至上主义的教室 03', link: '/KindleNotes/欢迎来到实力至上主义的教室 03' },
-            { text: '欢迎来到实力至上主义的教室 04', link: '/KindleNotes/欢迎来到实力至上主义的教室 04' },
-            { text: '欢迎来到实力至上主义的教室 05', link: '/KindleNotes/欢迎来到实力至上主义的教室 05' },
-            { text: '欢迎来到实力至上主义的教室 06', link: '/KindleNotes/欢迎来到实力至上主义的教室 06' },
-            { text: '欢迎来到实力至上主义的教室 07', link: '/KindleNotes/欢迎来到实力至上主义的教室 07' },
             { text: '欢迎来到实力至上主义的教室 08', link: '/KindleNotes/欢迎来到实力至上主义的教室 08' },
             { text: '欢迎来到实力至上主义的教室 09', link: '/KindleNotes/欢迎来到实力至上主义的教室 09' },
             { text: '欢迎来到实力至上主义的教室 4.5', link: '/KindleNotes/欢迎来到实力至上主义的教室 4.5' },
