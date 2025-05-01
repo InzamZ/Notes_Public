@@ -682,7 +682,7 @@ def set_vitepress(notes_dict: dict):
 }"""
     auto_generate_content = "\n            ".join(
         [
-            f"{{ text: '{book_name}', link: '/KindleNotes/{book_name}' }},"
+            f"{{ text: '{book_name.replace(" ", "-")}', link: '/KindleNotes/{book_name.replace(" ", "-")}' }},"
             for book_name in sorted(notes_dict.keys())
         ]
     )
