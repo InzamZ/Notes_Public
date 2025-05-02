@@ -319,7 +319,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         width, height = get_image_size(f"/tmp/{uid}.png")
         min_size = min(width, height)
         character_info["avatar"] = (
-            f"{os.getenv('IMAGE_COS_URL')}avatar/{uid}.png"
+            f"{os.getenv('IMAGE_COS_URL', 'https://image.inzamz.top/')}avatar/{uid}.png"
             f"?imageMogr2/cut/{min_size}x{min_size}/gravity/north/"
         )
         character_info["card_url"] = (
