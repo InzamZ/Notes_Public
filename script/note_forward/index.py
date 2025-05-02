@@ -194,32 +194,35 @@ def parse_character_info_from_bgm(notes, mongo_uri):
 
 
 def get_character_info_from_bgm(character, bookname):
-    book_name_search_key = bookname.split()[0]
-    print("book_name_search_key: ", book_name_search_key)
-
-    url = f"https://api.bgm.tv/search/subject/{quote(book_name_search_key)}?type=2&responseGroup=medium"
-    headers = {
-        "Authorization": "Bearer " + os.getenv("BANGUMI_TOKEN"),
-        "User-Agent": "Misaka19614/CharacterInfo",
-        "accept": "application/json",
-    }
-
-    print("url: ", url)
-    response_json = requests.get(url, headers=headers, stream=False)
-    response_json = response_json.json()
-    print("response_json: ", response_json)
-    time.sleep(0.1)
-    results = response_json["results"]
-    anime_list = response_json["list"]
-    if anime_list == None:
+    try:
+        book_name_search_key = bookname.split()[0]
+        print("book_name_search_key: ", book_name_search_key)
+    
+        url = f"https://api.bgm.tv/search/subject/{quote(book_name_search_key)}?type=2&responseGroup=medium"
+        headers = {
+            "Authorization": "Bearer " + os.getenv("BANGUMI_TOKEN"),
+            "User-Agent": "Misaka19614/CharacterInfo",
+            "accept": "application/json",
+        }
+    
+        print("url: ", url)
+        response_json = requests.get(url, headers=headers, stream=False)
+        response_json = response_json.json()
+        print("response_json: ", response_json)
+        time.sleep(0.1)
+        results = response_json["results"]
+        anime_list = response_json["list"]
+        if anime_list == None:
+            return None
+        for anime in anime_list:
+            anime_id = anime["id"]
+            character_info = get_character_info_by_anime_id(anime_id, character, bookname)
+            print("character_info: ", character_info)
+            if character_info != None:
+                return character_info
         return None
-    for anime in anime_list:
-        anime_id = anime["id"]
-        character_info = get_character_info_by_anime_id(anime_id, character, bookname)
-        print("character_info: ", character_info)
-        if character_info != None:
-            return character_info
-    return None
+    except Exception as e:
+        return None
 
 
 def get_image_size(image_path):
