@@ -289,6 +289,28 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
             for result in resp.json():
                 if converter.convert(result["name"]) == converted_character_name:
                     character_info["avatar"] = result["images"]["large"]
+                    # ==== 新增 MongoDB 更新逻辑 ====
+                    try:
+                        with MongoClient(os.getenv("MONGODB_ATLAS_URI")) as client:
+                            db = client["ExtraCharactor"]
+                            collection = db[collection_name]
+                            
+                            # 更新或插入角色数据
+                            collection.update_one(
+                                {"name": converted_character_name},
+                                {"$set": {
+                                    "name": converted_character_name,
+                                    "source": book_name,
+                                    "images": result["images"],
+                                    "last_updated": datetime.utcnow()
+                                }},
+                                upsert=True
+                            )
+                            print(f"Updated MongoDB record for {converted_character_name}")
+                            
+                    except Exception as e:
+                        print(f"MongoDB update failed: {str(e)}")
+                    # ==== 结束新增逻辑 ====
                     break
 
     except IndexError:
