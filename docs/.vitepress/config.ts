@@ -498,6 +498,9 @@ function kindle_note_sidebar() {
             { text: '欢迎来到实力至上主义的教室-二年级篇-02', link: '/KindleNotes/欢迎来到实力至上主义的教室-二年级篇-02' },
             { text: '欢迎来到实力至上主义的教室-二年级篇-05', link: '/KindleNotes/欢迎来到实力至上主义的教室-二年级篇-05' },
             { text: '欢迎来到实力至上主义的教室-二年级篇-06', link: '/KindleNotes/欢迎来到实力至上主义的教室-二年级篇-06' },
+            { text: '海伯利安', link: '/KindleNotes/海伯利安' },
+            { text: '海伯利安四部曲', link: '/KindleNotes/海伯利安四部曲' },
+            { text: '海伯利安的陨落', link: '/KindleNotes/海伯利安的陨落' },
         ]
     }]
 }
