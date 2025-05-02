@@ -185,7 +185,7 @@ def parse_character_info_from_bgm(notes, mongo_uri):
             bookname = note.get("from", "")
             if character == None:
                 continue
-            character_info = get_character_info_from_bgm(character, bookname)
+            character_info = get_character_info_from_bgm(character, bookname, mongo_uri)
             if character_info != None:
                 print("character_info: ", character, character_info)
                 if note.get("character_comment", None) != None:
@@ -193,7 +193,7 @@ def parse_character_info_from_bgm(notes, mongo_uri):
                 push_info_to_mongodb(character_info, mongo_uri)
 
 
-def get_character_info_from_bgm(character, bookname):
+def get_character_info_from_bgm(character, bookname, mongo_uri):
     try:
         book_name_search_key = bookname.split()[0]
         print("book_name_search_key: ", book_name_search_key)
@@ -216,7 +216,7 @@ def get_character_info_from_bgm(character, bookname):
             return None
         for anime in anime_list:
             anime_id = anime["id"]
-            character_info = get_character_info_by_anime_id(anime_id, character, bookname)
+            character_info = get_character_info_by_anime_id(anime_id, character, bookname, mongo_uri)
             print("character_info: ", character_info)
             if character_info != None:
                 return character_info
@@ -235,63 +235,104 @@ import opencc
 # 初始化简繁转换器，繁体转简体
 converter = opencc.OpenCC('t2s.json')
 
-def get_character_info_by_anime_id(anime_id, character_name, book_name):
-    url = f"https://api.bgm.tv/v0/subjects/{anime_id}/characters"
-    headers = {
-        "Authorization": "Bearer " + os.getenv("BANGUMI_TOKEN"),
-        "User-Agent": "Misaka19614/CharacterInfo",
-    }
-    character_json = requests.get(url, headers=headers).json()
+def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_uri):
+    # 转换角色名到简体中文
+    converted_character_name = converter.convert(character_name)
+    
+    # 初始化角色信息模板
     character_info = {
         "name": character_name,
         "nickname": character_name,
         "bio": "",
-        "avatar": " https://lain.bgm.tv/img/no_icon_subject.png",
+        "avatar": "https://lain.bgm.tv/img/no_icon_subject.png",
         "birthDate": "unknown",
         "joinDate": "unknown",
         "lastActive": "unknown",
         "gender": "lgbtq",
         "group": book_name,
     }
-    
-    # 将输入的字符名称统一转换为简体
-    converted_character_name = converter.convert(character_name)
-    
-    for result in character_json:
-        # 将API返回的名称转换为简体
-        converted_result_name = converter.convert(result["name"])
+
+    try:
+        # 获取 MongoDB 集合名称（取书名第一个单词）
+        collection_name = book_name.split(maxsplit=1)[0] if " " in book_name else book_name
         
-        # 使用转换后的名称进行比较
-        if converted_result_name == converted_character_name:
-            print("character_json: ", character_json)
-            character_info["avatar"] = result["images"]["large"]
-            uid = md5(character_name.encode("utf-8")).hexdigest()[:13]
-            uid = f"anime-{anime_id}-{uid}"
-            character_info["uuid"] = uid
-            with open(f"/tmp/{uid}.png", "wb") as f:
-                f.write(requests.get(character_info["avatar"]).content)
-            cos_resp = upload_file_to_cos(
-                os.getenv("IMAGE_COS_BUCKET"),
-                f"avatar/{uid}.png",
-                f"/tmp/{uid}.png",
-            )
-            print("cos_resp: ", cos_resp)
-            width, height = get_image_size(
-                f"/tmp/{uid}.png",
-            )
-            min_size = int(min(width, height))
-            character_info["avatar"] = (
-                os.getenv(
-                    "IMAGE_COS_URL",
-                    "https://image.inzamz.top/",
-                )
-                + f"avatar/{uid}.png?imageMogr2/cut/{min_size}x{min_size}/gravity/north/"
-            )
-            character_info["card_url"] = (
-                f"https://char.misaka19614.com/profile/userId/{uid}?random={int(time.time())}"
-            )
-            return character_info
-    return None
+        # 连接 ExtraCharactor 数据库
+        client = MongoClient(mongo_uri)
+        db = client.get_database("ExtraCharactor")
+        collection = db.get_collection(collection_name)
+        
+        # 查询转换后的角色名
+        db_char = collection.find_one({"name": converted_character_name})
+        
+        if db_char:
+            print(f"Found character in MongoDB: {db_char['name']}")
+            # 合并数据库中的图像数据
+            if "images" in db_char and "large" in db_char["images"]:
+                character_info["avatar"] = db_char["images"]["large"]
+            # 合并其他字段（可选）
+            character_info.update({
+                k: db_char.get(k, v) 
+                for k, v in character_info.items() 
+                if k not in ["avatar"]
+            })
+        else:
+            # 调用 BGM API 获取数据
+            url = f"https://api.bgm.tv/v0/subjects/{anime_id}/characters"
+            headers = {
+                "Authorization": "Bearer " + os.getenv("BANGUMI_TOKEN"),
+                "User-Agent": "Misaka19614/CharacterInfo",
+            }
+            resp = requests.get(url, headers=headers)
+            resp.raise_for_status()
+            
+            # 匹配转换后的角色名
+            for result in resp.json():
+                if converter.convert(result["name"]) == converted_character_name:
+                    character_info["avatar"] = result["images"]["large"]
+                    break
+
+    except IndexError:
+        print("Book name format invalid")
+    except pymongo.errors.PyMongoError as e:
+        print(f"MongoDB error: {str(e)}")
+    except requests.exceptions.RequestException as e:
+        print(f"BGM API error: {str(e)}")
+
+    # 统一处理头像上传
+    try:
+        uid = md5(character_name.encode()).hexdigest()[:13]
+        uid = f"anime-{anime_id}-{uid}"
+        character_info["uuid"] = uid
+        
+        # 下载并处理头像
+        with open(f"/tmp/{uid}.png", "wb") as f:
+            f.write(requests.get(character_info["avatar"]).content)
+        
+        # 上传到 COS
+        upload_file_to_cos(
+            os.getenv("IMAGE_COS_BUCKET"),
+            f"avatar/{uid}.png",
+            f"/tmp/{uid}.png"
+        )
+        
+        # 生成裁剪后的 URL
+        width, height = get_image_size(f"/tmp/{uid}.png")
+        min_size = min(width, height)
+        character_info["avatar"] = (
+            f"{os.getenv('IMAGE_COS_URL')}avatar/{uid}.png"
+            f"?imageMogr2/cut/{min_size}x{min_size}/gravity/north/"
+        )
+        character_info["card_url"] = (
+            f"https://char.misaka19614.com/profile/userId/{uid}"
+            f"?random={int(time.time())}"
+        )
+
+    except Exception as e:
+        print(f"Avatar processing failed: {str(e)}")
+        character_info["avatar"] = "https://example.com/fallback.png"
+
+    return character_info if character_info["avatar"] != "https://example.com/fallback.png" else None
+
 
 def push_info_to_mongodb(character_info, mongo_uri):
     print("push_info_to_mongodb character_info: ", character_info)
