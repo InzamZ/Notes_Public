@@ -358,8 +358,8 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
     return character_info if character_info["avatar"] != "https://example.com/fallback.png" else None
 
 
-def info_to_mongodb(character_info, mongo_uri):
-    print("push_info_to_mongodb character_info: ", character_info)
+def push_info_to_mongodb(character_info, mongo_uri):
+    # print("push_info_to_mongodb character_info: ", character_info)
     client = MongoClient(mongo_uri, maxPoolSize=1000, minPoolSize=100)
     db = client.get_database("CharacterProfiles")
     collections = db.get_collection("default")
@@ -368,7 +368,7 @@ def info_to_mongodb(character_info, mongo_uri):
     )
 
 def push_tag_info_to_mongodb(item, mongo_uri):
-    print("push_tag_info_to_mongodb item: ", item)
+    # print("push_tag_info_to_mongodb item: ", item)
     if not item.get("tag"):
         return
     
@@ -693,7 +693,7 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
         if book_name == "MsgToBookname":
             continue
         collections = db.get_collection(notes_list[0]["from"])
-        print(collections, flush=True)
+        # print(collections, flush=True)
         bulk_operations = []
         for x in notes_list:
             # 计算内容哈希
@@ -759,7 +759,7 @@ def push_favorate_to_atlas(notes_dict: dict, atlas_uri):
     for book_name in notes_dict.keys():
         notes_list = notes_dict[book_name]
         collections = db.get_collection(notes_list[0]["from"])
-        print(collections, flush=True)
+        # print(collections, flush=True)
         for x in notes_list:
             x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
             collections.update_one(
@@ -896,7 +896,7 @@ def push_channel(
         booknote_config = db.get_collection("BookNoteConfig")
         book_config = booknote_config.find_one({"from": book_name})
         collections = db.get_collection(book_name)
-        print(collections, flush=True)
+        # print(collections, flush=True)
         print(book_config, flush=True)
         if book_config == None:
             book_config = {"from": book_name, "info": None, "telegram_msg_info": None}
