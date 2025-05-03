@@ -258,7 +258,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         collection_name = book_name.split(maxsplit=1)[0] if " " in book_name else book_name
         
         # 连接 ExtraCharactor 数据库
-        client = MongoClient(mongo_uri)
+        client = MongoClient(mongo_uri, maxPoolSize=1000, minPoolSize=100,)
         db = client.get_database("ExtraCharactor")
         collection = db.get_collection(collection_name)
         
@@ -359,7 +359,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
 
 def push_info_to_mongodb(character_info, mongo_uri):
     print("push_info_to_mongodb character_info: ", character_info)
-    client = MongoClient(mongo_uri)
+    client = MongoClient(mongo_uri, maxPoolSize=1000, minPoolSize=100)
     db = client.get_database("CharacterProfiles")
     collections = db.get_collection("default")
     collections.update_one(
