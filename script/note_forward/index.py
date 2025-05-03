@@ -694,15 +694,44 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
         collections = db.get_collection(notes_list[0]["from"])
         print(collections, flush=True)
         for x in notes_list:
-            x["contenthash"] = md5(x["content"].encode("utf-8")).hexdigest()
-            x["hash"] = "0"
-            x["hash"] = md5(x["content"].encode("utf-8")).hexdigest()
-            # print(f"note: {str(x)}")
+            # 计算内容哈希
+            content = x["content"]
+            contenthash = md5(content.encode("utf-8")).hexdigest()
+            x["contenthash"] = contenthash
+        
+            # 创建临时对象用于哈希计算（排除hash和sync_flag字段）
+            temp_obj = {k: v for k, v in x.items() if k not in ('hash', 'sync_flag')}
+            temp_obj['hash'] = '0'  # 设置临时哈希值
+            
+            # 计算完整对象哈希
+            json_str = json.dumps(temp_obj, sort_keys=True).encode('utf-8')
+            new_hash = md5(json_str).hexdigest()
+            x['hash'] = new_hash
+        
+            # 查询数据库中的现有记录
+            existing = collections.find_one({"contenthash": contenthash})
+        
+            # 处理同步标志逻辑
+            if existing:
+                # 当哈希值变化时设置同步标志
+                if existing.get('hash') != new_hash:
+                    x['sync_flag'] = 1
+                else:
+                    # 保留原有同步标志值
+                    x['sync_flag'] = existing.get('sync_flag', 0)
+            else:
+                # 新记录默认需要同步
+                x['sync_flag'] = 1
+        
+            # 更新数据库记录
             collections.update_one(
-                {"contenthash": x["contenthash"]}, {"$set": x}, upsert=True
+                {'contenthash': contenthash},
+                {'$set': x},
+                upsert=True
             )
-            if os.environ.get("DEBUG"):
-                print(f"push to atlas: {x['contenthash']}")
+        
+            if os.environ.get('DEBUG'):
+                print(f"push to atlas: {contenthash}")
         collections.create_index(
             [("contenthash", pymongo.ASCENDING)], unique=True, name="contenthash"
         )
