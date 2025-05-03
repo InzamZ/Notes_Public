@@ -820,6 +820,7 @@ def search_neodb(book_name: str, neodb_token: str):
     }
     response = requests.get(url, headers=headers)
     resp_json = response.json()
+    print("search_neodb: ", resp_json)
     books_data = resp_json.get("data", None)
     if books_data == None:
         return None
@@ -853,6 +854,7 @@ def search_neodb(book_name: str, neodb_token: str):
         url = f"https://neodb.social/api/me/shelf/item/{uuid}"
         response = requests.get(url, headers=headers)
         rst = response.json()
+    print("rst: ", rst)
     return rst
 
 
