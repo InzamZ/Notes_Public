@@ -34,7 +34,7 @@ dotenv.load_dotenv()
 
 def get_eml_files_from_icloud(
     sender_email,
-    max_results=10,
+    max_results=5,
     email_account="your_email@icloud.com",
     app_password="your_app_specific_password",
     save_path="/tmp/apple_note/eml",
@@ -883,7 +883,7 @@ def get_ranking_star(rating: int):
 
 def push_channel(
     note: dict,
-    atlas_uri: str,
+    mongo_uri: str,
     neodb_token: str,
     telegram_token: str,
     channel: str,
