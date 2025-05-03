@@ -25,6 +25,7 @@ from email.policy import default
 import imaplib
 from cos_wrapper import upload_file_to_cos
 from datetime import datetime
+from pymongo import UpdateOne
 
 import dotenv
 
@@ -357,7 +358,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
     return character_info if character_info["avatar"] != "https://example.com/fallback.png" else None
 
 
-def push_info_to_mongodb(character_info, mongo_uri):
+def info_to_mongodb(character_info, mongo_uri):
     print("push_info_to_mongodb character_info: ", character_info)
     client = MongoClient(mongo_uri, maxPoolSize=1000, minPoolSize=100)
     db = client.get_database("CharacterProfiles")
@@ -693,6 +694,7 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
             continue
         collections = db.get_collection(notes_list[0]["from"])
         print(collections, flush=True)
+        bulk_operations = []
         for x in notes_list:
             # 计算内容哈希
             content = x["content"]
@@ -724,6 +726,15 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
                 x['sync_flag'] = 1
         
             # 更新数据库记录
+            # 构造批量操作
+            bulk_operations.append(
+                UpdateOne(
+                    {"contenthash": contenthash},
+                    {"$set": x},
+                    upsert=True
+                )
+            )
+            
             collections.update_one(
                 {'contenthash': contenthash},
                 {'$set': x},
@@ -732,6 +743,10 @@ def push_to_atlas(notes_dict: dict, atlas_uri):
         
             if os.environ.get('DEBUG'):
                 print(f"push to atlas: {contenthash}")
+        # 一次性批量提交
+        if bulk_operations:
+            collections.bulk_write(bulk_operations, ordered=False)
+
         collections.create_index(
             [("contenthash", pymongo.ASCENDING)], unique=True, name="contenthash"
         )
