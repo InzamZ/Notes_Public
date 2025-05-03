@@ -259,7 +259,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         collection_name = book_name.split(maxsplit=1)[0] if " " in book_name else book_name
         
         # 连接 ExtraCharactor 数据库
-        client = MongoClient(mongo_uri, maxPoolSize=1000, minPoolSize=100,)
+        client = MongoClient(mongo_uri, maxPoolSize=10, minPoolSize=5,)
         db = client.get_database("ExtraCharactor")
         collection = db.get_collection(collection_name)
         
@@ -293,7 +293,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
                     character_info["avatar"] = result["images"]["large"]
                     # ==== 新增 MongoDB 更新逻辑 ====
                     try:
-                        with MongoClient(os.getenv("MONGODB_ATLAS_URI")) as client:
+                        with MongoClient(os.getenv("MONGODB_ATLAS_URI"), maxPoolSize=10, minPoolSize=5) as client:
                             db = client["ExtraCharactor"]
                             collection = db[collection_name]
                             
@@ -360,7 +360,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
 
 def push_info_to_mongodb(character_info, mongo_uri):
     # print("push_info_to_mongodb character_info: ", character_info)
-    client = MongoClient(mongo_uri, maxPoolSize=1000, minPoolSize=100)
+    client = MongoClient(mongo_uri, maxPoolSize=10, minPoolSize=5)
     db = client.get_database("CharacterProfiles")
     collections = db.get_collection("default")
     collections.update_one(
@@ -372,7 +372,7 @@ def push_tag_info_to_mongodb(item, mongo_uri):
     if not item.get("tag"):
         return
     
-    with MongoClient(mongo_uri) as client:
+    with MongoClient(mongo_uri, maxPoolSize=10, minPoolSize=5) as client:
         db = client.get_database("TagDict")
         collections = db.get_collection("default")
         tags = item["tag"]
@@ -889,7 +889,7 @@ def push_channel(
     channel: str,
     force_update: bool = False,
 ):
-    client = MongoClient(atlas_uri)
+    client = MongoClient(mongo_uri, maxPoolSize=10, minPoolSize=5,)
     db = client.get_database("BooksNotes")
     bot = telebot.TeleBot(telegram_token)
     for book_name in note.keys():
