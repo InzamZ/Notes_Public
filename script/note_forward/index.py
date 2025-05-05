@@ -256,6 +256,8 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         "lastActive": "unknown",
         "gender": "lgbtq",
     }
+    last_updated = datetime.utcnow().timestamp()
+    character_info["last_updated"] = last_updated
 
     try:
         # 获取 MongoDB 集合名称（取书名第一个单词）
