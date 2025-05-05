@@ -195,10 +195,11 @@ def parse_character_info_from_bgm(notes, mongo_uri):
                 push_info_to_mongodb(character_info, mongo_uri)
 
 
-def get_character_info_from_bgm(character, bookname, mongo_uri):
+def get_character_info_from_bgm(character, bookname, mongo_uri = os.getenv("MONGODB_ATLAS_URI")):
     try:
         book_name_search_key = bookname.split()[0]
-        print("book_name_search_key: ", book_name_search_key)
+        print("book_name_search_key: ", book_name_search_key, flush=True)
+        print("character: ", character, flush=True)
     
         url = f"https://api.bgm.tv/search/subject/{quote(book_name_search_key)}?type=2&responseGroup=medium"
         headers = {
@@ -207,15 +208,19 @@ def get_character_info_from_bgm(character, bookname, mongo_uri):
             "accept": "application/json",
         }
     
-        print("url: ", url)
+        print("url: ", url, flush=True)
         response_json = requests.get(url, headers=headers, stream=False)
         response_json = response_json.json()
-        print("response_json: ", response_json)
-        time.sleep(0.1)
+        print("response_json: ", response_json, flush=True)
+        time.sleep(0.2)
         results = response_json["results"]
+        print("results: ", results, flush=True)
         anime_list = response_json["list"]
         if anime_list == None:
-            return None
+            character_info = get_character_info_by_anime_id(None, character, bookname, mongo_uri)
+            print("character_info: ", character_info)
+            if character_info != None:
+                return character_info
         for anime in anime_list:
             anime_id = anime["id"]
             character_info = get_character_info_by_anime_id(anime_id, character, bookname, mongo_uri)
@@ -259,7 +264,17 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         collection_name = book_name.split(maxsplit=1)[0] if " " in book_name else book_name
         
         # 连接 ExtraCharactor 数据库
-        client = MongoClient(mongo_uri, maxPoolSize=10, minPoolSize=5,)
+        client = MongoClient(mongo_uri,
+            socketTimeoutMS=30000,
+            connectTimeoutMS=30000,
+            serverSelectionTimeoutMS=30000,
+            # 自动重试设置
+            retryWrites=True,
+            retryReads=True,
+            # 重试配置
+            maxPoolSize=50,
+            waitQueueTimeoutMS=100000,
+        )
         db = client.get_database("ExtraCharactor")
         collection = db.get_collection(collection_name)
         
@@ -267,7 +282,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         db_char = collection.find_one({"name": converted_character_name})
         
         if db_char:
-            print(f"Found character in MongoDB: {db_char['name']}")
+            print(f"Found character in MongoDB: {db_char['name']}", flush=True)
             # 合并数据库中的图像数据
             if "images" in db_char and "large" in db_char["images"]:
                 character_info["avatar"] = db_char["images"]["large"]
@@ -277,7 +292,8 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
                 for k, v in character_info.items() 
                 if k not in ["avatar"]
             })
-        else:
+            last_updated = db_char.get("last_updated", datetime.utcnow())
+        elif anime_id:
             # 调用 BGM API 获取数据
             url = f"https://api.bgm.tv/v0/subjects/{anime_id}/characters"
             headers = {
@@ -291,36 +307,38 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
             for result in resp.json():
                 if converter.convert(result["name"]) == converted_character_name:
                     character_info["avatar"] = result["images"]["large"]
+                    last_updated = datetime.utcnow()
+                    character_info["last_updated"] = last_updated
                     # ==== 新增 MongoDB 更新逻辑 ====
                     try:
-                        with MongoClient(os.getenv("MONGODB_ATLAS_URI"), maxPoolSize=10, minPoolSize=5) as client:
-                            db = client["ExtraCharactor"]
-                            collection = db[collection_name]
-                            
-                            # 更新或插入角色数据
-                            collection.update_one(
-                                {"name": converted_character_name},
-                                {"$set": {
-                                    "name": converted_character_name,
-                                    "source": book_name,
-                                    "images": result["images"],
-                                    "last_updated": datetime.utcnow()
-                                }},
-                                upsert=True
-                            )
-                            print(f"Updated MongoDB record for {converted_character_name}")
+                        db = client["ExtraCharactor"]
+                        collection = db[collection_name]
+                        
+                        # 更新或插入角色数据
+                        collection.update_one(
+                            {"name": converted_character_name},
+                            {"$set": {
+                                "name": converted_character_name,
+                                "source": book_name,
+                                "group": collection_name,
+                                "images": result["images"],
+                                "last_updated": datetime.utcnow()
+                            }},
+                            upsert=True
+                        )
+                        print(f"Updated MongoDB record for {converted_character_name}", flush=True)
                             
                     except Exception as e:
-                        print(f"MongoDB update failed: {str(e)}")
+                        print(f"MongoDB update failed: {str(e)}", flush=True)
                     # ==== 结束新增逻辑 ====
                     break
 
     except IndexError:
-        print("Book name format invalid")
+        print("Book name format invalid", flush=True)
     except pymongo.errors.PyMongoError as e:
-        print(f"MongoDB error: {str(e)}")
+        print(f"MongoDB error: {str(e)}", flush=True)
     except requests.exceptions.RequestException as e:
-        print(f"BGM API error: {str(e)}")
+        print(f"BGM API error: {str(e)}", flush=True)
 
     # 统一处理头像上传
     try:
@@ -348,14 +366,14 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         )
         character_info["card_url"] = (
             f"https://char.misaka19614.com/profile/userId/{uid}"
-            f"?random={int(time.time())}"
+            f"?random={int(last_updated)}"
         )
 
     except Exception as e:
-        print(f"Avatar processing failed: {str(e)}")
-        character_info["avatar"] = "https://example.com/fallback.png"
+        print(f"Avatar processing failed: {str(e)}", flush=True)
+        character_info["avatar"] = "https://lain.bgm.tv/img/no_icon_subject.png"
 
-    return character_info if character_info["avatar"] != "https://example.com/fallback.png" else None
+    return character_info if character_info["avatar"] != "https://lain.bgm.tv/img/no_icon_subject.png" else None
 
 
 def push_info_to_mongodb(character_info, mongo_uri):
