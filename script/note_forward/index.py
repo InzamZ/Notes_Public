@@ -241,7 +241,6 @@ import opencc
 
 # 初始化简繁转换器，繁体转简体
 converter = opencc.OpenCC('t2s.json')
-
 def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_uri):
     # 转换角色名到简体中文
     converted_character_name = converter.convert(character_name)
@@ -256,13 +255,13 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         "joinDate": "unknown",
         "lastActive": "unknown",
         "gender": "lgbtq",
-        "group": book_name,
     }
 
     try:
         # 获取 MongoDB 集合名称（取书名第一个单词）
         collection_name = book_name.split(maxsplit=1)[0] if " " in book_name else book_name
-        
+        character_info["group"] = collection_name
+
         # 连接 ExtraCharactor 数据库
         client = MongoClient(mongo_uri,
             socketTimeoutMS=30000,
@@ -292,7 +291,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
                 for k, v in character_info.items() 
                 if k not in ["avatar"]
             })
-            last_updated = db_char.get("last_updated", datetime.utcnow())
+            last_updated = db_char.get("last_updated", datetime.utcnow().timestamp())
         elif anime_id:
             # 调用 BGM API 获取数据
             url = f"https://api.bgm.tv/v0/subjects/{anime_id}/characters"
@@ -307,7 +306,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
             for result in resp.json():
                 if converter.convert(result["name"]) == converted_character_name:
                     character_info["avatar"] = result["images"]["large"]
-                    last_updated = datetime.utcnow()
+                    last_updated = datetime.utcnow().timestamp()
                     character_info["last_updated"] = last_updated
                     # ==== 新增 MongoDB 更新逻辑 ====
                     try:
@@ -322,7 +321,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
                                 "source": book_name,
                                 "group": collection_name,
                                 "images": result["images"],
-                                "last_updated": datetime.utcnow()
+                                "last_updated": datetime.utcnow().timestamp()
                             }},
                             upsert=True
                         )
@@ -374,6 +373,7 @@ def get_character_info_by_anime_id(anime_id, character_name, book_name, mongo_ur
         character_info["avatar"] = "https://lain.bgm.tv/img/no_icon_subject.png"
 
     return character_info if character_info["avatar"] != "https://lain.bgm.tv/img/no_icon_subject.png" else None
+
 
 
 def push_info_to_mongodb(character_info, mongo_uri):
