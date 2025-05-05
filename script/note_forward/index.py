@@ -385,7 +385,7 @@ def push_info_to_mongodb(character_info, mongo_uri = os.getenv("MONGODB_ATLAS_UR
     db = client.get_database("CharacterProfiles")
     collections = db.get_collection("default")
     collections.update_one(
-        {"name": character_info["name"], "group": character_info["group"]}, {"$set": character_info}, upsert=True
+        {"name": character_info["name"], "from": character_info["group"]}, {"$set": character_info}, upsert=True
     )
 
 
